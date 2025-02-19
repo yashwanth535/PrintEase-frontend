@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [users, setUsers] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
-    fetch(`/api/users`)
+    fetch(`${API_URL}/api/users`)
       .then((response) => response.json())
       .then((data) => setUsers(data))
       .catch((error) => console.error("Error fetching data:", error));
