@@ -1,0 +1,12 @@
+{
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "https://print-ease-backend.vercel.app/api/$1" },
+    { "src": "/(.*)", "dest": "/" }
+  ]
+}
