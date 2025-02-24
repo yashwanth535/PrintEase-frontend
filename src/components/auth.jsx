@@ -1,9 +1,9 @@
-import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import React, { useState, useEffect } from "react"; // Add useEffect to the import
 
-const AuthForms = () => {
+const AuthForms = ({ initialForm = "signin" }) => {
   const API_URL = import.meta.env.VITE_API_URL;
-  const [formType, setFormType] = useState("signin");
+  const [formType, setFormType] = useState(initialForm);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -12,6 +12,10 @@ const AuthForms = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    setFormType(initialForm);
+  }, [initialForm]);
 
   const handleSignIn = async (event) => {
     event.preventDefault();
