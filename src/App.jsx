@@ -1,15 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Auth from "./components/auth"; // Import Auth component
 import Home from "./components/home"; // Import Home component
+import Error from "./components/error";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Default route ("/") shows Auth */}
+       <Routes>
+        {/* Public Route */}
         <Route path="/" element={<Auth />} />
-        {/* "/home" route shows Home component */}
-        <Route path="/home" element={<Home />} />
+        <Route path="/error" element={<Error/>} />
+        
+        {/* Protected Route */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/home" element={<Home />} />
+        </Route>
       </Routes>
     </Router>
   );
