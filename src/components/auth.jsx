@@ -1,7 +1,8 @@
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import React, { useState, useEffect } from "react"; // Add useEffect to the import
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-const AuthForms = ({ initialForm = "signin" }) => {
+const AuthForms = ({ initialForm = "signin", onClose }) => {
   const API_URL = import.meta.env.VITE_API_URL;
   const [formType, setFormType] = useState(initialForm);
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ const AuthForms = ({ initialForm = "signin" }) => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isVendor, setIsVendor] = useState(false);
 
   useEffect(() => {
     setFormType(initialForm);
@@ -25,52 +27,46 @@ const AuthForms = ({ initialForm = "signin" }) => {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, isVendor }),
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Login successful"); // Display success message
+        setMessage("Login successful");
         setTimeout(() => {
-          window.location.href = "/home"; // Redirect after 1.5 seconds
+          window.location.href = "/home";
         }, 1500);
       } else {
-        setMessage(data.message); // Display error message if login fails
+        setMessage(data.message);
       }
-      
     } catch (error) {
       console.error("Error during signin:", error);
     }
     setLoading(false);
   };
 
-  const handleOTP = async (event,type) => { 
+  const handleOTP = async (event, type) => {
     event.preventDefault();
     setLoading(true);
-  
+
     try {
-      // Step 1: Check if the user exists
       const response = await fetch(`${API_URL}/auth/userExists`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, isVendor }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.status === 400) {
-        if(type==='signup'){
+        if (type === 'signup') {
           setMessage("Email Already registered")
-        }
-        else{
+        } else {
           generateOTP("This is your one time password to reset password");
         }
-        
-      }
-      else{
-        if(type==='signup'){
+      } else {
+        if (type === 'signup') {
           generateOTP("This is your one time password to register into printEase");
-        }
-        else{
+        } else {
           setMessage("Email is not registered")
         }
       }
@@ -78,17 +74,17 @@ const AuthForms = ({ initialForm = "signin" }) => {
       console.error("Error during signup:", error);
       setMessage("Something went wrong. Please try again.");
     }
-  
+
     setLoading(false);
   };
 
-  const generateOTP = async(text)=>{
+  const generateOTP = async (text) => {
     const otpResponse = await fetch(`${API_URL}/auth/generateOTP`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        email, 
-        text: text, 
+      body: JSON.stringify({
+        email,
+        text: text,
       }),
     });
     const otpData = await otpResponse.json();
@@ -116,10 +112,8 @@ const AuthForms = ({ initialForm = "signin" }) => {
       } else {
         if (type === "signup") {
           signUpUser();
-        }
-        else{
-           console.log("entering password form");
-           setFormType("Enter-password");
+        } else {
+          setFormType("Enter-password");
         }
       }
     } catch (error) {
@@ -134,7 +128,7 @@ const AuthForms = ({ initialForm = "signin" }) => {
       const response = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, isVendor }),
       });
       const data = await response.json();
       if (response.status === 400) {
@@ -151,16 +145,16 @@ const AuthForms = ({ initialForm = "signin" }) => {
   const resetPassword = async (event) => {
     event.preventDefault();
     setLoading(true);
-    
+
     try {
       const response = await fetch(`${API_URL}/auth/reset_password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         setMessage("Password reset successful. Click below to sign in.");
       } else {
@@ -170,7 +164,7 @@ const AuthForms = ({ initialForm = "signin" }) => {
       console.error("Error resetting password:", error);
       setMessage("Something went wrong. Please try again.");
     }
-  
+
     setLoading(false);
   };
 
@@ -181,169 +175,229 @@ const AuthForms = ({ initialForm = "signin" }) => {
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
-  
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg"
+      >
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-800 pr-5">
+            {formType === 'signin' ? 'Welcome Back' : 
+             formType === 'signup' ? 'Create Account' :
+             formType === 'reset' ? 'Reset Password' :
+             formType.includes('otp') ? 'Verify OTP' : 'New Password'}
+          </h2>
+          {(formType === 'signin' || formType === 'signup') && (
+            <div className="flex items-center space-x-2">
+              <span className={`text-sm ${!isVendor ? 'text-blue-600 font-semibold' : 'text-gray-500'}`}>User</span>
+              <button
+                onClick={() => setIsVendor(!isVendor)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none
+                  ${isVendor ? 'bg-blue-600' : 'bg-gray-200'}`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-300
+                    ${isVendor ? 'translate-x-6' : 'translate-x-1'}`}
+                />
+              </button>
+              <span className={`text-sm ${isVendor ? 'text-blue-600 font-semibold' : 'text-gray-500'}`}>Vendor</span>
+            </div>
+          )}
+        </div>
+
         {formType === 'signin' && (
-          <form onSubmit={handleSignIn} className="flex flex-col space-y-4">
-            <h2 className="text-2xl font-semibold text-center">Sign In</h2>
-            <input
-              className="border p-2 rounded-md"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <div className="relative">
+          <form onSubmit={handleSignIn} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Email</label>
               <input
-                className="border p-2 rounded-md w-full"
-                placeholder="Password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
             </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Password</label>
+              <div className="relative">
+                <input
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </div>
+            </div>
+
             <button
               type="submit"
-              className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              disabled={loading}
             >
-              Sign In
+              {loading ? 'Signing in...' : 'Sign In'}
             </button>
-            {loading && <p className="text-center text-gray-500">Loading...</p>}
-            <p className="text-red-500">{message}</p>
+
+            {message && (
+              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+                {message}
+              </p>
+            )}
+
             <div className="flex justify-between text-sm">
-              <a href="#" onClick={() => setFormType('reset')} className="text-blue-500">
+              <button
+                type="button"
+                onClick={() => setFormType('reset')}
+                className="text-blue-600 hover:text-blue-800 transition duration-200"
+              >
                 Forgot password?
-              </a>
-              <a href="#" onClick={() => setFormType('signup')} className="text-blue-500">
-                Sign up
-              </a>
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormType('signup')}
+                className="text-blue-600 hover:text-blue-800 transition duration-200"
+              >
+                Create account
+              </button>
             </div>
           </form>
         )}
 
         {formType === 'signup' && (
-          <form onSubmit={(e) => handleOTP(e, 'signup')} className="flex flex-col space-y-4">
-            <h2 className="text-2xl font-semibold text-center">Create an Account</h2>
-            <input
-              className="border p-2 rounded-md"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <div className="relative">
+          <form onSubmit={(e) => handleOTP(e, 'signup')} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Email</label>
               <input
-                className="border p-2 rounded-md w-full"
-                placeholder="Password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Password</label>
+              <div className="relative">
+                <input
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Choose a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              disabled={loading}
+            >
+              {loading ? 'Sending OTP...' : 'Continue'}
+            </button>
+
+            {message && (
+              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+                {message}
+              </p>
+            )}
+
+            <p className="text-center text-sm text-gray-600">
+              Already have an account?{" "}
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                onClick={togglePasswordVisibility}
+                className="text-blue-600 hover:text-blue-800 transition duration-200"
+                onClick={() => setFormType("signin")}
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                Sign In
               </button>
+            </p>
+          </form>
+        )}
+
+        {(formType === 'otp-signup' || formType === 'otp-reset') && (
+          <form onSubmit={(e) => verifyOtp(e, formType === 'otp-signup' ? 'signup' : 'reset')} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Enter OTP</label>
+              <input
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                type="text"
+                placeholder="Enter the OTP sent to your email"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+              />
             </div>
-            <button
-              type="submit"
-              className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
-            >
-              Send OTP
-            </button>
-            {loading && <p className="text-center text-gray-500">Loading...</p>}
-            <p className="text-red-500">{message}</p>
-            <p className="text-center text-sm text-gray-600">
-            Already have an account?{" "}
-            <button
-              type="button"
-              className="text-blue-500 hover:underline"
-              onClick={() => setFormType("signin")}
-            >
-              Sign In
-            </button>
-          </p>
-          </form>
-        )}
 
-        {formType === 'otp-signup' && (
-          <form onSubmit={(e) => verifyOtp(e, 'signup')} className="flex flex-col space-y-4">
-            <h2 className="text-2xl font-semibold text-center">Enter OTP</h2>
-            <input
-              className="border p-2 rounded-md"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              required
-            />
             <button
               type="submit"
-              className="bg-purple-500 text-white p-2 rounded-md hover:bg-purple-600"
+              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              disabled={loading}
             >
-              Verify OTP
+              {loading ? 'Verifying...' : 'Verify OTP'}
             </button>
-            {loading && <p className="text-center text-gray-500">Loading...</p>}
-            <p className="text-red-500">{message}</p>
-          </form>
-        )}
 
-        {formType === 'otp-reset' && (
-          <form onSubmit={(e) => verifyOtp(e, 'reset')} className="flex flex-col space-y-4">
-            <h2 className="text-2xl font-semibold text-center">Enter OTP</h2>
-            <input
-              className="border p-2 rounded-md"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              required
-            />
-            <button
-              type="submit"
-              className="bg-purple-500 text-white p-2 rounded-md hover:bg-purple-600"
-            >
-              Verify OTP
-            </button>
-            {loading && <p className="text-center text-gray-500">Loading...</p>}
-            <p className="text-red-500">{message}</p>
+            {message && (
+              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+                {message}
+              </p>
+            )}
           </form>
         )}
 
         {formType === 'reset' && (
-          <form onSubmit={(e) => handleOTP(e, 'reset')} className="flex flex-col space-y-4">
-            <h2 className="text-2xl font-semibold text-center">Reset Password</h2>
-            <input
-              className="border p-2 rounded-md"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+          <form onSubmit={(e) => handleOTP(e, 'reset')} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Email</label>
+              <input
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
             <button
               type="submit"
-              className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600"
+              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
               disabled={loading}
             >
               {loading ? 'Sending OTP...' : 'Send OTP'}
             </button>
-            {loading && <p className="text-center text-gray-500">Loading...</p>}
-            <p className="text-red-500">{message}</p>
+
+            {message && (
+              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+                {message}
+              </p>
+            )}
+
             <button
               type="button"
-              className="text-blue-500 text-sm"
+              className="w-full text-center text-sm text-blue-600 hover:text-blue-800 transition duration-200"
               onClick={() => setFormType('signin')}
             >
               Back to Sign In
@@ -352,46 +406,65 @@ const AuthForms = ({ initialForm = "signin" }) => {
         )}
 
         {formType === 'Enter-password' && (
-          <form onSubmit={resetPassword} className="flex flex-col space-y-4">
-            <h2 className="text-2xl font-semibold text-center">Set New Password</h2>
-            <div className="relative">
-              <input
-                className="border p-2 rounded-md w-full"
-                placeholder="New Password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-            <div className="relative">
-              <input
-                className="border p-2 rounded-md w-full"
-                placeholder="Confirm New Password"
-                type={showConfirmPassword ? 'text' : 'password'}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                onClick={toggleConfirmPasswordVisibility}
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
+          <form onSubmit={resetPassword} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">New Password</label>
+              <div className="relative">
+                <input
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter new password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
               </div>
-            </form>
-        )}
+            </div>
 
-      </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Confirm New Password</label>
+              <div className="relative">
+                <input
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={toggleConfirmPasswordVisibility}
+                >
+                  {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              disabled={loading}
+            >
+              {loading ? 'Updating Password...' : 'Update Password'}
+            </button>
+
+            {message && (
+              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+                {message}
+              </p>
+            )}
+          </form>
+        )}
+      </motion.div>
     </div>
   );
 };

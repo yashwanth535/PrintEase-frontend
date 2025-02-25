@@ -4,6 +4,7 @@ import Home from "./pages/home"; // Import Home component
 import Error from "./pages/error";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/landing";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
        <Routes>
         {/* Public Route */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<About />} />
         <Route path="/error" element={<Error/>} />
         
         {/* Protected Route */}
