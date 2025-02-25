@@ -34,9 +34,10 @@ const LandingPage = () => {
   };
 
   const navItems = [
-    { name: 'Home', path: '/', icon: Home },
-    { name: 'About', path: '/about', icon: Info },
-  ];
+    { name: 'Home', path: '/', icon: Home, reload: true },
+    { name: 'About', path: '/about', icon: Info }
+];
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -48,39 +49,48 @@ const LandingPage = () => {
       >
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
-            <Link to="/" className="flex items-center space-x-2 group">
-              <Printer className="h-6 w-6 group-hover:text-blue-400 transition-colors duration-300" />
-              <h1 className="text-xl font-bold group-hover:text-blue-400 transition-colors duration-300">
-                PrintEase
-              </h1>
-            </Link>
+
+          <Link to="/" onClick={() => window.location.reload()} className="flex items-center space-x-2 group">
+            <Printer className="h-6 w-6 group-hover:text-blue-400 transition-colors duration-300" />
+            <h1 className="text-xl font-bold group-hover:text-blue-400 transition-colors duration-300">
+              PrintEase
+            </h1>
+          </Link>
+
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
                 <Link
-                  key={item.name}
-                  to={item.path}
-                  className="relative flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+                    key={item.name}
+                    to={item.path}
+                    className="relative flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+                    onClick={(e) => {
+                        if (item.reload) {
+                            e.preventDefault(); // Prevent React Router from handling navigation
+                            window.location.href = item.path; // Force full reload
+                        }
+                    }}
                 >
-                  <item.icon className="h-4 w-4 group-hover:text-blue-400 transition-colors duration-300" />
-                  <span>{item.name}</span>
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                    <item.icon className="h-4 w-4 group-hover:text-blue-400 transition-colors duration-300" />
+                    <span>{item.name}</span>
+                    <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                 </Link>
-              ))}
+            ))}
+
             </nav>
 
             {/* Desktop Auth Buttons */}
             <div className="hidden md:flex items-center space-x-4">
               <button
                 className="px-4 py-2 rounded-md border border-white/50 hover:border-white hover:bg-white/10 transition-all duration-300"
-                onClick={() => { setShowAuth(true); setFormType("signin"); }}
+                onClick={() => { setShowAuth(true); setFormType("signin-form"); }}
               >
                 Sign In
               </button>
               <button
                 className="px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
-                onClick={() => { setShowAuth(true); setFormType("signup"); }}
+                onClick={() => { setShowAuth(true); setFormType("signup-form"); }}
               >
                 Get Started
               </button>
@@ -173,7 +183,7 @@ const LandingPage = () => {
                 className="mt-6 bg-gray-800 text-white px-6 py-3 rounded-md text-lg transition-colors duration-300 hover:bg-gray-700"
                 onClick={() => {
                   setShowAuth(true);
-                  setFormType("signup");
+                  setFormType("signup-form");
                 }}
               >
                 Get Started

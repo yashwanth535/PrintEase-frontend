@@ -2,7 +2,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const AuthForms = ({ initialForm = "signin", onClose }) => {
+const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   const API_URL = import.meta.env.VITE_API_URL;
   const [formType, setFormType] = useState(initialForm);
   const [email, setEmail] = useState("");
@@ -51,6 +51,7 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
     try {
       const response = await fetch(`${API_URL}/auth/userExists`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, isVendor }),
       });
@@ -61,11 +62,11 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
         if (type === 'signup') {
           setMessage("Email Already registered")
         } else {
-          generateOTP("This is your one time password to reset password");
+          generateOTP("This is your one time password to reset password",type);
         }
       } else {
         if (type === 'signup') {
-          generateOTP("This is your one time password to register into printEase");
+          generateOTP("This is your one time password to register into printEase",type);
         } else {
           setMessage("Email is not registered")
         }
@@ -74,13 +75,12 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
       console.error("Error during signup:", error);
       setMessage("Something went wrong. Please try again.");
     }
-
-    setLoading(false);
   };
 
-  const generateOTP = async (text) => {
+  const generateOTP = async (text,type) => {
     const otpResponse = await fetch(`${API_URL}/auth/generateOTP`, {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email,
@@ -91,7 +91,12 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
 
     if (otpResponse.ok) {
       setMessage("OTP sent to your email");
-      setFormType("otp-reset");
+      setLoading(false);
+      if(type==='signup'){
+        setFormType("otp-signup")
+      }else{
+        setFormType("otp-reset");
+      }
     } else {
       setMessage(otpData.message || "Failed to send OTP");
     }
@@ -100,9 +105,11 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
   const verifyOtp = async (event, type) => {
     event.preventDefault();
     setLoading(true);
+    console.log('otp is:'+otp);
     try {
       const response = await fetch(`${API_URL}/auth/verifyOTP`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otp }),
       });
@@ -127,6 +134,7 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
     try {
       const response = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, isVendor }),
       });
@@ -149,8 +157,9 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
     try {
       const response = await fetch(`${API_URL}/auth/reset_password`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password ,isVendor}),
       });
 
       const data = await response.json();
@@ -184,14 +193,15 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
         transition={{ duration: 0.3 }}
         className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg"
       >
+
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800 pr-5">
-            {formType === 'signin' ? 'Welcome Back' : 
-             formType === 'signup' ? 'Create Account' :
-             formType === 'reset' ? 'Reset Password' :
+            {formType === 'signin-form' ? 'Welcome Back' : 
+             formType === 'signup-form' ? 'Create Account' :
+             formType === 'reset-password-form' ? 'Reset Password' :
              formType.includes('otp') ? 'Verify OTP' : 'New Password'}
           </h2>
-          {(formType === 'signin' || formType === 'signup') && (
+          {(formType === 'signin-form' || formType === 'signup-form' || formType=== 'reset-password-form') && (
             <div className="flex items-center space-x-2">
               <span className={`text-sm ${!isVendor ? 'text-blue-600 font-semibold' : 'text-gray-500'}`}>User</span>
               <button
@@ -209,7 +219,7 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
           )}
         </div>
 
-        {formType === 'signin' && (
+        {formType === 'signin-form' && (
           <form onSubmit={handleSignIn} className="space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Email</label>
@@ -260,14 +270,14 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
             <div className="flex justify-between text-sm">
               <button
                 type="button"
-                onClick={() => setFormType('reset')}
+                onClick={() => setFormType('reset-password-form')}
                 className="text-blue-600 hover:text-blue-800 transition duration-200"
               >
                 Forgot password?
               </button>
               <button
                 type="button"
-                onClick={() => setFormType('signup')}
+                onClick={() => setFormType('signup-form')}
                 className="text-blue-600 hover:text-blue-800 transition duration-200"
               >
                 Create account
@@ -276,7 +286,7 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
           </form>
         )}
 
-        {formType === 'signup' && (
+        {formType === 'signup-form' && (
           <form onSubmit={(e) => handleOTP(e, 'signup')} className="space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Email</label>
@@ -329,7 +339,7 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
               <button
                 type="button"
                 className="text-blue-600 hover:text-blue-800 transition duration-200"
-                onClick={() => setFormType("signin")}
+                onClick={() => setFormType("signin-form")}
               >
                 Sign In
               </button>
@@ -367,7 +377,7 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
           </form>
         )}
 
-        {formType === 'reset' && (
+        {formType === 'reset-password-form' && (
           <form onSubmit={(e) => handleOTP(e, 'reset')} className="space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Email</label>
@@ -398,7 +408,7 @@ const AuthForms = ({ initialForm = "signin", onClose }) => {
             <button
               type="button"
               className="w-full text-center text-sm text-blue-600 hover:text-blue-800 transition duration-200"
-              onClick={() => setFormType('signin')}
+              onClick={() => setFormType('signin-form')}
             >
               Back to Sign In
             </button>
