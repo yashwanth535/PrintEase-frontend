@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import AuthForms from "../components/auth";
 import mainImage from '../assets/main_img.png';
+import logo from '../../public/printer.svg'
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Printer, Menu, X, Home, Info, Wrench, PhoneCall } from 'lucide-react';
@@ -51,7 +52,8 @@ const LandingPage = () => {
           <div className="flex justify-between items-center">
 
           <Link to="/" onClick={() => window.location.reload()} className="flex items-center space-x-2 group">
-            <Printer className="h-6 w-6 group-hover:text-blue-400 transition-colors duration-300" />
+            {/* <Printer className="h-6 w-6 group-hover:text-blue-400 transition-colors duration-300" /> */}
+            <img src={logo} alt="" className="h-8 w-8" />
             <h1 className="text-xl font-bold group-hover:text-blue-400 transition-colors duration-300">
               PrintEase
             </h1>
