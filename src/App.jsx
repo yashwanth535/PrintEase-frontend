@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Auth from "./components/auth"; // Import Auth component
-import Home from "./pages/home"; // Import Home component
+import UserHome from "./pages/user/home";
+import VendorHome from "./pages/vendor/home";
 import Error from "./pages/error";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/landing";
@@ -16,9 +16,14 @@ function App() {
         <Route path="/error" element={<Error/>} />
         
         {/* Protected Route */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/home" element={<Home />} />
+        <Route element={<ProtectedRoute role="user"/>}>
+          <Route path="/u/home" element={<UserHome />} />
         </Route>
+
+        <Route element={<ProtectedRoute role="vendor"/>}>
+          <Route path="/v/home" element={<VendorHome/>} />
+        </Route>
+
       </Routes>
     </Router>
   );

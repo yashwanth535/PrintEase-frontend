@@ -31,10 +31,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Login successful");
-        setTimeout(() => {
-          window.location.href = "/home";
-        }, 1500);
+          window.location.href = isVendor?"v/home":"u/home";
       } else {
         setMessage(data.message);
       }
@@ -142,7 +139,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
       if (response.status === 400) {
         setMessage(data.message);
       } else {
-        window.location.href = "/home";
+        window.location.href = isVendor?"v/home":"u/home";
       }
     } catch (error) {
       console.error("Error during signup:", error);

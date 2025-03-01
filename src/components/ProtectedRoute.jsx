@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = () => {
+const ProtectedRoute = ({ role }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
 
     useEffect(() => {
@@ -13,9 +13,10 @@ const ProtectedRoute = () => {
                     credentials: "include",
                     headers: { "Content-Type": "application/json" },
                 });
-
                 const data = await response.json();
-                setIsAuthenticated(data.authenticated);
+                if(data.authenticated){
+                    setIsAuthenticated(data.role===role);
+                }
             } catch (error) {
                 console.error("Error checking authentication:", error);
                 setIsAuthenticated(false);
