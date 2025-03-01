@@ -19,8 +19,14 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
     setFormType(initialForm);
   }, [initialForm]);
 
+  // Clear message when form type changes
+  useEffect(() => {
+    setMessage("");
+  }, [formType]);
+
   const handleSignIn = async (event) => {
     event.preventDefault();
+    setMessage(""); // Clear message on new submission
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/auth/signin`, {
@@ -43,6 +49,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
   const handleOTP = async (event, type) => {
     event.preventDefault();
+    setMessage(""); // Clear message on new submission
     setLoading(true);
 
     try {
@@ -101,6 +108,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
   const verifyOtp = async (event, type) => {
     event.preventDefault();
+    setMessage(""); // Clear message on new submission
     setLoading(true);
     console.log('otp is:'+otp);
     try {
@@ -149,6 +157,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
   const resetPassword = async (event) => {
     event.preventDefault();
+    setMessage(""); // Clear message on new submission
     setLoading(true);
 
     try {
@@ -183,16 +192,16 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+    <div className="flex justify-center items-center my-12">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg"
+        className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md"
       >
 
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 pr-5">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 pr-5">
             {formType === 'signin-form' ? 'Welcome Back' : 
              formType === 'signup-form' ? 'Create Account' :
              formType === 'reset-password-form' ? 'Reset Password' :
@@ -200,18 +209,18 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
           </h2>
           {(formType === 'signin-form' || formType === 'signup-form' || formType=== 'reset-password-form') && (
             <div className="flex items-center space-x-2">
-              <span className={`text-sm ${!isVendor ? 'text-blue-600 font-semibold' : 'text-gray-500'}`}>User</span>
+              <span className={`text-sm ${!isVendor ? 'text-black font-semibold' : 'text-gray-500'}`}>User</span>
               <button
                 onClick={() => setIsVendor(!isVendor)}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none
-                  ${isVendor ? 'bg-blue-600' : 'bg-gray-200'}`}
+                  ${isVendor ? 'bg-black' : 'bg-gray-200'}`}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-300
                     ${isVendor ? 'translate-x-6' : 'translate-x-1'}`}
                 />
               </button>
-              <span className={`text-sm ${isVendor ? 'text-blue-600 font-semibold' : 'text-gray-500'}`}>Vendor</span>
+              <span className={`text-sm ${isVendor ? 'text-black font-semibold' : 'text-gray-500'}`}>Vendor</span>
             </div>
           )}
         </div>
@@ -221,7 +230,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Email</label>
               <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -233,7 +242,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               <label className="text-sm font-medium text-gray-700">Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
@@ -242,7 +251,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
                   onClick={togglePasswordVisibility}
                 >
                   {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
@@ -252,7 +261,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
               disabled={loading}
             >
               {loading ? 'Signing in...' : 'Sign In'}
@@ -268,14 +277,14 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               <button
                 type="button"
                 onClick={() => setFormType('reset-password-form')}
-                className="text-blue-600 hover:text-blue-800 transition duration-200"
+                className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
               >
                 Forgot password?
               </button>
               <button
                 type="button"
                 onClick={() => setFormType('signup-form')}
-                className="text-blue-600 hover:text-blue-800 transition duration-200"
+                className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
               >
                 Create account
               </button>
@@ -288,7 +297,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Email</label>
               <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -300,7 +309,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               <label className="text-sm font-medium text-gray-700">Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Choose a password"
                   value={password}
@@ -309,7 +318,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
                   onClick={togglePasswordVisibility}
                 >
                   {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
@@ -319,7 +328,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
               disabled={loading}
             >
               {loading ? 'Sending OTP...' : 'Continue'}
@@ -335,7 +344,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               Already have an account?{" "}
               <button
                 type="button"
-                className="text-blue-600 hover:text-blue-800 transition duration-200"
+                className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
                 onClick={() => setFormType("signin-form")}
               >
                 Sign In
@@ -349,7 +358,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Enter OTP</label>
               <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                 type="text"
                 placeholder="Enter the OTP sent to your email"
                 value={otp}
@@ -360,7 +369,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
               disabled={loading}
             >
               {loading ? 'Verifying...' : 'Verify OTP'}
@@ -379,7 +388,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Email</label>
               <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -390,7 +399,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
               disabled={loading}
             >
               {loading ? 'Sending OTP...' : 'Send OTP'}
@@ -404,7 +413,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
             <button
               type="button"
-              className="w-full text-center text-sm text-blue-600 hover:text-blue-800 transition duration-200"
+              className="w-full text-center text-sm text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
               onClick={() => setFormType('signin-form')}
             >
               Back to Sign In
@@ -418,7 +427,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               <label className="text-sm font-medium text-gray-700">New Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter new password"
                   value={password}
@@ -427,7 +436,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
                   onClick={togglePasswordVisibility}
                 >
                   {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
@@ -439,7 +448,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               <label className="text-sm font-medium text-gray-700">Confirm New Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Confirm new password"
                   value={confirmPassword}
@@ -448,7 +457,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
                   onClick={toggleConfirmPasswordVisibility}
                 >
                   {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
@@ -458,7 +467,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
               disabled={loading}
             >
               {loading ? 'Updating Password...' : 'Update Password'}

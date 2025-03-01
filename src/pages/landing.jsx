@@ -6,6 +6,7 @@ import logo from '../../public/printer.svg'
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Printer, Menu, X, Home, Info, Wrench, PhoneCall } from 'lucide-react';
+import LandingHeader from "../components/LandingHeader";
 
 const LandingPage = () => {
   const [showAuth, setShowAuth] = useState(false);
@@ -28,6 +29,12 @@ const LandingPage = () => {
     setShowAuth(false);
   };
 
+  const handleShowAuth = (formType) => {
+    setShowAuth(true);
+    setFormType(formType);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
@@ -42,113 +49,12 @@ const LandingPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <motion.header 
-        ref={headerRef}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="fixed w-full z-50 bg-gray-800 bg-opacity-95 backdrop-blur-sm text-white shadow-lg"
-      >
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex justify-between items-center">
-
-          <Link to="/" onClick={() => window.location.reload()} className="flex items-center space-x-2 group">
-            {/* <Printer className="h-6 w-6 group-hover:text-blue-400 transition-colors duration-300" /> */}
-            <img src={logo} alt="" className="h-8 w-8" />
-            <h1 className="text-xl font-bold group-hover:text-blue-400 transition-colors duration-300">
-              PrintEase
-            </h1>
-          </Link>
-
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <Link
-                    key={item.name}
-                    to={item.path}
-                    className="relative flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
-                    onClick={(e) => {
-                        if (item.reload) {
-                            e.preventDefault(); // Prevent React Router from handling navigation
-                            window.location.href = item.path; // Force full reload
-                        }
-                    }}
-                >
-                    <item.icon className="h-4 w-4 group-hover:text-blue-400 transition-colors duration-300" />
-                    <span>{item.name}</span>
-                    <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                </Link>
-            ))}
-
-            </nav>
-
-            {/* Desktop Auth Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
-              <button
-                className="px-4 py-2 rounded-md border border-white/50 hover:border-white hover:bg-white/10 transition-all duration-300"
-                onClick={() => { setShowAuth(true); setFormType("signin-form"); }}
-              >
-                Sign In
-              </button>
-              <button
-                className="px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
-                onClick={() => { setShowAuth(true); setFormType("signup-form"); }}
-              >
-                Get Started
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 hover:bg-gray-700 rounded-md transition-colors duration-300"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-
-          {/* Mobile Menu */}
-          <motion.div
-            initial="hidden"
-            animate={isMenuOpen ? "visible" : "hidden"}
-            variants={{
-              visible: { height: 'auto', opacity: 1 },
-              hidden: { height: 0, opacity: 0 }
-            }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden overflow-hidden"
-          >
-            <div className="py-4 space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className="flex items-center space-x-2 px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-md transition-colors duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-              <div className="pt-4 space-y-2">
-                <button
-                  className="w-full px-4 py-2 rounded-md border border-white/50 hover:border-white hover:bg-white/10 transition-all duration-300"
-                  onClick={() => { setShowAuth(true); setFormType("signin"); setIsMenuOpen(false); }}
-                >
-                  Sign In
-                </button>
-                <button
-                  className="w-full px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 transition-colors duration-300"
-                  onClick={() => { setShowAuth(true); setFormType("signup"); setIsMenuOpen(false); }}
-                >
-                  Get Started
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </motion.header>
+      <LandingHeader 
+        setShowAuth={handleShowAuth}
+        setFormType={setFormType}
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+      />
 
       {/* Add margin-top to account for fixed header */}
       <div className="pt-16">
@@ -183,10 +89,7 @@ const LandingPage = () => {
               </p>
               <button
                 className="mt-6 bg-gray-800 text-white px-6 py-3 rounded-md text-lg transition-colors duration-300 hover:bg-gray-700"
-                onClick={() => {
-                  setShowAuth(true);
-                  setFormType("signup-form");
-                }}
+                onClick={() => handleShowAuth("signup-form")}
               >
                 Get Started
               </button>
@@ -205,16 +108,16 @@ const LandingPage = () => {
 
         <section 
           ref={featuresRef} 
-          className="py-16 px-6 bg-white"
+          className="py-16 px-6 bg-white relative"
         >
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             animate={featuresInView ? { opacity: 1, y: 0 } : {}}
-            className="text-3xl font-bold text-center text-gray-800"
+            className="text-3xl font-bold text-center text-gray-800 mb-12"
           >
             Key Features
           </motion.h2>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto relative z-10">
             {[
               {
                 title: "Seamless PDF Uploads",
@@ -248,14 +151,17 @@ const LandingPage = () => {
                 animate={featuresInView ? "visible" : "hidden"}
                 whileHover="hover"
                 transition={{ delay: index * 0.1 }}
-                className="bg-gray-100 p-6 rounded-lg shadow-md feature-card h-64 flex flex-col justify-between"
+                className="bg-white/60 backdrop-blur-sm border border-black/5 p-6 rounded-xl shadow-lg feature-card h-64 flex flex-col justify-between relative overflow-hidden group hover:bg-white/80 transition-all duration-300"
               >
-                <div>
+                <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+                <div className="relative z-10">
                   <h3 className="text-xl font-semibold text-gray-800">{feature.title}</h3>
                   <p className="text-gray-600 mt-2">{feature.description}</p>
                 </div>
-                <div className="mt-4">
-                  <Link to="/about" className="text-blue-600 hover:underline">Learn More</Link>
+                <div className="mt-4 relative z-10">
+                  <Link to="/about" className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200">
+                    Learn More
+                  </Link>
                 </div>
               </motion.div>
             ))}

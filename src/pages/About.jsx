@@ -44,13 +44,13 @@ const About = () => {
   };
 
   return (
-    <div className="min-h-screen py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <Link
           to="/"
-          className="inline-flex items-center text-gray-600 hover:text-blue-400 transition-colors mb-8"
+          className="inline-flex items-center text-black/80 hover:text-black transition-colors mb-8 group"
         >
-          <ArrowLeft className="w-5 h-5 mr-2" />
+          <ArrowLeft className="w-5 h-5 mr-2 group-hover:text-gray-600" />
           Back to Home
         </Link>
 
@@ -58,10 +58,12 @@ const About = () => {
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
+            className="text-4xl font-extrabold sm:text-5xl md:text-6xl"
           >
-            About
-            <span className="block mt-2 bg-clip-text text-transparent bg-blue-400">
+            <span className="text-white [-webkit-text-stroke:1px_black] text-stroke-black">
+              About
+            </span>
+            <span className="block mt-2 text-gray-900">
               PrintEase
             </span>
           </motion.h1>
@@ -69,7 +71,7 @@ const About = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="mt-4 max-w-2xl mx-auto text-xl text-gray-500"
+            className="mt-4 max-w-2xl mx-auto text-xl text-gray-600"
           >
             Simplifying the printing process for everyone.
           </motion.p>
@@ -79,7 +81,7 @@ const About = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mt-20 prose prose-lg mx-auto text-gray-500"
+          className="mt-20 prose prose-lg mx-auto text-gray-600"
         >
           <p>
             PrintEase was created to address the complexities of modern printing needs. We aim to make the printing process as simple and efficient as possible.
@@ -99,13 +101,16 @@ const About = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="text-center"
+              className="bg-white/60 backdrop-blur-sm border border-black/5 p-6 rounded-xl shadow-lg text-center relative overflow-hidden group hover:bg-white/80 transition-all duration-300"
             >
-              <div className="inline-flex p-3 rounded-lg bg-blue-400">
-                <value.icon className="w-6 h-6 text-white" />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+              <div className="relative z-10">
+                <div className="inline-flex p-3 rounded-lg bg-black/80">
+                  <value.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="mt-4 text-xl font-semibold text-gray-900">{value.title}</h3>
+                <p className="mt-2 text-gray-600">{value.description}</p>
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">{value.title}</h3>
-              <p className="mt-2 text-gray-500">{value.description}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -114,12 +119,12 @@ const About = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-20 text-center"
+          className="mt-20 text-center mb-10"
         >
           <h2 className="text-3xl font-bold text-gray-900">Get in Touch</h2>
-          <p className="mt-4 text-xl text-gray-500">
+          <p className="mt-4 text-xl text-gray-600">
             We'd love to hear from you. Reach out to us at{' '}
-            <a href="mailto:contact@printease.com" className="text-blue-400 hover:text-blue-500">
+            <a href="mailto:contact@printease.com" className="text-black hover:text-gray-600 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200">
               contact@printease.com
             </a>
           </p>
