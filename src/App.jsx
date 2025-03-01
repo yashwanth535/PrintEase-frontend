@@ -5,6 +5,7 @@ import Error from "./pages/error";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/landing";
 import About from "./pages/About";
+import NotFound from "./pages/PageNotFound";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
         <Route element={<ProtectedRoute role="vendor"/>}>
           <Route path="/v/home" element={<VendorHome/>} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
 
       </Routes>
     </Router>
