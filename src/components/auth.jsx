@@ -29,7 +29,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
     setMessage(""); // Clear message on new submission
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/auth/signin`, {
+      const response = await fetch(`${API_URL}/api/auth/signin`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -53,7 +53,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/auth/userExists`, {
+      const response = await fetch(`${API_URL}/api/auth/userExists`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -82,7 +82,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   };
 
   const generateOTP = async (text,type) => {
-    const otpResponse = await fetch(`${API_URL}/auth/generateOTP`, {
+    const otpResponse = await fetch(`${API_URL}/api/auth/generateOTP`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -112,7 +112,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
     setLoading(true);
     console.log('otp is:'+otp);
     try {
-      const response = await fetch(`${API_URL}/auth/verifyOTP`, {
+      const response = await fetch(`${API_URL}/api/auth/verifyOTP`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -137,7 +137,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   const signUpUser = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/auth/signup`, {
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -161,7 +161,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/auth/reset_password`, {
+      const response = await fetch(`${API_URL}/api/auth/reset_password`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

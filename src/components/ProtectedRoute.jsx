@@ -8,8 +8,9 @@ const ProtectedRoute = ({ role }) => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
+                console.log("checking authentication");
                 const API_URL = import.meta.env.VITE_API_URL;
-                const response = await fetch(`${API_URL}/auth/isAuthenticated`, {
+                const response = await fetch(`${API_URL}/api/auth/isAuthenticated`, {
                     method: "POST",
                     credentials: "include",
                     headers: { "Content-Type": "application/json" },
