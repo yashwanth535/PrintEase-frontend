@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { Menu, X, Home, Info } from 'lucide-react';
-import logo from '../../public/printer.svg';
 
 const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) => {
   const navItems = [
@@ -19,7 +18,7 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <Link to="/" onClick={() => window.location.reload()} className="flex items-center space-x-2 group">
-            <img src={logo} alt="" className="h-8 w-8" />
+            <img src="/printer.svg" alt="" className="h-8 w-8" />
             <h1 className="text-xl font-bold group-hover:text-gray-600 transition-colors duration-300">
               PrintEase
             </h1>

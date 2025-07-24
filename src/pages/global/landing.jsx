@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import AuthForms from "../components/auth";
-import mainImage from '../assets/main_img.png';
-import logo from '../../public/printer.svg'
+import AuthForms from "../../components/global/auth";
+import mainImage from '../../assets/main_img.png';
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Printer, Menu, X, Home, Info, Wrench, PhoneCall } from 'lucide-react';
-import LandingHeader from "../components/LandingHeader";
+import LandingHeader from "../../components/global/LandingHeader";
 
 const LandingPage = () => {
   const [showAuth, setShowAuth] = useState(false);

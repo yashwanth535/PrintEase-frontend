@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const PdfUpload = () => {
+const FileUpload = () => {
   const API_URL = import.meta.env.VITE_API_URL;
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -9,11 +9,11 @@ const PdfUpload = () => {
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
-    if (file && file.type === 'application/pdf') {
+    if (file) {
       setSelectedFile(file);
       setUploadStatus('');
     } else {
-      setUploadStatus('Please select a PDF file');
+      setUploadStatus('Please select a valid file');
       setSelectedFile(null);
     }
   };
@@ -26,14 +26,14 @@ const PdfUpload = () => {
 
     setUploading(true);
     const formData = new FormData();
-    formData.append('pdf', selectedFile);
+    formData.append('file', selectedFile); // Changed 'pdf' to 'file'
 
     try {
-      const response = await axios.post(`${API_URL}/api/upload-pdf`, formData, {
+      const response = await axios.post(`${API_URL}/api/upload-file`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        credentials: 'include',
+        withCredentials: true, // credentials => withCredentials
       });
 
       setUploadStatus('File uploaded successfully!');
@@ -48,7 +48,7 @@ const PdfUpload = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-8 p-8 bg-white rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Upload PDF Document</h2>
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">Upload File</h2>
       <div className="space-y-4">
         <div className="flex flex-col items-center justify-center w-full">
           <label
@@ -75,12 +75,11 @@ const PdfUpload = () => {
               <p className="text-sm text-gray-600">
                 {selectedFile ? selectedFile.name : 'Click to upload or drag and drop'}
               </p>
-              <p className="text-xs text-gray-500 mt-1">PDF files only</p>
+              <p className="text-xs text-gray-500 mt-1">All file types accepted</p>
             </div>
             <input
               id="file-input"
               type="file"
-              accept=".pdf"
               onChange={handleFileSelect}
               className="hidden"
             />
@@ -120,7 +119,7 @@ const PdfUpload = () => {
               Uploading...
             </span>
           ) : (
-            'Upload PDF'
+            'Upload File'
           )}
         </button>
 
@@ -140,4 +139,4 @@ const PdfUpload = () => {
   );
 };
 
-export default PdfUpload; 
+export default FileUpload;

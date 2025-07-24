@@ -16,6 +16,7 @@ const ProtectedRoute = ({ role }) => {
                     headers: { "Content-Type": "application/json" },
                 });
                 const data = await response.json();
+                console.log(data);
                 setIsAuthenticated(data.authenticated?data.role===role:false);
             } catch (error) {
                 console.error("Error checking authentication:", error);
