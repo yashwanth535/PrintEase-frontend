@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UserHeader from "../../components/user/header";
 import axios from "axios";
-import * as pdfjsLib from "pdfjs-dist";
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
+
+import { pdfjs } from 'react-pdf';
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -52,6 +54,12 @@ const CreateOrder = () => {
     }
   };
 
+  const getPageCount = async (file) => {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+    return pdf.numPages;
+  };
+
   const handleFile = async (file) => {
     setUploading(true);
     setUploadStatus("Uploading...");
@@ -59,9 +67,8 @@ const CreateOrder = () => {
 
     if (file.type === "application/pdf") {
       try {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        setPageCount(pdf.numPages);
+        const pages = await getPageCount(file);
+        setPageCount(pages);
       } catch (err) {
         console.error("Failed to read PDF:", err);
         setPageCount(1);
