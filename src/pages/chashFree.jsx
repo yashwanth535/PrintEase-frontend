@@ -17,8 +17,8 @@ const CashfreeCheckout = () => {
 
     const checkoutOptions = {
       paymentSessionId: sessionId,
-      returnUrl:"http://localhost:5173?myorder={order_id}",
-      redirectTarget: '_blank', // _blank, _modal, _top also supported
+      returnUrl: `${window.location.origin}/u/payment-success?order_id={order_id}`,
+      redirectTarget: '_self', // _blank, _modal, _top also supported
     };
 
     cashfree.checkout(checkoutOptions);

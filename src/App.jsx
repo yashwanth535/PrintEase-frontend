@@ -14,6 +14,8 @@ import CashfreeCheckout from "./pages/chashFree";
 import BackendCheck from './pages/global/ui/BackendCheck';
 import VendorMap from "./pages/vendor/vendorMap";
 import Cart from "./pages/user/cart";
+import Checkout from "./pages/user/checkout";
+import PaymentSuccess from "./pages/user/paymentSuccess";
 import CreateOrder from "./pages/user/createOrder";
 import VendorList from "./pages/user/vendorList";
 import Dev from "./pages/global/dev";
@@ -45,6 +47,8 @@ function App() {
           <Route element={<ProtectedRoute role="user"/>}>
             <Route path="/u/home" element={<UserHome />} />
             <Route path="/u/cart" element={<Cart />} />
+            <Route path="/u/checkout" element={<Checkout />} />
+            <Route path="/u/payment-success" element={<PaymentSuccess />} />
             <Route path="/u/vendors" element={<VendorList />} />
             <Route path="/u/order/create/:vendorId" element={<CreateOrder />} />
             <Route path='/u/vendor-profile/:vendorId' element={<VendorProfileForUser/>} />

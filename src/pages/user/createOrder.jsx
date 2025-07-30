@@ -79,6 +79,7 @@ const CreateOrder = () => {
 
     setUploading(false);
     setUploadStatus("File selected.");
+    handleFileUpload(file);
   };
 
   const handleFileUpload = async (file) => {
@@ -101,6 +102,7 @@ const CreateOrder = () => {
     try {
       const res = await fetch(`${API_URL}/api/user/signed-url`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fileName: file.name,
@@ -120,6 +122,7 @@ const CreateOrder = () => {
       if (!uploadRes.ok) throw new Error("Upload failed");
 
       const fullUrl = `${SUPABASE_URL}/storage/v1/object/public/printease/${path}`;
+      console.log(fullUrl);
       setFileUrl(fullUrl);
       setUploadStatus("File uploaded successfully!");
     } catch (err) {
@@ -144,7 +147,7 @@ const CreateOrder = () => {
     return total.toFixed(2);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!fileUrl) {
       alert("Please upload a file before submitting.");
@@ -153,20 +156,38 @@ const CreateOrder = () => {
 
     const orderData = {
       fileUrl,
-      copies,
-      printType,
-      paperSize,
+      totalPrice: parseFloat(calculateTotal()),
+      pages: pageCount,
+      color: printType === 'color' ? true : false,
+      sets: copies,
+      size: paperSize,
+      binding: binding === 'no' ? 'none' : binding,
       notes,
-      binding,
       vendorId: vendorId || null,
-      pageCount,
-      totalPrice: calculateTotal(),
     };
 
     console.log("Submitting order:", orderData);
 
-    // TODO: POST orderData to backend
-    navigate("/u/cart");
+    try {
+      const response = await fetch(`${API_URL}/api/order/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        alert("Order created successfully!");
+        navigate("/u/cart");
+      } else {
+        alert("Failed to create order: " + data.message);
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Error creating order. Please try again.");
+    }
   };
 
   return (
