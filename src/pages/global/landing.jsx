@@ -47,7 +47,7 @@ const LandingPage = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <LandingHeader 
         setShowAuth={handleShowAuth}
         setFormType={setFormType}
@@ -57,7 +57,7 @@ const LandingPage = () => {
 
       {/* Add margin-top to account for fixed header */}
       <div className="pt-16">
-        <div className="bg-gray-100 flex flex-col md:flex-row items-center transition-all duration-300">
+        <div className="bg-white dark:bg-black flex flex-col md:flex-row items-center transition-all duration-300">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -79,15 +79,15 @@ const LandingPage = () => {
             }`}
           >
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-gray-800">
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
                 Hassle-Free Printing, Anytime, Anywhere!
               </h1>
-              <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 PrintEase connects you with local print shops for seamless PDF uploads, secure payments, and real-time
                 order tracking.
               </p>
               <button
-                className="mt-6 bg-gray-800 text-white px-6 py-3 rounded-md text-lg transition-colors duration-300 hover:bg-gray-700"
+                className="mt-6 btn-primary text-lg px-6 py-3"
                 onClick={() => handleShowAuth("signup-form")}
               >
                 Get Started
@@ -107,12 +107,12 @@ const LandingPage = () => {
 
         <section 
           ref={featuresRef} 
-          className="py-16 px-6 bg-white relative"
+          className="py-16 px-6 bg-white dark:bg-black relative transition-colors duration-300"
         >
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             animate={featuresInView ? { opacity: 1, y: 0 } : {}}
-            className="text-3xl font-bold text-center text-gray-800 mb-12"
+            className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12"
           >
             Key Features
           </motion.h2>
@@ -150,15 +150,15 @@ const LandingPage = () => {
                 animate={featuresInView ? "visible" : "hidden"}
                 whileHover="hover"
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/60 backdrop-blur-sm border border-black/5 p-6 rounded-xl shadow-lg feature-card h-64 flex flex-col justify-between relative overflow-hidden group hover:bg-white/80 transition-all duration-300"
+                className="card p-6 h-64 flex flex-col justify-between relative overflow-hidden group hover:shadow-lg transition-all duration-300"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
                 <div className="relative z-10">
-                  <h3 className="text-xl font-semibold text-gray-800">{feature.title}</h3>
-                  <p className="text-gray-600 mt-2">{feature.description}</p>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{feature.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mt-2">{feature.description}</p>
                 </div>
                 <div className="mt-4 relative z-10">
-                  <Link to="/about" className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200">
+                  <Link to="/about" className="text-black dark:text-white hover:text-gray-700 dark:hover:text-gray-300 underline decoration-gray-400 dark:decoration-gray-600 hover:decoration-gray-700 dark:hover:decoration-gray-500 transition duration-200">
                     Learn More
                   </Link>
                 </div>
@@ -167,7 +167,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <footer className="bg-gray-800 text-gray-300 py-4 text-center">
+        <footer className="bg-gray-900 dark:bg-black text-gray-300 py-4 text-center transition-colors duration-300">
           <p>&copy; {new Date().getFullYear()} PrintEase. All rights reserved.</p>
         </footer>
       </div>

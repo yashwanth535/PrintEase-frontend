@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaSignOutAlt, FaUser, FaMoneyBillWave, FaClipboardList, FaChartLine } from "react-icons/fa";
 import { motion } from "framer-motion";
-import logo from '../../../public/printer.svg';
 import VendorHeader from '../../components/vendor/header';
 
 const Home = () => {
@@ -36,7 +35,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       {/* Header */}
       <VendorHeader/>
       {/* Main Content */}
@@ -45,9 +44,9 @@ const Home = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-white/60 backdrop-blur-sm border border-black/5 p-6 rounded-xl shadow-lg"
+          className="card p-6"
         >
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Order Management</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Order Management</h2>
           <div className="grid gap-6">
             {orders.map((order) => (
               <motion.div
@@ -56,39 +55,39 @@ const Home = () => {
                 initial="hidden"
                 animate="visible"
                 whileHover="hover"
-                className="bg-white/60 backdrop-blur-sm border border-black/5 p-6 rounded-xl shadow-lg relative overflow-hidden group hover:bg-white/80 transition-all duration-300"
+                className="card p-6 relative overflow-hidden group hover:shadow-lg transition-all duration-300"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
                 <div className="relative z-10">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-800">Order #{order.id}</h3>
-                      <p className="text-gray-600">{order.customerName}</p>
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Order #{order.id}</h3>
+                      <p className="text-gray-600 dark:text-gray-400">{order.customerName}</p>
                     </div>
-                    <span className={`px-4 py-2 rounded-full text-sm font-medium ${
-                      order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
-                      order.status === 'completed' ? 'bg-green-100 text-green-800' :
-                      'bg-red-100 text-red-800'
+                    <span className={`px-4 py-2 text-sm font-medium ${
+                      order.status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400' :
+                      order.status === 'processing' ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400' :
+                      order.status === 'completed' ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400' :
+                      'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400'
                     }`}>
                       {order.status}
                     </span>
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-600">Items</p>
-                      <p className="font-medium text-gray-800">{order.items}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Items</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{order.items}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Total</p>
-                      <p className="font-medium text-gray-800">₹{order.total}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
+                      <p className="font-medium text-gray-900 dark:text-white">₹{order.total}</p>
                     </div>
                   </div>
                   <div className="mt-6 flex gap-3">
-                    <button className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                    <button className="btn-primary">
                       View Details
                     </button>
-                    <button className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors duration-300">
+                    <button className="btn-secondary">
                       Update Status
                     </button>
                   </div>

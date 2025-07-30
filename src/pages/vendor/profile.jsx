@@ -4,44 +4,40 @@ import VendorHeader from '../../components/vendor/header';
 
 const defaultVendorData = {
   email: "",
-  shopName: "",
   collection_name: "",
-  location: { address: "", pincode: "", lat: "", lng: "" },
+  shopName: "",
+  location: { 
+    address: "", 
+    pincode: "", 
+    lat: "", 
+    lng: "" 
+  },
   contactNumber: "",
   prices: {
-    A4: { color: "", black_white: "" },
-    A3: { color: "", black_white: "" },
-    A5: { color: "", black_white: "" },
-    A6: { color: "", black_white: "" },
-    water_color_print: "",
-    photo_print: { passport: "", "4x6": "", "5x7": "", "8x10": "" },
-    spiral_binding: {
-      up_to_50_pages: "",
-      up_to_100_pages: "",
-      up_to_200_pages: "",
-      above_200_pages: ""
+    color: {
+      A4: "",
+      A5: "",
+      A6: ""
     },
-    lamination: { A4: "", A3: "", ID_card: "" },
-    scanning: { per_page: "" },
-    xerox: { black_white: "", color: "" },
-    certificate_printing: { basic: "", premium: "" },
-    visiting_cards: { basic: "", premium: "" },
-    book_binding: { soft_cover: "", hard_cover: "" }
+    black_white: {
+      A4: "",
+      A5: "",
+      A6: ""
+    },
+    binding: {
+      soft: "",
+      hard: ""
+    }
   },
   services: {
-    colorPrinting: false,
-    blackWhitePrinting: false,
-    photoPrinting: false,
-    spiralBinding: false,
-    lamination: false,
-    scanning: false,
-    xerox: false,
-    certificatePrinting: false,
-    visitingCardPrinting: false,
-    bookBinding: false
+    colorPrinting: true,
+    blackWhitePrinting: true,
+    binding: true
   },
-  paymentOptions: [],
-  openHours: { open: "", close: "" },
+  openHours: { 
+    open: "", 
+    close: "" 
+  },
   isVerified: false,
   createdAt: ""
 };
@@ -49,14 +45,7 @@ const defaultVendorData = {
 const serviceLabels = {
   colorPrinting: "Color Printing",
   blackWhitePrinting: "Black & White Printing",
-  photoPrinting: "Photo Printing",
-  spiralBinding: "Spiral Binding",
-  lamination: "Lamination",
-  scanning: "Scanning",
-  xerox: "Xerox",
-  certificatePrinting: "Certificate Printing",
-  visitingCardPrinting: "Visiting Card Printing",
-  bookBinding: "Book Binding"
+  binding: "Binding"
 };
 
 const Profile = () => {
@@ -102,27 +91,14 @@ const Profile = () => {
     }));
   };
 
-  const handlePriceChange = (section, key, value) => {
+  const handlePriceChange = (category, size, value) => {
     setVendorData((prev) => ({
       ...prev,
       prices: {
         ...prev.prices,
-        [section]: {
-          ...prev.prices[section],
-          [key]: value
-        }
-      }
-    }));
-  };
-
-  const handlePhotoPrintChange = (key, value) => {
-    setVendorData((prev) => ({
-      ...prev,
-      prices: {
-        ...prev.prices,
-        photo_print: {
-          ...prev.prices.photo_print,
-          [key]: value
+        [category]: {
+          ...prev.prices[category],
+          [size]: value
         }
       }
     }));
@@ -144,13 +120,6 @@ const Profile = () => {
     setVendorData((prev) => ({
       ...prev,
       openHours: { ...prev.openHours, [name]: value }
-    }));
-  };
-
-  const handlePaymentOptionsChange = (e) => {
-    setVendorData((prev) => ({
-      ...prev,
-      paymentOptions: e.target.value.split(",").map((p) => p.trim())
     }));
   };
 
@@ -189,10 +158,6 @@ const Profile = () => {
       }
     );
   };
-  
-  
-
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -221,22 +186,22 @@ const Profile = () => {
   };
 
   // Helper for price fields
-  const renderPriceSection = (label, section, keys) => (
+  const renderPriceSection = (label, category, sizes) => (
     <fieldset className="border rounded p-4 mb-4">
       <legend className="font-semibold text-gray-700">{label}</legend>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-        {keys.map((key) => (
-          <div key={key} className="flex flex-col">
-            <label className="text-sm text-gray-600 font-medium">{key.replace(/_/g, " ")}</label>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+        {sizes.map((size) => (
+          <div key={size} className="flex flex-col">
+            <label className="text-sm text-gray-600 font-medium">{size}</label>
             {isEditing ? (
               <input
                 type="number"
                 className="border rounded p-1"
-                value={vendorData.prices[section]?.[key] || ""}
-                onChange={(e) => handlePriceChange(section, key, e.target.value)}
+                value={vendorData.prices[category]?.[size] || ""}
+                onChange={(e) => handlePriceChange(category, size, e.target.value)}
               />
             ) : (
-              <span>{vendorData.prices[section]?.[key] ?? "-"}</span>
+              <span>{vendorData.prices[category]?.[size] ?? "-"}</span>
             )}
           </div>
         ))}
@@ -247,7 +212,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <VendorHeader/>
-      <main className="max-w-5xl mx-auto px-4 py-12 mt-32">
+      <main className="max-w-4xl mx-auto px-4 py-12 mt-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -267,7 +232,7 @@ const Profile = () => {
                   </div>
                   <div>
                     <label>Shop Name</label>
-                    <input name="shopName" value={vendorData.shopName} onChange={handleChange} className="border p-2 rounded w-full" required />
+                    <input name="shopName" value={vendorData.shopName} onChange={handleChange} className="border p-2 rounded w-full" />
                   </div>
                   <div>
                     <label>Contact Number</label>
@@ -313,59 +278,13 @@ const Profile = () => {
                 </div>
               </fieldset>
 
-
-              {renderPriceSection("A4 Printing", "A4", ["color", "black_white"])}
-              {renderPriceSection("A3 Printing", "A3", ["color", "black_white"])}
-              {renderPriceSection("A5 Printing", "A5", ["color", "black_white"])}
-              {renderPriceSection("A6 Printing", "A6", ["color", "black_white"])}
-
-              <fieldset className="border rounded p-4 mb-4">
-                <legend className="font-semibold text-gray-700">Photo Printing</legend>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-                  {Object.keys(defaultVendorData.prices.photo_print).map((key) => (
-                    <div key={key} className="flex flex-col">
-                      <label className="text-sm text-gray-600 font-medium">{key.replace(/_/g, " ")}</label>
-                      {isEditing ? (
-                        <input
-                          type="number"
-                          className="border rounded p-1"
-                          value={vendorData.prices.photo_print[key] || ""}
-                          onChange={(e) => handlePhotoPrintChange(key, e.target.value)}
-                        />
-                      ) : (
-                        <span>{vendorData.prices.photo_print[key] ?? "-"}</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </fieldset>
-
-              <fieldset className="border rounded p-4 mb-4">
-                <legend className="font-semibold text-gray-700">Other Services & Prices</legend>
-                {renderPriceSection("Spiral Binding", "spiral_binding", ["up_to_50_pages", "up_to_100_pages", "up_to_200_pages", "above_200_pages"])}
-                {renderPriceSection("Lamination", "lamination", ["A4", "A3", "ID_card"])}
-                {renderPriceSection("Scanning", "scanning", ["per_page"])}
-                {renderPriceSection("Xerox", "xerox", ["black_white", "color"])}
-                {renderPriceSection("Certificate Printing", "certificate_printing", ["basic", "premium"])}
-                {renderPriceSection("Visiting Cards", "visiting_cards", ["basic", "premium"])}
-                {renderPriceSection("Book Binding", "book_binding", ["soft_cover", "hard_cover"])}
-                <div className="mt-4">
-                  <label>Watercolor Print</label>
-                  <input
-                    type="number"
-                    className="border rounded p-1 ml-2"
-                    value={vendorData.prices.water_color_print || ""}
-                    onChange={(e) => setVendorData((prev) => ({
-                      ...prev,
-                      prices: { ...prev.prices, water_color_print: e.target.value }
-                    }))}
-                  />
-                </div>
-              </fieldset>
+              {renderPriceSection("Color Printing", "color", ["A4", "A5", "A6"])}
+              {renderPriceSection("Black & White Printing", "black_white", ["A4", "A5", "A6"])}
+              {renderPriceSection("Binding", "binding", ["soft", "hard"])}
 
               <fieldset className="border rounded p-4 mb-4">
                 <legend className="font-semibold text-gray-700">Services Offered</legend>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                   {Object.keys(serviceLabels).map((key) => (
                     <label key={key} className="flex items-center gap-2">
                       <input
@@ -392,17 +311,6 @@ const Profile = () => {
                     <input name="close" value={vendorData.openHours.close || ""} onChange={handleOpenHoursChange} className="border p-2 rounded w-full" />
                   </div>
                 </div>
-              </fieldset>
-
-              <fieldset className="border rounded p-4 mb-4">
-                <legend className="font-semibold text-gray-700">Payment Options</legend>
-                <input
-                  type="text"
-                  value={vendorData.paymentOptions.join(", ")}
-                  onChange={handlePaymentOptionsChange}
-                  className="border p-2 rounded w-full"
-                  placeholder="Comma separated (e.g. Cash, UPI, Card)"
-                />
               </fieldset>
 
               <div className="flex gap-2">
@@ -435,6 +343,7 @@ const Profile = () => {
                   <div><strong>Created At:</strong> {vendorData.createdAt ? new Date(vendorData.createdAt).toLocaleString() : "-"}</div>
                 </div>
               </fieldset>
+              
               <fieldset className="border rounded p-4 mb-4">
                 <legend className="font-semibold text-gray-700">Location</legend>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -444,42 +353,20 @@ const Profile = () => {
                   <div><strong>Longitude:</strong> {vendorData.location.lng}</div>
                 </div>
               </fieldset>
-              {renderPriceSection("A4 Printing", "A4", ["color", "black_white"])}
-              {renderPriceSection("A3 Printing", "A3", ["color", "black_white"])}
-              {renderPriceSection("A5 Printing", "A5", ["color", "black_white"])}
-              {renderPriceSection("A6 Printing", "A6", ["color", "black_white"])}
-              <fieldset className="border rounded p-4 mb-4">
-                <legend className="font-semibold text-gray-700">Photo Printing</legend>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
-                  {Object.keys(defaultVendorData.prices.photo_print).map((key) => (
-                    <div key={key} className="flex flex-col">
-                      <span className="text-sm text-gray-600 font-medium">{key.replace(/_/g, " ")}</span>
-                      <span>{vendorData.prices.photo_print[key] ?? "-"}</span>
-                    </div>
-                  ))}
-                </div>
-              </fieldset>
-              <fieldset className="border rounded p-4 mb-4">
-                <legend className="font-semibold text-gray-700">Other Services & Prices</legend>
-                {renderPriceSection("Spiral Binding", "spiral_binding", ["up_to_50_pages", "up_to_100_pages", "up_to_200_pages", "above_200_pages"])}
-                {renderPriceSection("Lamination", "lamination", ["A4", "A3", "ID_card"])}
-                {renderPriceSection("Scanning", "scanning", ["per_page"])}
-                {renderPriceSection("Xerox", "xerox", ["black_white", "color"])}
-                {renderPriceSection("Certificate Printing", "certificate_printing", ["basic", "premium"])}
-                {renderPriceSection("Visiting Cards", "visiting_cards", ["basic", "premium"])}
-                {renderPriceSection("Book Binding", "book_binding", ["soft_cover", "hard_cover"])}
-                <div className="mt-4">
-                  <strong>Watercolor Print:</strong> {vendorData.prices.water_color_print ?? "-"}
-                </div>
-              </fieldset>
+              
+              {renderPriceSection("Color Printing", "color", ["A4", "A5", "A6"])}
+              {renderPriceSection("Black & White Printing", "black_white", ["A4", "A5", "A6"])}
+              {renderPriceSection("Binding", "binding", ["soft", "hard"])}
+              
               <fieldset className="border rounded p-4 mb-4">
                 <legend className="font-semibold text-gray-700">Services Offered</legend>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                   {Object.keys(serviceLabels).map((key) => (
                     <div key={key}><strong>{serviceLabels[key]}:</strong> {vendorData.services[key] ? "Yes" : "No"}</div>
                   ))}
                 </div>
               </fieldset>
+              
               <fieldset className="border rounded p-4 mb-4">
                 <legend className="font-semibold text-gray-700">Open Hours</legend>
                 <div className="grid grid-cols-2 gap-4">
@@ -487,10 +374,7 @@ const Profile = () => {
                   <div><strong>Close:</strong> {vendorData.openHours.close}</div>
                 </div>
               </fieldset>
-              <fieldset className="border rounded p-4 mb-4">
-                <legend className="font-semibold text-gray-700">Payment Options</legend>
-                <div>{vendorData.paymentOptions.join(", ")}</div>
-              </fieldset>
+              
               <button
                 className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
                 onClick={() => setIsEditing(true)}

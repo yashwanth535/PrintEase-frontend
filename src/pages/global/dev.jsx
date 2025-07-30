@@ -9,11 +9,12 @@ const Dev = ({ user }) => {
     const fetchAndRedirect = async () => {
       try {
         const endpoint = user ? `${api}/api/user/dev` : `${api}/api/vendor/dev`;
-
+        console.log(endpoint);
         const response = await fetch(endpoint, {
           method: "GET",
           credentials: "include", 
         });
+        console.log("resopnse came");
 
         if (response.ok) {
           if (user) {

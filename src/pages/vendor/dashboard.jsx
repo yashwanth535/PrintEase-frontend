@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaSignOutAlt, FaUser, FaMoneyBillWave, FaClipboardList, FaChartLine, FaFileAlt, FaCheckCircle, FaSpinner, FaTimesCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
-import logo from '../../../public/printer.svg';
 import VendorHeader from '../../components/vendor/header';
 
 const Dashboard = () => {
