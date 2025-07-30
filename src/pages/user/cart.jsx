@@ -134,7 +134,7 @@ const Cart = () => {
       <main className="pt-32 md:pt-36 px-4 pb-8">
         <div className="max-w-7xl mx-auto">
           {/* Header Section */}
-          <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                 Shopping Cart
@@ -378,7 +378,7 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
-            </div>
+        </div>
           )}
         </div>
       </main>
