@@ -6,23 +6,27 @@
  * @returns {Promise} Promise that resolves when SDK is available
  */
 export const waitForCashfree = (timeout = 10000) => {
+  console.log("🕐 Waiting for Cashfree SDK to load...");
+
   return new Promise((resolve, reject) => {
     const startTime = Date.now();
-    
+
     const checkCashfree = () => {
       if (typeof window.Cashfree !== 'undefined') {
+        console.log("✅ Cashfree SDK loaded successfully.");
         resolve(window.Cashfree);
         return;
       }
-      
+
       if (Date.now() - startTime > timeout) {
+        console.error("❌ Cashfree SDK failed to load within timeout.");
         reject(new Error('Cashfree SDK failed to load within timeout'));
         return;
       }
-      
+
       setTimeout(checkCashfree, 100);
     };
-    
+
     checkCashfree();
   });
 };
@@ -35,9 +39,14 @@ export const waitForCashfree = (timeout = 10000) => {
  * @returns {Promise} Promise that resolves when checkout is initiated
  */
 export const initializeCashfreeCheckout = async (paymentSessionId, returnUrl, mode = 'sandbox') => {
+  console.log("🛠️ Initializing Cashfree Checkout...");
+  console.log("📦 Payment Session ID:", paymentSessionId);
+  console.log("🔁 Return URL:", returnUrl);
+  console.log("🌐 Mode:", mode);
+
   try {
     const Cashfree = await waitForCashfree();
-    
+
     const cashfree = Cashfree({
       mode: mode,
     });
@@ -48,15 +57,20 @@ export const initializeCashfreeCheckout = async (paymentSessionId, returnUrl, mo
       redirectTarget: '_self',
     };
 
+    console.log("🚀 Calling `cashfree.checkout()` with options:", checkoutOptions);
+
     return new Promise((resolve, reject) => {
       try {
         cashfree.checkout(checkoutOptions);
+        console.log("✅ Cashfree checkout initialized.");
         resolve();
       } catch (error) {
+        console.error("❌ Error during `cashfree.checkout()`:", error);
         reject(error);
       }
     });
   } catch (error) {
+    console.error("❌ Failed to initialize Cashfree:", error.message);
     throw new Error(`Failed to initialize Cashfree: ${error.message}`);
   }
 };
@@ -66,5 +80,7 @@ export const initializeCashfreeCheckout = async (paymentSessionId, returnUrl, mo
  * @returns {boolean} True if SDK is available
  */
 export const isCashfreeAvailable = () => {
-  return typeof window.Cashfree !== 'undefined';
-}; 
+  const available = typeof window.Cashfree !== 'undefined';
+  console.log(`🔎 Cashfree SDK available: ${available}`);
+  return available;
+};

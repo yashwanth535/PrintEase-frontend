@@ -28,18 +28,24 @@ const Checkout = () => {
   }, [selectedOrders, navigate]);
 
   // Check if Cashfree SDK is loaded
-  useEffect(() => {
-    const checkSDK = () => {
-      if (isCashfreeAvailable()) {
-        setSdkLoading(false);
-      } else {
-        // Retry after a short delay
-        setTimeout(checkSDK, 500);
-      }
-    };
-    
-    checkSDK();
-  }, []);
+  // Check if Cashfree SDK is loaded
+useEffect(() => {
+  const checkSDK = () => {
+    console.log("🔍 Checking if Cashfree SDK is available...");
+
+    if (isCashfreeAvailable()) {
+      console.log("✅ Cashfree SDK is available.");
+      setSdkLoading(false);
+    } else {
+      console.log("❌ Cashfree SDK not available yet. Retrying in 500ms...");
+      // Retry after a short delay
+      setTimeout(checkSDK, 500);
+    }
+  };
+
+  checkSDK();
+}, []);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
