@@ -10,7 +10,6 @@ import LandingPage from "./pages/global/landing";
 import About from "./pages/global/About";
 import NotFound from "./pages/global/ui/PageNotFound";
 import { Toaster } from "react-hot-toast";
-import CashfreeCheckout from "./pages/chashFree";
 import BackendCheck from './pages/global/ui/BackendCheck';
 import VendorMap from "./pages/vendor/vendorMap";
 import Cart from "./pages/user/cart";
@@ -39,7 +38,6 @@ function App() {
           <Route path="/backend" element={<BackendCheck/>} />
           <Route path="/about" element={<About />} />
           <Route path="/error" element={<Error/>} />
-          <Route path="/checkout" element ={<CashfreeCheckout/>} />   
           <Route path = "/u/dev" element={<Dev user={true}/>}/> 
           <Route path = "/v/dev" element={<Dev user={false}/>} />
 
