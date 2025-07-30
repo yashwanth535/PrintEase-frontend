@@ -59,7 +59,7 @@ const Checkout = () => {
       if (data.success) {
         // Initialize Cashfree checkout
         const cashfree = window.Cashfree({
-          mode: 'sandbox', // or 'production'
+          mode: process.env.NODE_ENV === 'production' ? 'production' : 'sandbox',
         });
 
         const checkoutOptions = {
