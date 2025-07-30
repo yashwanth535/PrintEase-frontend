@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import UserHeader from "../../components/user/header";
 import { useState, useEffect } from "react";
+import { initializeCashfreeCheckout, isCashfreeAvailable } from "../../utils/cashfree.js";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,6 +10,7 @@ const Checkout = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [sdkLoading, setSdkLoading] = useState(true);
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
     email: "",
@@ -24,6 +26,20 @@ const Checkout = () => {
       navigate('/u/cart');
     }
   }, [selectedOrders, navigate]);
+
+  // Check if Cashfree SDK is loaded
+  useEffect(() => {
+    const checkSDK = () => {
+      if (isCashfreeAvailable()) {
+        setSdkLoading(false);
+      } else {
+        // Retry after a short delay
+        setTimeout(checkSDK, 500);
+      }
+    };
+    
+    checkSDK();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -57,18 +73,23 @@ const Checkout = () => {
       const data = await response.json();
       
       if (data.success) {
-        // Initialize Cashfree checkout
-        const cashfree = window.Cashfree({
-          mode: import.meta.env.VITE_PROD === 'true' ? 'production' : 'sandbox',
-        });
+        try {
+          // Check if Cashfree SDK is available
+          if (!isCashfreeAvailable()) {
+            setError("Payment gateway not loaded. Please refresh the page and try again.");
+            return;
+          }
 
-        const checkoutOptions = {
-          paymentSessionId: data.paymentSessionId,
-          returnUrl: `${window.location.origin}/u/payment-success?order_id=${data.orderId}`,
-          redirectTarget: '_self', // _blank, _modal, _top also supported
-        };
-
-        cashfree.checkout(checkoutOptions);
+          // Initialize Cashfree checkout with utility function
+          await initializeCashfreeCheckout(
+            data.paymentSessionId,
+            `${window.location.origin}/u/payment-success?order_id=${data.orderId}`,
+            import.meta.env.VITE_PROD === 'true' ? 'production' : 'sandbox'
+          );
+        } catch (error) {
+          console.error("Cashfree initialization error:", error);
+          setError(`Payment gateway error: ${error.message}`);
+        }
       } else {
         setError(data.message || "Failed to create payment order");
       }
@@ -210,24 +231,29 @@ const Checkout = () => {
                 </div>
               )}
 
-              <button
-                onClick={handlePayment}
-                disabled={loading || !customerDetails.name || !customerDetails.email || !customerDetails.phone}
-                className="w-full btn-primary mt-6 py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+                             <button
+                 onClick={handlePayment}
+                 disabled={loading || sdkLoading || !customerDetails.name || !customerDetails.email || !customerDetails.phone}
+                 className="w-full btn-primary mt-6 py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+               >
                 {loading ? (
                   <div className="flex items-center justify-center">
                     <div className="animate-spin h-5 w-5 border-b-2 border-white mr-2"></div>
                     Processing...
                   </div>
-                ) : (
-                  <>
-                    <svg className="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                    Pay ₹{totalAmount.toFixed(2)}
-                  </>
-                )}
+                                 ) : sdkLoading ? (
+                   <div className="flex items-center justify-center">
+                     <div className="animate-spin h-5 w-5 border-b-2 border-white mr-2"></div>
+                     Loading Payment Gateway...
+                   </div>
+                 ) : (
+                   <>
+                     <svg className="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                     </svg>
+                     Pay ₹{totalAmount.toFixed(2)}
+                   </>
+                 )}
               </button>
 
               <div className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
