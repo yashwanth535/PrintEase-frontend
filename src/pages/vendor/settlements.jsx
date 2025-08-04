@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import VendorHeader from "../../components/vendor/header";
-import { FaReceipt, FaTimes } from "react-icons/fa";
+import { FaUniversity, FaTimes } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const Payments = () => {
-  const [paidOrders, setPaidOrders] = useState([]);
+const Settlements = () => {
+  const [settlements, setSettlements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedSettlement, setSelectedSettlement] = useState(null);
 
   useEffect(() => {
-    fetchPaidOrders();
+    fetchSettlements();
   }, []);
 
-  const fetchPaidOrders = async () => {
+  const fetchSettlements = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/api/vendor/orders`, {
+      const response = await fetch(`${API_URL}/api/vendor/settlements`, {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -25,14 +25,13 @@ const Payments = () => {
 
       const data = await response.json();
       if (data.success) {
-        const paid = data.orders.filter((o) => o.paymentStatus === "paid");
-        setPaidOrders(paid);
+        setSettlements(data.settlements || []);
       } else {
-        setError(data.message || "Failed to fetch payments");
+        setError(data.message || "Failed to fetch settlements");
       }
     } catch (err) {
-      console.error("Error fetching payments:", err);
-      setError("Error fetching payments");
+      console.error("Error fetching settlements:", err);
+      setError("Error fetching settlements");
     } finally {
       setLoading(false);
     }
@@ -50,41 +49,41 @@ const Payments = () => {
       <VendorHeader />
       <main className="max-w-7xl mx-auto px-4 py-10 mt-32">
         <h1 className="text-2xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
-          <FaReceipt /> Payments Received
+          <FaUniversity /> Bank Settlements
         </h1>
 
         {loading ? (
-          <p className="text-gray-600 dark:text-gray-400">Loading payments...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading settlements...</p>
         ) : error ? (
           <p className="text-red-500">{error}</p>
-        ) : paidOrders.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400">No payments found.</p>
+        ) : settlements.length === 0 ? (
+          <p className="text-gray-500 dark:text-gray-400">No settlements found.</p>
         ) : (
           <div className="space-y-4">
-            {paidOrders.map((order) => (
+            {settlements.map((st) => (
               <div
-                key={order._id}
+                key={st._id}
                 className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 bg-white dark:bg-gray-900"
               >
                 <div className="flex justify-between items-start gap-2">
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                      Order #{order._id.slice(-6)}
+                      Settlement #{st._id.slice(-6)}
                     </h3>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
-                      Paid At: {order.paidAt ? new Date(order.paidAt).toLocaleString() : "-"}
+                      Date: {new Date(st.settledAt).toLocaleString()}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
-                      Customer: {order?.userId?.email || "Unknown"}
+                      Bank Ref: {st.bankReference || "-"}
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <span className="text-sm text-green-600 dark:text-green-400">PAID</span>
+                    <span className="text-sm text-green-600 dark:text-green-400">₹{st.amount}</span>
                     <button
-                      onClick={() => setSelectedOrder(order)}
+                      onClick={() => setSelectedSettlement(st)}
                       className="btn-secondary text-xs px-3 py-1"
                     >
-                      View Order
+                      View Details
                     </button>
                   </div>
                 </div>
@@ -95,28 +94,23 @@ const Payments = () => {
       </main>
 
       {/* Overlay Modal */}
-      {selectedOrder && (
+      {selectedSettlement && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-md w-full p-6 relative animate-fade-in">
             <button
-              onClick={() => setSelectedOrder(null)}
+              onClick={() => setSelectedSettlement(null)}
               className="absolute top-3 right-3 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white"
             >
               <FaTimes className="w-5 h-5" />
             </button>
             <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-              Order Details #{selectedOrder._id.slice(-6)}
+              Settlement #{selectedSettlement._id.slice(-6)}
             </h2>
             <div className="space-y-2 mb-4">
-              <DetailRow label="Pages per copy:" value={selectedOrder.pages} />
-              <DetailRow label="Total copies:" value={selectedOrder.sets} />
-              <DetailRow label="Print type:" value={selectedOrder.color ? "Color" : "Black & White"} />
-              <DetailRow label="Paper size:" value={selectedOrder.size} />
-              <DetailRow label="Binding:" value={selectedOrder.binding === "no" ? "None" : selectedOrder.binding} />
-              {selectedOrder.notes && <DetailRow label="Notes:" value={selectedOrder.notes} />}
-            </div>
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <DetailRow label="Total Cost:" value={`₹${selectedOrder.totalPrice}`} />
+              <DetailRow label="Amount:" value={`₹${selectedSettlement.amount}`} />
+              <DetailRow label="Settled At:" value={new Date(selectedSettlement.settledAt).toLocaleString()} />
+              <DetailRow label="Bank Reference:" value={selectedSettlement.bankReference || "-"} />
+              <DetailRow label="Status:" value={selectedSettlement.status} />
             </div>
           </div>
         </div>
@@ -125,4 +119,4 @@ const Payments = () => {
   );
 };
 
-export default Payments;
+export default Settlements;

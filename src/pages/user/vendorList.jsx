@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaStar, FaRegStar, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import UserHeader from '../../components/user/header';
 import axios from 'axios';
@@ -12,6 +13,8 @@ const VendorList = () => {
   const [selectedServices, setSelectedServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [favourites, setFavourites] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const vendorsPerPage = 10;
   const navigate = useNavigate();
@@ -40,15 +43,16 @@ const VendorList = () => {
     }
   }, []);
 
-  // Fetch vendors once
+  // Fetch vendors & favourites once
   useEffect(() => {
     fetchVendors();
+    fetchFavourites();
   }, []);
 
   // Refilter when service or location changes
   useEffect(() => {
     filterAndSortVendors();
-  }, [vendors, selectedServices, userLocation]);
+  }, [vendors, selectedServices, userLocation, searchTerm]);
 
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     if (!lat1 || !lng1 || !lat2 || !lng2) return null;
@@ -87,8 +91,37 @@ const VendorList = () => {
     }
   };
 
+  const fetchFavourites = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/user/favourites`, { withCredentials: true });
+      if (res.data.success) {
+        setFavourites(res.data.vendors.map(v => v._id));
+      }
+    } catch (err) {
+      console.error('Error fetching favourites:', err);
+    }
+  };
+
+  const toggleFavourite = async (vendorId) => {
+    try {
+      if (favourites.includes(vendorId)) {
+        await axios.delete(`${API_URL}/api/user/favourites/${vendorId}`, { withCredentials: true });
+        setFavourites(prev => prev.filter(id => id !== vendorId));
+      } else {
+        await axios.post(`${API_URL}/api/user/favourites`, { vendorId }, { withCredentials: true });
+        setFavourites(prev => [...prev, vendorId]);
+      }
+    } catch (err) {
+      console.error('Error toggling favourite:', err);
+    }
+  };
+
   const filterAndSortVendors = () => {
     let filtered = vendors;
+
+    if (searchTerm.trim() !== '') {
+      filtered = filtered.filter(v => v.shopName?.toLowerCase().includes(searchTerm.toLowerCase()));
+    }
 
     if (selectedServices.length > 0) {
       filtered = filtered.filter((vendor) => 
@@ -146,11 +179,23 @@ const VendorList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
       <UserHeader />
 
       <div className="max-w-6xl mx-auto py-10 px-4 mt-32">
         <h1 className="text-2xl font-bold mb-4">Nearby Print Vendors</h1>
+
+        {/* Search */}
+        <div className="relative max-w-xs mb-6">
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search vendor..."
+            className="w-full pl-10 pr-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
+          />
+        </div>
 
         {/* Filters */}
         <div className="mb-6">
@@ -184,9 +229,9 @@ const VendorList = () => {
         {currentVendors.length === 0 ? (
           <p className="text-center text-gray-500">No vendors found for selected filters.</p>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm border">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
             {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-50 border-b font-medium text-gray-700">
+            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-50 dark:bg-gray-800 border-b font-medium text-gray-700 dark:text-gray-200">
               <div className="col-span-3">Vendor Name</div>
               <div className="col-span-3">Address</div>
               <div className="col-span-2">Distance</div>
@@ -198,16 +243,25 @@ const VendorList = () => {
             {currentVendors.map((vendor, index) => (
               <div 
                 key={vendor._id} 
-                className={`grid grid-cols-12 gap-4 p-4 items-center border-b hover:bg-gray-50 transition-colors ${
+                className={`grid grid-cols-12 gap-4 p-4 items-center border-b hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
                   index === currentVendors.length - 1 ? 'border-b-0' : ''
                 }`}
               >
                 <div className="col-span-3">
-                  <h3 className="font-semibold text-gray-900">{vendor.shopName}</h3>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => toggleFavourite(vendor._id)} className="focus:outline-none">
+                      {favourites.includes(vendor._id) ? (
+                        <FaStar className="text-yellow-400" />
+                      ) : (
+                        <FaRegStar className="text-gray-400 hover:text-yellow-400" />
+                      )}
+                    </button>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">{vendor.shopName}</h3>
+                  </div>
                 </div>
                 
                 <div className="col-span-3">
-                  <p className="text-sm text-gray-600">{vendor.location?.address || 'No address'}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{vendor.location?.address || 'No address'}</p>
                 </div>
                 
                 <div className="col-span-2">

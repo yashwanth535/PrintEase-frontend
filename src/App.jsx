@@ -3,6 +3,7 @@ import UserHome from "./pages/user/home";
 import VendorHome from "./pages/vendor/home";
 import VendorProfile from "./pages/vendor/profile";
 import VendorPayments from "./pages/vendor/payments";
+import VendorSettlements from "./pages/vendor/settlements";
 import VendorDashboard from "./pages/vendor/dashboard";
 import Error from "./pages/global/ui/unAuth";
 import ProtectedRoute from "./components/global/ProtectedRoute";
@@ -13,6 +14,10 @@ import { Toaster } from "react-hot-toast";
 import BackendCheck from './pages/global/ui/BackendCheck';
 import VendorMap from "./pages/vendor/vendorMap";
 import Cart from "./pages/user/cart";
+import Payments from "./pages/user/payments";
+import UserDashboard from "./pages/user/dashboard";
+import Favourites from "./pages/user/favourites";
+import Notifications from "./pages/user/notifications";
 import Checkout from "./pages/user/checkout";
 import PaymentSuccess from "./pages/user/paymentSuccess";
 import CreateOrder from "./pages/user/createOrder";
@@ -47,6 +52,10 @@ function App() {
             <Route path="/u/cart" element={<Cart />} />
             <Route path="/u/checkout" element={<Checkout />} />
             <Route path="/u/payment-success" element={<PaymentSuccess />} />
+            <Route path="/u/payments" element={<Payments />} />
+            <Route path="/u/dashboard" element={<UserDashboard />} />
+            <Route path="/u/favourites" element={<Favourites />} />
+            <Route path="/u/notifications" element={<Notifications />} />
             <Route path="/u/vendors" element={<VendorList />} />
             <Route path="/u/order/create/:vendorId" element={<CreateOrder />} />
             <Route path='/u/vendor-profile/:vendorId' element={<VendorProfileForUser/>} />
@@ -56,6 +65,7 @@ function App() {
             <Route path="/v/home" element={<VendorHome/>} />
             <Route path="/v/profile" element={<VendorProfile/>} />
             <Route path="/v/payments" element={<VendorPayments/>} />
+            <Route path="/v/settlements" element={<VendorSettlements/>} />
             <Route path="/v/dashboard" element={<VendorDashboard/>} />
             <Route path="/v/map" element={<VendorMap/>} />
           </Route>

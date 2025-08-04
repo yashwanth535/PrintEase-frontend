@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Header from "../../components/user/header"
 
 const VendorProfile = () => {
+  const navigate = useNavigate();
   const [vendor, setVendor] = useState(null);
   const { vendorId } = useParams();
   const API_URL = import.meta.env.VITE_API_URL;
@@ -32,15 +33,23 @@ const VendorProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300 px-4 py-10">
       <Header/>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md border mt-32"
+        className="max-w-4xl mx-auto bg-white dark:bg-gray-900 p-8 rounded-xl shadow-md border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 mt-32"
       >
-        <h2 className="text-3xl font-semibold text-gray-800 mb-6">Vendor Profile</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-semibold text-gray-800 dark:text-white">Vendor Profile</h2>
+          <button
+            onClick={() => navigate(`/u/order/create/${vendor._id}`)}
+            className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          >
+            Create Order
+          </button>
+        </div>
 
         {/* Basic Info */}
         <div className="grid md:grid-cols-2 gap-4 mb-6">
@@ -52,8 +61,8 @@ const VendorProfile = () => {
         </div>
 
         {/* Location */}
-        <fieldset className="border rounded p-4 mb-6">
-          <legend className="font-semibold text-gray-700">Location</legend>
+        <fieldset className="border border-gray-200 dark:border-gray-800 rounded p-4 mb-6">
+          <legend className="font-semibold text-gray-700 dark:text-gray-300">Location</legend>
           <div className="grid md:grid-cols-4 gap-4 mt-2">
             <p><strong>Address:</strong> {vendor.location.address}</p>
             <p><strong>Pincode:</strong> {vendor.location.pincode}</p>
@@ -63,8 +72,8 @@ const VendorProfile = () => {
         </fieldset>
 
         {/* Prices */}
-        <fieldset className="border rounded p-4 mb-6">
-          <legend className="font-semibold text-gray-700">Prices</legend>
+        <fieldset className="border border-gray-200 dark:border-gray-800 rounded p-4 mb-6">
+          <legend className="font-semibold text-gray-700 dark:text-gray-300">Prices</legend>
           <div className="grid md:grid-cols-3 gap-4 mt-2">
             <div>
               <h4 className="font-semibold">Color</h4>
@@ -88,8 +97,8 @@ const VendorProfile = () => {
         </fieldset>
 
         {/* Services */}
-        <fieldset className="border rounded p-4 mb-6">
-          <legend className="font-semibold text-gray-700">Services Offered</legend>
+        <fieldset className="border border-gray-200 dark:border-gray-800 rounded p-4 mb-6">
+          <legend className="font-semibold text-gray-700 dark:text-gray-300">Services Offered</legend>
           <div className="grid md:grid-cols-3 gap-2 mt-2">
             <p>Color Printing: {vendor.services.colorPrinting ? "Yes" : "No"}</p>
             <p>Black & White Printing: {vendor.services.blackWhitePrinting ? "Yes" : "No"}</p>
@@ -98,8 +107,8 @@ const VendorProfile = () => {
         </fieldset>
 
         {/* Open Hours */}
-        <fieldset className="border rounded p-4">
-          <legend className="font-semibold text-gray-700">Open Hours</legend>
+        <fieldset className="border border-gray-200 dark:border-gray-800 rounded p-4">
+          <legend className="font-semibold text-gray-700 dark:text-gray-300">Open Hours</legend>
           <div className="grid grid-cols-2 gap-4 mt-2">
             <p><strong>Open:</strong> {vendor.openHours.open}</p>
             <p><strong>Close:</strong> {vendor.openHours.close}</p>

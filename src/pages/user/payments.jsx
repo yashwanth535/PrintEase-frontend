@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import VendorHeader from "../../components/vendor/header";
+import UserHeader from "../../components/user/header";
 import { FaReceipt, FaTimes } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -17,7 +17,7 @@ const Payments = () => {
   const fetchPaidOrders = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/api/vendor/orders`, {
+      const response = await fetch(`${API_URL}/api/order`, {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -47,10 +47,10 @@ const Payments = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <VendorHeader />
+      <UserHeader />
       <main className="max-w-7xl mx-auto px-4 py-10 mt-32">
         <h1 className="text-2xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
-          <FaReceipt /> Payments Received
+          <FaReceipt /> Payments History
         </h1>
 
         {loading ? (
@@ -75,7 +75,7 @@ const Payments = () => {
                       Paid At: {order.paidAt ? new Date(order.paidAt).toLocaleString() : "-"}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
-                      Customer: {order?.userId?.email || "Unknown"}
+                      Vendor: {order?.vendorId?.shopName || "Unknown"}
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-2">

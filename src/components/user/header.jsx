@@ -60,17 +60,7 @@ const UserHeader = () => {
               >
                 <FaBell className="w-4 h-4" />
               </Link>
-              <Link
-                to="/u/support"
-                className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 ${
-                  isActive('/u/support') 
-                    ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 shadow-sm' 
-                    : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/10'
-                }`}
-              >
-                <FaHeadset className="w-4 h-4" />
-                <span className="hidden sm:inline">Support</span>
-              </Link>
+              
               <Link
                 to="/u/profile"
                 className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 ${
@@ -164,6 +154,7 @@ const UserHeader = () => {
               <FaHeart className="w-4 h-4" />
               <span>Favorites</span>
             </Link>
+
           </nav>
         </div>
       </div>

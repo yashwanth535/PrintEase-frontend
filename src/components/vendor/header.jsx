@@ -47,6 +47,9 @@ const VendorHeader = () => {
               </Link>
             </div>
             <div className="flex items-center gap-2">
+            <button onClick={() => navigate("/v/settlements")} className="btn-primary">
+                Settlements
+              </button>
               <Link
                 to="/v/profile"
                 className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 ${
