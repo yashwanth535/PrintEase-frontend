@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { FaSignOutAlt, FaUser, FaMoneyBillWave, FaClipboardList, FaChartLine } from "react-icons/fa";
-import logo from '../../assets/printer.svg';
 import ThemeToggle from '../ui/ThemeToggle';
 
 const VendorHeader = () => {
@@ -41,7 +40,7 @@ const VendorHeader = () => {
             <div className="flex items-center gap-3">
               <Link to="/v/home" className="flex items-center gap-3 hover:opacity-80 transition-all duration-300 group">
                 <div className="relative">
-                  <img src={logo} alt="PrintEase Logo" className="h-8 w-8 group-hover:scale-110 transition-transform duration-300" />
+                  <img src='/printer.svg' alt="PrintEase Logo" className="h-8 w-8 group-hover:scale-110 transition-transform duration-300" />
                 </div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">PrintEase</h1>
               </Link>
