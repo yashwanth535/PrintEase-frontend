@@ -15,6 +15,7 @@ import BackendCheck from './pages/global/ui/BackendCheck';
 import VendorMap from "./pages/vendor/vendorMap";
 import Cart from "./pages/user/cart";
 import Payments from "./pages/user/payments";
+import UserProfile from "./pages/user/profile";
 import UserDashboard from "./pages/user/dashboard";
 import Favourites from "./pages/user/favourites";
 import Notifications from "./pages/user/notifications";
@@ -59,6 +60,7 @@ function App() {
             <Route path="/u/vendors" element={<VendorList />} />
             <Route path="/u/order/create/:vendorId" element={<CreateOrder />} />
             <Route path='/u/vendor-profile/:vendorId' element={<VendorProfileForUser/>} />
+            <Route path="/u/profile" element={<UserProfile/>}/>
           </Route>
 
           <Route element={<ProtectedRoute role="vendor"/>}>
