@@ -162,6 +162,17 @@ const VendorList = () => {
     navigate(`/u/vendor-profile/${vendorId}`);
   };
 
+  const handleGetDirections = (vendorLat, vendorLng) => {
+    if (userLocation && vendorLat && vendorLng) {
+      const userLat = userLocation.lat;
+      const userLng = userLocation.lng;
+      const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${vendorLat},${vendorLng}`;
+      window.open(googleMapsUrl, '_blank');
+    } else {
+      alert('Cannot get directions: User location or vendor location is missing.');
+    }
+  };
+
   const handleServiceToggle = (serviceValue) => {
     setSelectedServices(prev => 
       prev.includes(serviceValue)
@@ -281,18 +292,24 @@ const VendorList = () => {
                 </div>
                 
                 <div className="col-span-2">
-                  <div className="flex gap-2">
+                  <div className="flex justify-around items-center mt-4 space-x-2">
                     <button
                       onClick={() => handleViewProfile(vendor._id)}
-                      className="px-3 py-1 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+                      className="py-2 px-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm"
                     >
                       View Profile
                     </button>
                     <button
                       onClick={() => handleCreateOrder(vendor._id)}
-                      className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                      className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm"
                     >
                       Create Order
+                    </button>
+                     <button
+                      onClick={() => handleGetDirections(vendor.location?.lat, vendor.location?.lng)}
+                      className="py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 text-sm"
+                    >
+                      Get Directions
                     </button>
                   </div>
                 </div>

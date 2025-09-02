@@ -126,6 +126,7 @@ const Profile = () => {
   const handleGetLocation = () => {
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
+        console.log(position.coords);
         const { latitude, longitude, accuracy } = position.coords;
   
         console.log("📍 New location received");
