@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
 import UserHome from "./pages/user/home";
 import VendorHome from "./pages/vendor/home";
 import VendorProfile from "./pages/vendor/profile";
@@ -28,6 +29,85 @@ import VendorProfileForUser from "./pages/user/vendorProfile";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationError, setLocationError] = useState(null);
+  const [userAddress, setUserAddress] = useState('Fetching address...');
+
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // Replace with your actual API key
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          console.log("User location:", position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          setLocationError(error.message);
+          console.error("Error getting user location:", error);
+        }
+      );
+    } else {
+      setLocationError("Geolocation is not supported by your browser.");
+      console.error("Geolocation is not supported by your browser.");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (userLocation && GOOGLE_MAPS_API_KEY !== "YOUR_GOOGLE_MAPS_API_KEY") {
+        try {
+          const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${userLocation.latitude},${userLocation.longitude}&key=${GOOGLE_MAPS_API_KEY}`
+          );
+          const data = await response.json();
+          if (data.results && data.results.length > 0) {
+            setUserAddress(data.results[0].formatted_address);
+          } else {
+            setUserAddress('Address not found');
+          }
+        } catch (error) {
+          console.error("Error fetching address:", error);
+          setUserAddress('Error fetching address');
+        }
+      }
+    };
+    fetchAddress();
+  }, [userLocation, GOOGLE_MAPS_API_KEY]);
+
+  useEffect(() => {
+    const sendLocationToBackend = async () => {
+      if (userLocation) {
+        try {
+          const response = await fetch("http://localhost:3000/api/vendors/nearest", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userLat: userLocation.latitude,
+              userLng: userLocation.longitude,
+            }),
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            console.log("Nearest vendors:", data.vendors);
+            // You can now use this data to display nearest vendors
+          } else {
+            console.error("Error from backend:", data.message);
+          }
+        } catch (error) {
+          console.error("Error sending location to backend:", error);
+        }
+      }
+    };
+    sendLocationToBackend();
+  }, [userLocation]);
+
   return (
     <ThemeProvider>
       <Router>
