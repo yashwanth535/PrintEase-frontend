@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import React, { useState, useEffect } from "react";
@@ -10,6 +11,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otp, setOtp] = useState("");
+  const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +25,73 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   // Clear message when form type changes
   useEffect(() => {
     setMessage("");
+    setOtpDigits(["", "", "", "", "", ""]);
+    setOtp("");
   }, [formType]);
+
+  // Update OTP string when digits change
+  useEffect(() => {
+    setOtp(otpDigits.join(""));
+  }, [otpDigits]);
+
+  const handleOtpChange = (index, value) => {
+    // Only allow single digit
+    if (value.length > 1) return;
+    
+    // Only allow numbers
+    if (value && !/^[0-9]$/.test(value)) return;
+    
+    const newDigits = [...otpDigits];
+    newDigits[index] = value;
+    setOtpDigits(newDigits);
+    
+    // Auto-focus next input
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      if (nextInput) nextInput.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    // Handle backspace
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) {
+        prevInput.focus();
+        const newDigits = [...otpDigits];
+        newDigits[index - 1] = "";
+        setOtpDigits(newDigits);
+      }
+    }
+    
+    // Handle arrow keys
+    if (e.key === 'ArrowLeft' && index > 0) {
+      const prevInput = document.getElementById(`otp-${index - 1}`);
+      if (prevInput) prevInput.focus();
+    }
+    
+    if (e.key === 'ArrowRight' && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      if (nextInput) nextInput.focus();
+    }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    const newDigits = [...otpDigits];
+    
+    for (let i = 0; i < 6; i++) {
+      newDigits[i] = pastedData[i] || "";
+    }
+    
+    setOtpDigits(newDigits);
+    
+    // Focus the last filled input or first empty one
+    const lastFilledIndex = Math.min(pastedData.length - 1, 5);
+    const targetInput = document.getElementById(`otp-${lastFilledIndex}`);
+    if (targetInput) targetInput.focus();
+  };
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -198,45 +266,45 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   };
 
   return (
-    <div className="flex justify-center items-center my-12">
+    <div className="flex justify-center items-center h-[600px] max-w-screen overflow-hidden -pl-20 py-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md"
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md floating"
       >
 
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 pr-5">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-sans font-bold text-slate-900 dark:text-slate-100 pr-5">
             {formType === 'signin-form' ? 'Welcome Back' : 
              formType === 'signup-form' ? 'Create Account' :
              formType === 'reset-password-form' ? 'Reset Password' :
              formType.includes('otp') ? 'Verify OTP' : 'New Password'}
           </h2>
           {(formType === 'signin-form' || formType === 'signup-form' || formType=== 'reset-password-form') && (
-            <div className="flex items-center space-x-2">
-              <span className={`text-sm ${!isVendor ? 'text-black font-semibold' : 'text-gray-500'}`}>User</span>
+            <div className="flex items-center space-x-3 bg-white/30 dark:bg-black/30 backdrop-blur-sm rounded-full p-1">
+              <span className={`text-xs font-medium px-2 ${!isVendor ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}>User</span>
               <button
                 onClick={() => setIsVendor(!isVendor)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none
-                  ${isVendor ? 'bg-black' : 'bg-gray-200'}`}
+                className={`relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-500
+                  ${isVendor ? 'bg-slate-900 dark:bg-slate-100' : 'bg-slate-300 dark:bg-slate-600'}`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition duration-300
-                    ${isVendor ? 'translate-x-6' : 'translate-x-1'}`}
+                  className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform duration-300
+                    ${isVendor ? 'translate-x-5' : 'translate-x-1'}`}
                 />
               </button>
-              <span className={`text-sm ${isVendor ? 'text-black font-semibold' : 'text-gray-500'}`}>Vendor</span>
+              <span className={`text-xs font-medium px-2 ${isVendor ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}>Vendor</span>
             </div>
           )}
         </div>
 
         {formType === 'signin-form' && (
           <form onSubmit={handleSignIn} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Email</label>
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
               <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                className="input-field"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -244,11 +312,11 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 required
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Password</label>
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                  className="input-field pr-12"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
@@ -257,40 +325,40 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200"
                   onClick={togglePasswordVisibility}
                 >
-                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </button>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
+              className="w-full btn-primary mt-6"
               disabled={loading}
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
 
             {message && (
-              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
-                {message}
-              </p>
+              <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+                <p className="text-sm font-medium">{message}</p>
+              </div>
             )}
 
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm pt-4">
               <button
                 type="button"
                 onClick={() => setFormType('reset-password-form')}
-                className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 font-medium transition-colors duration-200"
               >
                 Forgot password?
               </button>
               <button
                 type="button"
                 onClick={() => setFormType('signup-form')}
-                className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 font-medium transition-colors duration-200"
               >
                 Create account
               </button>
@@ -300,10 +368,10 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
         {formType === 'signup-form' && (
           <form onSubmit={(e) => handleOTP(e, 'signup')} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Email</label>
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
               <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                className="input-field"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -311,11 +379,11 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 required
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Password</label>
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                  className="input-field pr-12"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Choose a password"
                   value={password}
@@ -324,33 +392,33 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200"
                   onClick={togglePasswordVisibility}
                 >
-                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </button>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
+              className="w-full btn-primary mt-6"
               disabled={loading}
             >
               {loading ? 'Sending OTP...' : 'Continue'}
             </button>
 
             {message && (
-              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
-                {message}
-              </p>
+              <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+                <p className="text-sm font-medium">{message}</p>
+              </div>
             )}
 
-            <p className="text-center text-sm text-gray-600">
+            <p className="text-center text-sm text-slate-600 dark:text-slate-400 pt-4">
               Already have an account?{" "}
               <button
                 type="button"
-                className="text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
+                className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 font-medium transition-colors duration-200"
                 onClick={() => setFormType("signin-form")}
               >
                 Sign In
@@ -361,40 +429,67 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
         {(formType === 'otp-signup' || formType === 'otp-reset') && (
           <form onSubmit={(e) => verifyOtp(e, formType === 'otp-signup' ? 'signup' : 'reset')} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Enter OTP</label>
-              <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
-                type="text"
-                placeholder="Enter the OTP sent to your email"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                required
-              />
+            <div className="text-center mb-6">
+              <p className="text-sm text-slate-600 dark:text-slate-400">We&apos;ve sent a verification code to your email</p>
+            </div>
+            
+            <div className="space-y-4">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300 text-center block">Enter Verification Code</label>
+              <div className="flex justify-center gap-3" onPaste={handleOtpPaste}>
+                {otpDigits.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`otp-${index}`}
+                    className="w-12 h-12 text-center text-lg font-mono font-semibold bg-white/50 dark:bg-black/50 backdrop-blur-sm border-2 border-slate-200/50 dark:border-slate-700/50 rounded-xl focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-500 focus:border-transparent transition-all duration-300 text-slate-900 dark:text-slate-100"
+                    type="text"
+                    inputMode="numeric"
+                    maxLength="1"
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                    autoComplete="off"
+                  />
+                ))}
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">Paste your 6-digit code or enter each digit individually</p>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
-              disabled={loading}
+              className="w-full btn-primary mt-6"
+              disabled={loading || otp.length !== 6}
             >
               {loading ? 'Verifying...' : 'Verify OTP'}
             </button>
 
             {message && (
-              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
-                {message}
-              </p>
+              <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+                <p className="text-sm font-medium">{message}</p>
+              </div>
             )}
+            
+            <div className="text-center pt-4">
+              <button
+                type="button"
+                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 font-medium transition-colors duration-200"
+                onClick={() => setFormType(formType === 'otp-signup' ? 'signup-form' : 'reset-password-form')}
+              >
+                ← Back
+              </button>
+            </div>
           </form>
         )}
 
         {formType === 'reset-password-form' && (
           <form onSubmit={(e) => handleOTP(e, 'reset')} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Email</label>
+            <div className="text-center mb-6">
+              <p className="text-sm text-slate-600 dark:text-slate-400">Enter your email to receive a password reset code</p>
+            </div>
+            
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
               <input
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                className="input-field"
                 type="email"
                 placeholder="Enter your email"
                 value={email}
@@ -405,35 +500,41 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
+              className="w-full btn-primary mt-6"
               disabled={loading}
             >
-              {loading ? 'Sending OTP...' : 'Send OTP'}
+              {loading ? 'Sending OTP...' : 'Send Reset Code'}
             </button>
 
             {message && (
-              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
-                {message}
-              </p>
+              <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+                <p className="text-sm font-medium">{message}</p>
+              </div>
             )}
 
-            <button
-              type="button"
-              className="w-full text-center text-sm text-black hover:text-gray-700 underline decoration-gray-400 hover:decoration-gray-700 transition duration-200"
-              onClick={() => setFormType('signin-form')}
-            >
-              Back to Sign In
-            </button>
+            <div className="text-center pt-4">
+              <button
+                type="button"
+                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 font-medium transition-colors duration-200"
+                onClick={() => setFormType('signin-form')}
+              >
+                ← Back to Sign In
+              </button>
+            </div>
           </form>
         )}
 
         {formType === 'Enter-password' && (
           <form onSubmit={resetPassword} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">New Password</label>
+            <div className="text-center mb-6">
+              <p className="text-sm text-slate-600 dark:text-slate-400">Create your new password</p>
+            </div>
+            
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">New Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                  className="input-field pr-12"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter new password"
                   value={password}
@@ -442,19 +543,19 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200"
                   onClick={togglePasswordVisibility}
                 >
-                  {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </button>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Confirm New Password</label>
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Confirm New Password</label>
               <div className="relative">
                 <input
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black focus:border-transparent transition duration-200"
+                  className="input-field pr-12"
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Confirm new password"
                   value={confirmPassword}
@@ -463,26 +564,32 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200"
                   onClick={toggleConfirmPasswordVisibility}
                 >
-                  {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                  {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </button>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-white hover:text-black border border-transparent hover:border-black transition-all duration-300"
-              disabled={loading}
+              className="w-full btn-primary mt-6"
+              disabled={loading || password !== confirmPassword}
             >
               {loading ? 'Updating Password...' : 'Update Password'}
             </button>
 
+            {password !== confirmPassword && password && confirmPassword && (
+              <div className="text-center p-2 rounded-lg bg-amber-50/80 dark:bg-amber-900/20">
+                <p className="text-xs text-amber-700 dark:text-amber-300">Passwords don&apos;t match</p>
+              </div>
+            )}
+
             {message && (
-              <p className={`text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
-                {message}
-              </p>
+              <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+                <p className="text-sm font-medium">{message}</p>
+              </div>
             )}
           </form>
         )}

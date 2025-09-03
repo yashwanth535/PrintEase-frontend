@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { Menu, X, Home, Info } from 'lucide-react';
