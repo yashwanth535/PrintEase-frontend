@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaPlus, FaClipboardList, FaTrash, FaEye, FaShoppingCart, FaClock, FaCheckCircle, FaHourglassHalf } from "react-icons/fa";
+import { FaClipboardList, FaTrash, FaEye, FaShoppingCart, FaClock, FaCheckCircle, FaHourglassHalf } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
 

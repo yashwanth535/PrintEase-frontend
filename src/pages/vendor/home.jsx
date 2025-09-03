@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Package, CheckCircle, Clock, AlertCircle, Eye, Download, User, Calendar, FileText, CreditCard } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -122,171 +124,248 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black flex flex-col transition-colors duration-300">
-      <main
-        className="flex-1 flex flex-col items-center justify-start pt-32 md:pt-36"
-        style={{ minHeight: "calc(100vh - 4rem)" }}
-      >
-        <div className="w-full max-w-7xl px-4 md:px-8">
-          {/* Tabs */}
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex space-x-4 mt-2">
+    <div className="min-h-screen minimal-gradient">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-40">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {/* Page Header */}
+          <motion.div 
+            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 rounded-xl">
+                <Package className="h-8 w-8 text-slate-700 dark:text-slate-300" />
+              </div>
+              Order Management
+            </h1>
+            <p className="text-slate-600 dark:text-slate-400 text-lg">
+              Manage and track all your printing orders efficiently.
+            </p>
+          </motion.div>
+          {/* Tabs and Actions */}
+          <motion.div 
+            className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="feature-card p-1 flex space-x-1">
               <button
-                className={`px-4 py-2 font-medium transition-colors duration-200 ${
+                className={`px-4 py-2 font-medium rounded-lg transition-all duration-200 flex items-center gap-2 ${
                   selectedTab === "active"
-                    ? "bg-white dark:bg-black text-black dark:text-white shadow border-b-2 border-black dark:border-white"
-                    : "bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
+                    ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 }`}
                 onClick={() => setSelectedTab("active")}
               >
+                <Clock className="h-4 w-4" />
                 Active
               </button>
               <button
-                className={`px-4 py-2 font-medium transition-colors duration-200 ${
+                className={`px-4 py-2 font-medium rounded-lg transition-all duration-200 flex items-center gap-2 ${
                   selectedTab === "completed"
-                    ? "bg-white dark:bg-black text-black dark:text-white shadow border-b-2 border-black dark:border-white"
-                    : "bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
+                    ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 }`}
                 onClick={() => setSelectedTab("completed")}
               >
+                <CheckCircle className="h-4 w-4" />
                 Completed
               </button>
               <button
-                className={`px-4 py-2 font-medium transition-colors duration-200 ${
+                className={`px-4 py-2 font-medium rounded-lg transition-all duration-200 flex items-center gap-2 ${
                   selectedTab === "pending"
-                    ? "bg-white dark:bg-black text-black dark:text-white shadow border-b-2 border-black dark:border-white"
-                    : "bg-gray-200 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-800"
+                    ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 }`}
                 onClick={() => setSelectedTab("pending")}
               >
+                <AlertCircle className="h-4 w-4" />
                 Pending
               </button>
             </div>
-            {/* Optionally, vendor might want to navigate somewhere else */}
-            <div className="flex gap-2">
-              
-              <button onClick={() => navigate("/v/profile")} className="btn-primary">
+            <div className="flex gap-3">
+              <button onClick={() => navigate("/v/payments")} className="btn-secondary flex items-center gap-2">
+                <CreditCard className="h-4 w-4" />
+                Payments
+              </button>
+              <button onClick={() => navigate("/v/profile")} className="btn-primary flex items-center gap-2">
+                <User className="h-4 w-4" />
                 Profile
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Orders List Card */}
-          <div className="card p-6 min-h-[200px]">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              {selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)} Orders
-            </h3>
+          <motion.div 
+            className="feature-card floating p-6 min-h-[400px]"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className={`p-2 rounded-xl ${
+                selectedTab === "active" ? "bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800" :
+                selectedTab === "completed" ? "bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900 dark:to-emerald-800" :
+                "bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900 dark:to-amber-800"
+              }`}>
+                {selectedTab === "active" && <Clock className="h-5 w-5 text-blue-700 dark:text-blue-300" />}
+                {selectedTab === "completed" && <CheckCircle className="h-5 w-5 text-emerald-700 dark:text-emerald-300" />}
+                {selectedTab === "pending" && <AlertCircle className="h-5 w-5 text-amber-700 dark:text-amber-300" />}
+              </div>
+              <h3 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                {selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)} Orders
+              </h3>
+            </div>
 
             {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="animate-spin h-8 w-8 border-b-2 border-black dark:border-white mr-3"></div>
-                <span className="text-gray-600 dark:text-gray-400">Loading orders...</span>
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin h-8 w-8 border-4 border-slate-200 dark:border-slate-700 border-t-slate-600 dark:border-t-slate-300 rounded-full mr-3"></div>
+                <span className="text-slate-600 dark:text-slate-400">Loading orders...</span>
               </div>
             ) : error ? (
-              <div className="text-center py-8">
-                <p className="text-red-500 mb-4">{error}</p>
+              <div className="text-center py-12">
+                <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800 mb-4">
+                  <p className="text-red-600 dark:text-red-400">{error}</p>
+                </div>
                 <button onClick={fetchOrders} className="btn-primary">
                   Retry
                 </button>
               </div>
             ) : (
               <>
-                <ul className="space-y-3">
+                <div className="space-y-4">
                   {ordersToShow.length === 0 ? (
-                    <li className="text-gray-400 dark:text-gray-500 text-center py-8">
-                      No {selectedTab} orders found.
-                    </li>
+                    <div className="text-center py-12">
+                      <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <Package className="h-12 w-12 text-slate-400 mx-auto mb-3" />
+                        <p className="text-slate-500 dark:text-slate-400">No {selectedTab} orders found.</p>
+                      </div>
+                    </div>
                   ) : (
-                    ordersToShow.map((order) => (
-                      <li
+                    ordersToShow.map((order, index) => (
+                      <motion.div
                         key={order._id}
-                        className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+                        className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 rounded-xl p-5 hover:bg-white/80 dark:hover:bg-slate-800/80 transition-all duration-200 hover:shadow-lg hover:scale-[1.01]"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
                       >
-                        <div className="flex justify-between items-start">
+                        <div className="flex justify-between items-start gap-4">
                           <div className="flex-1">
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                                  <FileText className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-slate-900 dark:text-slate-100">
+                                    Order #{order._id?.slice(-6)}
+                                  </h4>
+                                  <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                                    <Calendar className="h-3 w-3" />
+                                    {new Date(order.createdAt).toLocaleDateString()}
+                                  </p>
+                                </div>
+                              </div>
                               {/* Complete button for active orders */}
                               {(order.status === "accepted" || order.status === "in_progress") && (
                                 <button
                                   onClick={() => handleCompleteOrder(order._id)}
                                   disabled={updatingOrder === order._id}
-                                  className="p-1 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 disabled:opacity-50"
+                                  className="btn-primary text-sm px-3 py-1 disabled:opacity-50 flex items-center gap-1"
                                   title="Mark as Completed"
                                 >
                                   {updatingOrder === order._id ? (
-                                    <div className="w-4 h-4 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+                                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                   ) : (
-                                    "Complete"
+                                    <>
+                                      <CheckCircle className="h-3 w-3" />
+                                      Complete
+                                    </>
                                   )}
                                 </button>
                               )}
                             </div>
-                            <div className="flex items-center space-x-2 mb-2">
-                              <h4 className="font-semibold text-gray-900 dark:text-white">
-                                Order #{order._id?.slice(-6)}
-                              </h4>
+                            <div className="flex items-center justify-between mb-3">
                               <span
-                                className={`px-2 py-1 text-xs rounded-full ${
+                                className={`px-3 py-1 text-xs font-medium rounded-full backdrop-blur-sm ${
                                   order.status === "completed"
-                                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                    ? "bg-emerald-100/80 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
                                     : order.status === "pending"
-                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                    ? "bg-amber-100/80 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 border border-amber-200 dark:border-amber-800"
                                     : order.status === "accepted" || order.status === "in_progress"
-                                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                                    : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                                    ? "bg-blue-100/80 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                                    : "bg-slate-100/80 text-slate-700 dark:bg-slate-900/50 dark:text-slate-300 border border-slate-200 dark:border-slate-800"
                                 }`}
                               >
                                 {order.status?.replace("_", " ").toUpperCase()}
                               </span>
+                              <span className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                                ₹{order.totalPrice}
+                              </span>
                             </div>
-                            <div className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                              <p>Customer: {order.userId?.email || "Unknown"}</p>
-                              <p>Pages: {order.pages} | Copies: {order.sets} | Size: {order.size}</p>
-                              <p>Type: {order.color ? "Color" : "Black & White"} | Binding: {order.binding}</p>
-                              <p>Total: ₹{order.totalPrice}</p>
-                              <p className="text-xs text-gray-500">
-                                Created: {new Date(order.createdAt).toLocaleDateString()}
-                              </p>
-                              {/* File Actions */}
-                              <div className="flex gap-2 mt-2">
-                                <button
-                                  onClick={() => window.open(order.fileUrl, '_blank')}
-                                  className="text-xs px-2 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800 rounded"
-                                >
-                                  Open
-                                </button>
-                                <button
-                                  onClick={() => downloadFile(order.fileUrl, `order-${order._id.slice(-6)}.pdf`)}
-                                  className="text-xs px-2 py-1 bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 rounded"
-                                >
-                                  Download
-                                </button>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-slate-600 dark:text-slate-400 mb-4">
+                              <div className="space-y-2">
+                                <p className="flex items-center gap-2">
+                                  <User className="h-3 w-3" />
+                                  <span className="font-medium">Customer:</span> {order.userId?.email || "Unknown"}
+                                </p>
+                                <p><span className="font-medium">Pages:</span> {order.pages} | <span className="font-medium">Copies:</span> {order.sets}</p>
+                                <p><span className="font-medium">Size:</span> {order.size}</p>
                               </div>
+                              <div className="space-y-2">
+                                <p><span className="font-medium">Type:</span> {order.color ? "Color" : "Black & White"}</p>
+                                <p><span className="font-medium">Binding:</span> {order.binding}</p>
+                              </div>
+                            </div>
+                            {/* File Actions */}
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => window.open(order.fileUrl, '_blank')}
+                                className="btn-secondary text-xs px-3 py-1 flex items-center gap-1"
+                              >
+                                <Eye className="h-3 w-3" />
+                                View
+                              </button>
+                              <button
+                                onClick={() => downloadFile(order.fileUrl, `order-${order._id.slice(-6)}.pdf`)}
+                                className="btn-secondary text-xs px-3 py-1 flex items-center gap-1"
+                              >
+                                <Download className="h-3 w-3" />
+                                Download
+                              </button>
                             </div>
                           </div>
                         </div>
-                      </li>
+                      </motion.div>
                     ))
                   )}
-                </ul>
+                </div>
 
                 {/* Show More for Completed Orders */}
                 {selectedTab === "completed" &&
                   !showAllCompleted &&
                   orders.filter((order) => order.status === "completed").length > 10 && (
-                    <div className="flex justify-center mt-4">
+                    <div className="flex justify-center mt-6">
                       <button
                         onClick={() => setShowAllCompleted(true)}
-                        className="text-black dark:text-white hover:text-gray-700 dark:hover:text-gray-300 underline text-sm"
+                        className="btn-secondary text-sm"
                       >
-                        Show More
+                        Show More Orders
                       </button>
                     </div>
                   )}
               </>
             )}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </main>
     </div>
   );
