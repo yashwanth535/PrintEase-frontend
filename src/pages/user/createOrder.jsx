@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FileText, Upload, Copy, Settings, Edit3, Calculator, ShoppingCart, ArrowLeft, Check, Store, MapPin, Phone } from "lucide-react";
 
 import { pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -190,85 +192,96 @@ const CreateOrder = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <main className="pt-32 md:pt-36 px-4 pb-8">
-        <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen minimal-gradient">
+      <main className="max-w-6xl mx-auto px-4 py-8 pt-24 mt-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-6"
+        >
           {/* Header Section */}
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-black dark:bg-white mb-3 shadow-lg">
-              <svg className="w-6 h-6 text-white dark:text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
+          <div className="feature-card floating p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white">
+                  <ShoppingCart size={24} />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+                    Create New Order
+                  </h1>
+                  <p className="text-slate-600 dark:text-slate-400 mt-1">
+                    Configure your printing requirements
+                  </p>
+                </div>
+              </div>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-              Create New Order
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">Configure your printing requirements</p>
           </div>
 
           {/* Loading State */}
           {loading && vendorId && (
-            <div className="mb-6 p-4 bg-white dark:bg-black shadow-lg border border-gray-200 dark:border-gray-800">
+            <div className="feature-card floating p-4">
               <div className="flex items-center justify-center">
-                <div className="animate-spin h-6 w-6 border-b-2 border-black dark:border-white mr-2"></div>
-                <span className="text-gray-600 dark:text-gray-400 text-sm">Loading vendor details...</span>
+                <div className="animate-spin h-6 w-6 border-b-2 border-blue-600 mr-2"></div>
+                <span className="text-slate-600 dark:text-slate-400 text-sm">Loading vendor details...</span>
               </div>
             </div>
           )}
 
           {/* Vendor Info Card */}
           {vendor && (
-            <div className="mb-6 p-4 bg-black dark:bg-white text-white dark:text-black shadow-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="feature-card floating p-6"
+            >
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-white/20 dark:bg-black/20 flex items-center justify-center">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl text-white">
+                    <Store size={20} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold">{vendor.shopName || "Unnamed Shop"}</h3>
-                    <p className="text-gray-300 dark:text-gray-700 flex items-center text-sm mt-0.5">
-                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                      {vendor.shopName || "Unnamed Shop"}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 flex items-center text-sm mt-1">
+                      <MapPin size={14} className="mr-1" />
                       {vendor.location?.address || "Address not available"}
                     </p>
                   </div>
                 </div>
                 {vendor.contactNumber && (
-                  <div className="flex items-center text-gray-300 dark:text-gray-700 text-sm">
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
+                  <div className="flex items-center text-slate-600 dark:text-slate-400 text-sm">
+                    <Phone size={16} className="mr-2" />
                     {vendor.contactNumber}
                   </div>
                 )}
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Main Form Container */}
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Left Column - Order Details */}
-            <div className="space-y-4">
-              <div className="card p-4">
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-gray-100 dark:bg-gray-900 flex items-center justify-center mr-2">
-                    <svg className="w-4 h-4 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="space-y-6"
+            >
+              <div className="feature-card floating p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg text-white">
+                    <FileText size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Document Details</h2>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Document Details</h2>
                 </div>
 
                 {/* File Type */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 dark:text-gray-300 mb-1 font-medium flex items-center text-sm">
-                    <svg className="w-3 h-3 mr-1 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
+                <div className="mb-6">
+                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm">
                     File Type
                   </label>
                   <select
@@ -284,14 +297,11 @@ const CreateOrder = () => {
                 </div>
 
                 {/* File Upload */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 dark:text-gray-300 mb-1 font-medium flex items-center text-sm">
-                    <svg className="w-3 h-3 mr-1 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
+                <div className="mb-6">
+                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm">
                     Upload File
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 p-4 text-center hover:border-black dark:hover:border-white transition-colors">
+                  <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 p-6 text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors rounded-lg bg-slate-50/50 dark:bg-slate-800/50">
                     <input
                       type="file"
                       accept={
@@ -308,35 +318,28 @@ const CreateOrder = () => {
                       id="file-upload"
                     />
                     <label htmlFor="file-upload" className="cursor-pointer">
-                      <svg className="w-8 h-8 text-gray-400 dark:text-gray-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                      </svg>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Click to upload or drag and drop</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Supports {fileType.toUpperCase()} files</p>
+                      <Upload size={32} className="text-slate-400 dark:text-slate-500 mx-auto mb-3" />
+                      <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">Click to upload or drag and drop</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">Supports {fileType.toUpperCase()} files</p>
                     </label>
                   </div>
                   {uploading && (
-                    <div className="mt-2 flex items-center text-black dark:text-white text-sm">
-                      <div className="animate-spin h-3 w-3 border-b-2 border-black dark:border-white mr-1"></div>
+                    <div className="mt-3 flex items-center text-blue-600 dark:text-blue-400 text-sm">
+                      <div className="animate-spin h-4 w-4 border-b-2 border-blue-600 dark:border-blue-400 mr-2"></div>
                       Uploading...
                     </div>
                   )}
                   {uploadStatus && (
-                    <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 flex items-center">
-                      <svg className="w-3 h-3 mr-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                    <p className="mt-3 text-sm text-emerald-600 dark:text-emerald-400 flex items-center">
+                      <Check size={16} className="mr-2" />
                       {uploadStatus}
                     </p>
                   )}
                 </div>
 
                 {/* Number of Copies */}
-                <div className="mb-4">
-                  <label className="block text-gray-700 dark:text-gray-300 mb-1 font-medium flex items-center text-sm">
-                    <svg className="w-3 h-3 mr-1 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                    </svg>
+                <div className="mb-6">
+                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm">
                     Number of Copies
                   </label>
                   <input
@@ -351,21 +354,18 @@ const CreateOrder = () => {
               </div>
 
               {/* Print Settings */}
-              <div className="card p-4">
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-gray-100 dark:bg-gray-900 flex items-center justify-center mr-2">
-                    <svg className="w-4 h-4 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
-                    </svg>
+              <div className="feature-card floating p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg text-white">
+                    <Settings size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Print Settings</h2>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Print Settings</h2>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   {/* Print Type */}
                   <div>
-                    <label className="block text-gray-700 dark:text-gray-300 mb-1 font-medium text-sm">Print Type</label>
+                    <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm">Print Type</label>
                     <select
                       value={printType}
                       onChange={(e) => setPrintType(e.target.value)}
@@ -378,7 +378,7 @@ const CreateOrder = () => {
 
                   {/* Paper Size */}
                   <div>
-                    <label className="block text-gray-700 dark:text-gray-300 mb-1 font-medium text-sm">Paper Size</label>
+                    <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm">Paper Size</label>
                     <select
                       value={paperSize}
                       onChange={(e) => setPaperSize(e.target.value)}
@@ -393,8 +393,8 @@ const CreateOrder = () => {
                 </div>
 
                 {/* Binding */}
-                <div className="mt-3">
-                  <label className="block text-gray-700 dark:text-gray-300 mb-1 font-medium text-sm">Binding</label>
+                <div className="mt-4">
+                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm">Binding</label>
                   <select
                     value={binding}
                     onChange={(e) => setBinding(e.target.value)}
@@ -406,19 +406,22 @@ const CreateOrder = () => {
                   </select>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right Column - Notes and Summary */}
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="space-y-6"
+            >
               {/* Notes */}
-              <div className="card p-4">
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-gray-100 dark:bg-gray-900 flex items-center justify-center mr-2">
-                    <svg className="w-4 h-4 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
+              <div className="feature-card floating p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-lg text-white">
+                    <Edit3 size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Special Instructions</h2>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Special Instructions</h2>
                 </div>
                 <textarea
                   value={notes}
@@ -430,40 +433,38 @@ const CreateOrder = () => {
               </div>
 
               {/* Order Summary */}
-              <div className="bg-black dark:bg-white text-white dark:text-black shadow-lg p-4">
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-white/20 dark:bg-black/20 flex items-center justify-center mr-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
+              <div className="feature-card floating p-6 bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-100 dark:to-slate-50 text-white dark:text-slate-900">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-white/20 dark:bg-slate-900/20 rounded-lg">
+                    <Calculator size={20} />
                   </div>
-                  <h2 className="text-lg font-bold">Order Summary</h2>
+                  <h2 className="text-xl font-bold">Order Summary</h2>
                 </div>
 
-                <div className="space-y-2 mb-4">
+                <div className="space-y-3 mb-6">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-300 dark:text-gray-700">Pages per copy:</span>
+                    <span className="text-slate-300 dark:text-slate-600">Pages per copy:</span>
                     <span className="font-semibold">{pageCount}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-300 dark:text-gray-700">Total copies:</span>
+                    <span className="text-slate-300 dark:text-slate-600">Total copies:</span>
                     <span className="font-semibold">{copies}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-300 dark:text-gray-700">Print type:</span>
+                    <span className="text-slate-300 dark:text-slate-600">Print type:</span>
                     <span className="font-semibold capitalize">{printType === "bw" ? "Black & White" : "Color"}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-300 dark:text-gray-700">Paper size:</span>
+                    <span className="text-slate-300 dark:text-slate-600">Paper size:</span>
                     <span className="font-semibold">{paperSize}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-300 dark:text-gray-700">Binding:</span>
+                    <span className="text-slate-300 dark:text-slate-600">Binding:</span>
                     <span className="font-semibold capitalize">{binding === "no" ? "None" : binding}</span>
                   </div>
                 </div>
 
-                <div className="border-t border-gray-300 dark:border-gray-700 pt-3">
+                <div className="border-t border-slate-300/30 dark:border-slate-600/30 pt-4">
                   <div className="flex justify-between items-center text-lg font-bold">
                     <span>Total Cost:</span>
                     <span>₹{calculateTotal()}</span>
@@ -472,30 +473,26 @@ const CreateOrder = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex space-x-3">
+              <div className="flex gap-4">
                 <button
                   type="button"
                   onClick={() => (vendorId ? navigate("/u/vendors") : navigate("/u/home"))}
-                  className="btn-secondary flex-1 flex items-center justify-center"
+                  className="btn-secondary flex-1 flex items-center justify-center gap-2"
                 >
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
+                  <ArrowLeft size={16} />
                   {vendorId ? "Back to Vendors" : "Cancel"}
                 </button>
                 <button
                   onClick={handleSubmit}
-                  className="btn-primary flex-1 flex items-center justify-center"
+                  className="btn-primary flex-1 flex items-center justify-center gap-2"
                 >
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <Check size={16} />
                   Submit Order
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </div>
   );

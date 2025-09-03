@@ -57,16 +57,8 @@ const VendorHeader = () => {
                 Settlements
               </button>
               
-              <Link
-                to="/v/profile"
-                className={`nav-link ${
-                  isActive('/v/profile') 
-                    ? 'bg-slate-900/80 dark:bg-slate-100/80 text-white dark:text-slate-900' 
-                    : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100'
-                }`}
-              >
+              <Link to="/v/profile" className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 px-5 ">
                 <FaUser className="h-4 w-4" />
-                <span>Profile</span>
               </Link>
               
               <ThemeToggle />

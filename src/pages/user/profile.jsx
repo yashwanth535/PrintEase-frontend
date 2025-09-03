@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { User, Mail, ShoppingBag, Heart, Bell, Activity, CheckCircle, Home, Star, Check } from "lucide-react";
 
 const defaultUserData = {
   email: "",
@@ -52,202 +53,234 @@ const UserProfile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen minimal-gradient flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-4xl mt-32 mx-auto px-4 py-12">
+    <div className="min-h-screen minimal-gradient">
+      <main className="max-w-6xl mx-auto px-4 py-8 pt-24 mt-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white p-8 rounded-xl shadow-xl border"
+          transition={{ duration: 0.6 }}
+          className="space-y-6"
         >
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-3xl font-semibold text-gray-800">User Profile</h2>
-            <div className="flex items-center gap-4">
-              <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                Active User
+          {/* Header Section */}
+          <div className="feature-card floating p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl text-white">
+                  <User size={24} />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+                    User Profile
+                  </h1>
+                  <p className="text-slate-600 dark:text-slate-400 mt-1">
+                    Manage your account and view activity
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-full text-sm font-medium">
+                  <CheckCircle size={16} />
+                  Active User
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="space-y-6">
-            {/* Basic Information */}
-            <fieldset className="border rounded p-4">
-              <legend className="font-semibold text-gray-700">Account Information</legend>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-600 font-medium">Email</span>
-                  <span className="text-gray-800">{userData.email || "-"}</span>
+          <div className="space-y-8">
+            {/* Top Section - Account Info & Statistics */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              {/* Account Information */}
+              <motion.div 
+                className="feature-card floating p-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Mail className="text-slate-600 dark:text-slate-400" size={20} />
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Account Information</h3>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-sm text-gray-600 font-medium">Member Since</span>
-                  <span className="text-gray-800">{formatDate(userData.createdAt)}</span>
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Email Address</p>
+                    <p className="text-slate-800 dark:text-slate-200">{userData.email || "-"}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Member Since</p>
+                    <p className="text-slate-800 dark:text-slate-200">{formatDate(userData.createdAt)}</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Account Status */}
+              <motion.div 
+                className="feature-card floating p-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Activity className="text-slate-600 dark:text-slate-400" size={20} />
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Account Status</h3>
+                </div>
+                <div className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                    <span className="font-medium text-emerald-800 dark:text-emerald-400">Account Active</span>
+                  </div>
+                  <div className="text-sm text-emerald-600 dark:text-emerald-400">
+                    All systems operational
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Statistics Grid */}
+            <motion.div 
+              className="feature-card floating p-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Activity className="text-slate-600 dark:text-slate-400" size={20} />
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Account Statistics</h3>
+              </div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-6 rounded-xl text-center border border-blue-200 dark:border-blue-800">
+                  <ShoppingBag className="mx-auto mb-3 text-blue-600 dark:text-blue-400" size={24} />
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{userData.orders.length}</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">Total Orders</div>
+                </div>
+                <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 p-6 rounded-xl text-center border border-emerald-200 dark:border-emerald-800">
+                  <Heart className="mx-auto mb-3 text-emerald-600 dark:text-emerald-400" size={24} />
+                  <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{userData.favourites.length}</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">Favourites</div>
+                </div>
+                <div className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 p-6 rounded-xl text-center border border-amber-200 dark:border-amber-800">
+                  <Bell className="mx-auto mb-3 text-amber-600 dark:text-amber-400" size={24} />
+                  <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">{getUnreadNotificationsCount()}</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">Unread Notifications</div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 p-6 rounded-xl text-center border border-purple-200 dark:border-purple-800">
+                  <Activity className="mx-auto mb-3 text-purple-600 dark:text-purple-400" size={24} />
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{userData.logs.length}</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">Activity Logs</div>
                 </div>
               </div>
-            </fieldset>
+            </motion.div>
 
-            {/* Statistics */}
-            <fieldset className="border rounded p-4">
-              <legend className="font-semibold text-gray-700">Account Statistics</legend>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                <div className="bg-blue-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-blue-600">{userData.orders.length}</div>
-                  <div className="text-sm text-gray-600">Total Orders</div>
+            {/* Middle Section - Notifications & Activity */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              {/* Recent Notifications */}
+              <motion.div 
+                className="feature-card floating p-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Bell className="text-slate-600 dark:text-slate-400" size={20} />
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Recent Notifications</h3>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-green-600">{userData.favourites.length}</div>
-                  <div className="text-sm text-gray-600">Favourites</div>
-                </div>
-                <div className="bg-yellow-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-yellow-600">{getUnreadNotificationsCount()}</div>
-                  <div className="text-sm text-gray-600">Unread Notifications</div>
-                </div>
-                <div className="bg-purple-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-purple-600">{userData.logs.length}</div>
-                  <div className="text-sm text-gray-600">Activity Logs</div>
-                </div>
-              </div>
-            </fieldset>
-
-            {/* Recent Notifications */}
-            <fieldset className="border rounded p-4">
-              <legend className="font-semibold text-gray-700">Recent Notifications</legend>
-              <div className="mt-4 space-y-2 max-h-64 overflow-y-auto">
-                {userData.notifications.length > 0 ? (
-                  userData.notifications.slice(-5).reverse().map((notification, index) => (
-                    <div key={index} className={`p-3 rounded-lg border-l-4 ${
-                      notification.read 
-                        ? 'bg-gray-50 border-gray-300' 
-                        : 'bg-blue-50 border-blue-400'
-                    }`}>
-                      <div className="flex justify-between items-start">
-                        <p className="text-gray-800 text-sm">{notification.message}</p>
-                        <span className="text-xs text-gray-500 ml-2">
-                          {formatDate(notification.createdAt)}
-                        </span>
+                <div className="space-y-3 max-h-64 overflow-y-auto">
+                  {userData.notifications.length > 0 ? (
+                    userData.notifications.slice(-5).reverse().map((notification, index) => (
+                      <div key={index} className={`p-4 rounded-lg border-l-4 ${
+                        notification.read 
+                          ? 'bg-slate-50 dark:bg-slate-800 border-slate-300 dark:border-slate-600' 
+                          : 'bg-blue-50 dark:bg-blue-900/20 border-blue-400 dark:border-blue-600'
+                      }`}>
+                        <div className="flex justify-between items-start">
+                          <p className="text-slate-800 dark:text-slate-200 text-sm">{notification.message}</p>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 ml-2 whitespace-nowrap">
+                            {formatDate(notification.createdAt)}
+                          </span>
+                        </div>
+                        {!notification.read && (
+                          <span className="inline-block mt-2 text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
+                            New
+                          </span>
+                        )}
                       </div>
-                      {!notification.read && (
-                        <span className="inline-block mt-1 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                          New
-                        </span>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-center py-4">No notifications yet</p>
-                )}
-              </div>
-            </fieldset>
+                    ))
+                  ) : (
+                    <p className="text-slate-500 dark:text-slate-400 text-center py-8">No notifications yet</p>
+                  )}
+                </div>
+              </motion.div>
 
-            {/* Recent Activity */}
-            <fieldset className="border rounded p-4">
-              <legend className="font-semibold text-gray-700">Recent Activity</legend>
-              <div className="mt-4 space-y-2 max-h-64 overflow-y-auto">
-                {getRecentActivity().length > 0 ? (
-                  getRecentActivity().reverse().map((log, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
-                      <div className="flex justify-between items-start">
-                        <p className="text-gray-800 text-sm">{log.message}</p>
-                        <span className="text-xs text-gray-500 ml-2">
-                          {formatDate(log.createdAt)}
-                        </span>
+              {/* Recent Activity */}
+              <motion.div 
+                className="feature-card floating p-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <Activity className="text-slate-600 dark:text-slate-400" size={20} />
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Recent Activity</h3>
+                </div>
+                <div className="space-y-3 max-h-64 overflow-y-auto">
+                  {getRecentActivity().length > 0 ? (
+                    getRecentActivity().reverse().map((log, index) => (
+                      <div key={index} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                        <div className="flex justify-between items-start">
+                          <p className="text-slate-800 dark:text-slate-200 text-sm">{log.message}</p>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 ml-2 whitespace-nowrap">
+                            {formatDate(log.createdAt)}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500 text-center py-4">No recent activity</p>
-                )}
-              </div>
-            </fieldset>
+                    ))
+                  ) : (
+                    <p className="text-slate-500 dark:text-slate-400 text-center py-8">No recent activity</p>
+                  )}
+                </div>
+              </motion.div>
+            </div>
 
             {/* Quick Actions */}
-            <fieldset className="border rounded p-4">
-              <legend className="font-semibold text-gray-700">Quick Actions</legend>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <motion.div 
+              className="feature-card floating p-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <Star className="text-slate-600 dark:text-slate-400" size={20} />
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Quick Actions</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
                   onClick={() => navigate("/u/home")}
-                  className="bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center gap-2"
+                  className="btn-primary flex items-center justify-center gap-2"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                    />
-                  </svg>
+                  <Home size={18} />
                   View Orders
                 </button>
 
                 <button
                   onClick={() => navigate("/u/favourites")}
-                  className="bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition duration-200 flex items-center justify-center gap-2"
+                  className="btn-secondary flex items-center justify-center gap-2"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
+                  <Heart size={18} />
                   View Favourites
                 </button>
 
-                <button className="bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition duration-200 flex items-center justify-center gap-2">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 17h5l-5 5v-5z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4"
-                    />
-                  </svg>
+                <button className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-full transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                  <Check size={18} />
                   Mark All Read
                 </button>
               </div>
-            </fieldset>
-
-            {/* Account Health */}
-            <fieldset className="border rounded p-4">
-              <legend className="font-semibold text-gray-700">Account Status</legend>
-              <div className="mt-4 flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="font-medium text-green-800">Account Active</span>
-                </div>
-                <div className="text-sm text-green-600">
-                  All systems operational
-                </div>
-              </div>
-            </fieldset>
+            </motion.div>
           </div>
         </motion.div>
       </main>
