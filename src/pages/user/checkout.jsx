@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import UserHeader from "../../components/user/header";
 import { useState, useEffect } from "react";
 import { initializeCashfreeCheckout, isCashfreeAvailable } from "../../utils/cashfree.js";
 
@@ -114,7 +113,6 @@ useEffect(() => {
   if (selectedOrders.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-        <UserHeader />
         <main className="pt-32 md:pt-36 px-4 pb-8">
           <div className="max-w-2xl mx-auto text-center">
             <p className="text-gray-600 dark:text-gray-400">No orders selected for checkout.</p>
@@ -127,7 +125,6 @@ useEffect(() => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <UserHeader />
       <main className="pt-32 md:pt-36 px-4 pb-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}

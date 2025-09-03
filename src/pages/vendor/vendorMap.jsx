@@ -1,6 +1,5 @@
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { useEffect, useState } from "react";
-import VendorHeader from '../../components/vendor/header';
 
 const mapContainerStyle = {
   width: "100%",
@@ -58,7 +57,6 @@ const VendorMap = () => {
 
   return (
     <>
-      <VendorHeader />
       <div className="mt-32">
         <GoogleMap
           mapContainerStyle={mapContainerStyle}

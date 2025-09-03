@@ -1,7 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import UserHeader from "../../components/user/header";
-import axios from "axios";
 
 import { pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -192,7 +191,6 @@ const CreateOrder = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <UserHeader />
       <main className="pt-32 md:pt-36 px-4 pb-8">
         <div className="max-w-6xl mx-auto">
           {/* Header Section */}

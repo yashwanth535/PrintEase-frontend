@@ -1,8 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { motion } from "framer-motion";
-import Header from "../../components/user/header"
 
 const VendorProfile = () => {
   const navigate = useNavigate();
@@ -34,7 +32,6 @@ const VendorProfile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300 px-4 py-10">
-      <Header/>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

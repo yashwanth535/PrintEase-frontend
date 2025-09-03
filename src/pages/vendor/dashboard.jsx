@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { FaSignOutAlt, FaUser, FaMoneyBillWave, FaClipboardList, FaChartLine, FaFileAlt, FaCheckCircle, FaSpinner, FaTimesCircle } from "react-icons/fa";
+import { FaFileAlt, FaCheckCircle, FaSpinner, FaTimesCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
-import VendorHeader from '../../components/vendor/header';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
   const [stats, setStats] = useState({
     totalOrders: 0,
@@ -72,7 +69,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <VendorHeader/>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-32">

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Header from "../../components/user/header"
 import { useNavigate } from "react-router-dom";
 
 const defaultUserData = {
@@ -61,7 +60,6 @@ const UserProfile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header/>
       <main className="max-w-4xl mt-32 mx-auto px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

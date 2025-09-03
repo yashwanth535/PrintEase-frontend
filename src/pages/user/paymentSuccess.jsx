@@ -1,5 +1,4 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import UserHeader from "../../components/user/header";
 import { useState, useEffect } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -62,7 +61,6 @@ const PaymentSuccess = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-        <UserHeader />
         <main className="pt-32 md:pt-36 px-4 pb-8">
           <div className="max-w-2xl mx-auto text-center">
             <div className="animate-spin h-12 w-12 border-b-2 border-black dark:border-white mx-auto mb-4"></div>
@@ -80,7 +78,6 @@ const PaymentSuccess = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <UserHeader />
       <main className="pt-32 md:pt-36 px-4 pb-8">
         <div className="max-w-2xl mx-auto">
           {paymentStatus === 'success' && (

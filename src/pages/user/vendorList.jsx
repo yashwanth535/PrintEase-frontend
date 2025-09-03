@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { FaStar, FaRegStar, FaSearch } from 'react-icons/fa';
+import { FaStar, FaRegStar, FaSearch, FaMapMarkerAlt, FaEye, FaPlus, FaDirections, FaFilter } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import UserHeader from '../../components/user/header';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -190,156 +191,207 @@ const VendorList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <UserHeader />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-all duration-500">
+      <div className="max-w-7xl mx-auto px-4 py-8 pt-40">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="feature-card floating mb-8 mt-4"
+        >
+          <div className="flex flex-col lg:flex-row gap-6 items-center">
+            <div className="relative flex-1 max-w-md">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search vendors by name..."
+                className="input-field pl-12 w-full"
+              />
+            </div>
 
-      <div className="max-w-6xl mx-auto py-10 px-4 mt-32">
-        <h1 className="text-2xl font-bold mb-4">Nearby Print Vendors</h1>
+            {/* Filter Toggle */}
+            <div className="flex items-center gap-4">
+              <FaFilter className="text-slate-500 dark:text-slate-400" />
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Filter by Services:</span>
+            </div>
+          </div>
 
-        {/* Search */}
-        <div className="relative max-w-xs mb-6">
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search vendor..."
-            className="w-full pl-10 pr-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-          />
-        </div>
-
-        {/* Filters */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-3">Filter by Services</label>
-          <div className="flex flex-wrap gap-2">
+          {/* Service Filters */}
+          <div className="flex flex-wrap gap-3 mt-6">
             {serviceOptions.map((service) => (
-              <button
+              <motion.button
                 key={service.value}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => handleServiceToggle(service.value)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedServices.includes(service.value)
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                    : 'bg-white/60 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-700/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50'
                 }`}
               >
                 {service.label}
-              </button>
+              </motion.button>
             ))}
             {selectedServices.length > 0 && (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedServices([])}
-                className="px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-700 hover:bg-red-200 transition-colors"
+                className="px-6 py-3 rounded-full text-sm font-medium bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-lg shadow-red-500/25 transition-all duration-300"
               >
                 Clear All
-              </button>
+              </motion.button>
             )}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Vendor List */}
-        {currentVendors.length === 0 ? (
-          <p className="text-center text-gray-500">No vendors found for selected filters.</p>
-        ) : (
-          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
-            {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 p-4 bg-gray-50 dark:bg-gray-800 border-b font-medium text-gray-700 dark:text-gray-200">
-              <div className="col-span-3">Vendor Name</div>
-              <div className="col-span-3">Address</div>
-              <div className="col-span-2">Distance</div>
-              <div className="col-span-2">Services</div>
-              <div className="col-span-2">Actions</div>
-            </div>
+        {/* Vendor Cards Grid */}
+        <AnimatePresence>
+          {currentVendors.length === 0 ? (
+            <motion.div
+              className="feature-card text-center py-16"
+            >
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                No vendors found
+              </h3>
+              <p className="text-slate-500 dark:text-slate-400">
+                Try adjusting your search criteria or clearing the filters
+              </p>
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {currentVendors.map((vendor, index) => (
+                <motion.div
+                  key={vendor._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -5 }}
+                  className="feature-card floating group cursor-pointer relative overflow-hidden"
+                >
+                  {/* Favorite Button */}
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => toggleFavourite(vendor._id)}
+                    className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-lg"
+                  >
+                    {favourites.includes(vendor._id) ? (
+                      <FaStar className="text-yellow-500 w-4 h-4" />
+                    ) : (
+                      <FaRegStar className="text-slate-400 hover:text-yellow-500 w-4 h-4 transition-colors" />
+                    )}
+                  </motion.button>
 
-            {/* Vendor List Items */}
-            {currentVendors.map((vendor, index) => (
-              <div 
-                key={vendor._id} 
-                className={`grid grid-cols-12 gap-4 p-4 items-center border-b hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
-                  index === currentVendors.length - 1 ? 'border-b-0' : ''
-                }`}
-              >
-                <div className="col-span-3">
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => toggleFavourite(vendor._id)} className="focus:outline-none">
-                      {favourites.includes(vendor._id) ? (
-                        <FaStar className="text-yellow-400" />
-                      ) : (
-                        <FaRegStar className="text-gray-400 hover:text-yellow-400" />
-                      )}
-                    </button>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{vendor.shopName}</h3>
+                  {/* Vendor Header */}
+                  <div className="mb-6">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {vendor.shopName}
+                    </h3>
+                    <div className="flex items-center text-slate-600 dark:text-slate-400 mb-3">
+                      <FaMapMarkerAlt className="w-4 h-4 mr-2 text-red-500" />
+                      <span className="text-sm truncate">{vendor.location?.address || 'Address not available'}</span>
+                    </div>
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-700 dark:text-blue-400 text-sm font-medium">
+                      📍 {formatDistance(vendor.distance)}
+                    </div>
                   </div>
-                </div>
-                
-                <div className="col-span-3">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{vendor.location?.address || 'No address'}</p>
-                </div>
-                
-                <div className="col-span-2">
-                  <p className="text-sm text-blue-600">📍 {formatDistance(vendor.distance)}</p>
-                </div>
-                
-                <div className="col-span-2">
-                  <div className="text-sm text-gray-700">
-                    {Object.entries(vendor.services)
-                      .filter(([key, val]) => val)
-                      .map(([key, val], idx) => (
-                        <span key={key} className="inline-block bg-gray-100 rounded px-2 py-1 text-xs mr-1 mb-1">
-                          {key}
-                        </span>
-                      ))}
+
+                  {/* Services */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Available Services</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {Object.entries(vendor.services)
+                        .filter(([key, val]) => val)
+                        .map(([key, val]) => (
+                          <span 
+                            key={key} 
+                            className="px-3 py-1 text-xs font-medium bg-white/60 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300 rounded-full backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
+                          >
+                            {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                          </span>
+                        ))}
+                    </div>
                   </div>
-                </div>
-                
-                <div className="col-span-2">
-                  <div className="flex justify-around items-center mt-4 space-x-2">
-                    <button
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => handleViewProfile(vendor._id)}
-                      className="py-2 px-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 text-sm"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white/60 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-white/80 dark:hover:bg-slate-600/80 transition-all duration-300 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
                     >
-                      View Profile
-                    </button>
-                    <button
+                      <FaEye className="w-4 h-4" />
+                      <span className="text-sm font-medium">View</span>
+                    </motion.button>
+                    
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => handleCreateOrder(vendor._id)}
-                      className="py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg shadow-blue-500/25"
                     >
-                      Create Order
-                    </button>
-                     <button
+                      <FaPlus className="w-4 h-4" />
+                      <span className="text-sm font-medium">Order</span>
+                    </motion.button>
+                    
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => handleGetDirections(vendor.location?.lat, vendor.location?.lng)}
-                      className="py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 text-sm"
+                      className="px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg shadow-green-500/25"
                     >
-                      Get Directions
-                    </button>
+                      <FaDirections className="w-4 h-4" />
+                    </motion.button>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </AnimatePresence>
 
         {/* Pagination */}
         {filteredVendors.length > vendorsPerPage && (
-          <div className="flex justify-center gap-4 mt-8">
-            <button
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-center items-center gap-4 mt-12"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 disabled:opacity-50"
+              className="px-6 py-3 rounded-xl bg-white/60 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-700/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 font-medium"
             >
               Previous
-            </button>
-            <button
+            </motion.button>
+            
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                Page {currentPage} of {Math.ceil(filteredVendors.length / vendorsPerPage)}
+              </span>
+            </div>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() =>
                 setCurrentPage((prev) =>
                   indexOfLast < filteredVendors.length ? prev + 1 : prev
                 )
               }
               disabled={indexOfLast >= filteredVendors.length}
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg shadow-blue-500/25 font-medium"
             >
               Next
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         )}
       </div>
     </div>

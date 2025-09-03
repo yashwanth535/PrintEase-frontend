@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserHome from "./pages/user/home";
 import VendorHome from "./pages/vendor/home";
 import VendorProfile from "./pages/vendor/profile";
@@ -27,6 +28,8 @@ import VendorList from "./pages/user/vendorList";
 import Dev from "./pages/global/dev";
 import VendorProfileForUser from "./pages/user/vendorProfile";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import UserHeader from "./components/user/header";
+import VendorHeader from "./components/vendor/header";
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
@@ -127,30 +130,49 @@ function App() {
           <Route path = "/u/dev" element={<Dev user={true}/>}/> 
           <Route path = "/v/dev" element={<Dev user={false}/>} />
 
-          {/* Protected Route */}
+          {/* Protected User Routes */}
           <Route element={<ProtectedRoute role="user"/>}>
-            <Route path="/u/home" element={<UserHome />} />
-            <Route path="/u/cart" element={<Cart />} />
-            <Route path="/u/checkout" element={<Checkout />} />
-            <Route path="/u/payment-success" element={<PaymentSuccess />} />
-            <Route path="/u/payments" element={<Payments />} />
-            <Route path="/u/dashboard" element={<UserDashboard />} />
-            <Route path="/u/favourites" element={<Favourites />} />
-            <Route path="/u/notifications" element={<Notifications />} />
-            <Route path="/u/vendors" element={<VendorList />} />
-            <Route path="/u/order/create/:vendorId" element={<CreateOrder />} />
-            <Route path='/u/vendor-profile/:vendorId' element={<VendorProfileForUser/>} />
-            <Route path="/u/profile" element={<UserProfile/>}/>
+            <Route path="/u/*" element={
+              <div>
+                <UserHeader />
+                <Routes>
+                  <Route path="home" element={<UserHome />} />
+                  <Route path="cart" element={<Cart />} />
+                  <Route path="checkout" element={<Checkout />} />
+                  <Route path="payment-success" element={<PaymentSuccess />} />
+                  <Route path="payments" element={<Payments />} />
+                  <Route path="dashboard" element={<UserDashboard />} />
+                  <Route path="favourites" element={<Favourites />} />
+                  <Route path="notifications" element={<Notifications />} />
+                  <Route path="vendors" element={<VendorList />} />
+                  <Route path="order/create/:vendorId" element={<CreateOrder />} />
+                  <Route path="vendor-profile/:vendorId" element={<VendorProfileForUser/>} />
+                  <Route path="profile" element={<UserProfile/>}/>
+                </Routes>
+              </div>
+            } />
           </Route>
 
-          <Route element={<ProtectedRoute role="vendor"/>}>
-            <Route path="/v/home" element={<VendorHome/>} />
-            <Route path="/v/profile" element={<VendorProfile/>} />
-            <Route path="/v/payments" element={<VendorPayments/>} />
-            <Route path="/v/settlements" element={<VendorSettlements/>} />
-            <Route path="/v/dashboard" element={<VendorDashboard/>} />
-            <Route path="/v/map" element={<VendorMap/>} />
+          {/* Protected Vendor Routes */}
+          <Route element={<ProtectedRoute role="vendor" />}>
+            <Route
+              path="/v/*"
+              element={
+                <div>
+                  <VendorHeader />
+                  <Routes>
+                    <Route path="home" element={<VendorHome />} />
+                    <Route path="profile" element={<VendorProfile />} />
+                    <Route path="payments" element={<VendorPayments />} />
+                    <Route path="settlements" element={<VendorSettlements />} />
+                    <Route path="dashboard" element={<VendorDashboard />} />
+                    <Route path="map" element={<VendorMap />} />
+                  </Routes>
+                </div>
+              }
+            />
           </Route>
+
 
           <Route path="*" element={<NotFound />} />
 

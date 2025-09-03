@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import UserHeader from "../../components/user/header";
 import { FaBell, FaHistory } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -51,7 +51,6 @@ const Notifications = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <UserHeader />
       <main className="max-w-4xl mx-auto px-4 py-10 mt-32">
         {loading ? (
           <p className="text-gray-600 dark:text-gray-400">Loading...</p>

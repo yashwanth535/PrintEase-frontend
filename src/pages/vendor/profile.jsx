@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import VendorHeader from '../../components/vendor/header';
 
 const defaultVendorData = {
   email: "",
@@ -212,7 +212,6 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <VendorHeader/>
       <main className="max-w-4xl mx-auto px-4 py-12 mt-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

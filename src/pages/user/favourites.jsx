@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UserHeader from "../../components/user/header";
 import { FaHeart, FaTrash } from "react-icons/fa";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -44,7 +43,6 @@ const Favourites = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <UserHeader />
       <main className="max-w-7xl mx-auto px-4 py-10 mt-32">
         <h1 className="text-2xl font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
           <FaHeart /> Favourite Vendors

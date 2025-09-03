@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import VendorHeader from "../../components/vendor/header";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -124,7 +123,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black flex flex-col transition-colors duration-300">
-      <VendorHeader />
       <main
         className="flex-1 flex flex-col items-center justify-start pt-32 md:pt-36"
         style={{ minHeight: "calc(100vh - 4rem)" }}

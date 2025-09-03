@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { FaSignOutAlt, FaUser, FaMoneyBillWave, FaClipboardList, FaChartLine } from "react-icons/fa";
 import ThemeToggle from '../ui/ThemeToggle';
 
@@ -34,84 +34,106 @@ const VendorHeader = () => {
 
   return (
     <>
-      <header className="bg-white/95 dark:bg-black/95 backdrop-blur-sm shadow-sm border-b border-gray-200 dark:border-gray-800 fixed top-0 left-0 right-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <motion.header 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed top-4 left-4 right-4 z-50 glass-nav rounded-2xl mx-auto max-w-screen text-slate-900 dark:text-slate-100 transition-all duration-300"
+      >
+        <div className="px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <Link to="/v/home" className="flex items-center gap-3 hover:opacity-80 transition-all duration-300 group">
-                <div className="relative">
-                  <img src='/printer.svg' alt="PrintEase Logo" className="h-8 w-8 group-hover:scale-110 transition-transform duration-300" />
-                </div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">PrintEase</h1>
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
-            <button onClick={() => navigate("/v/settlements")} className="btn-primary">
+            <Link to="/v/home" className="flex items-center space-x-3 group floating">
+              <div className="p-2 bg-white/20 dark:bg-black/20 rounded-xl backdrop-blur-sm">
+                <img src='/printer.svg' alt="PrintEase Logo" className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+              </div>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 group-hover:opacity-80 transition-opacity duration-300">
+                PrintEase
+              </h1>
+            </Link>
+            <div className="flex items-center space-x-3">
+              <button 
+                onClick={() => navigate("/v/settlements")} 
+                className="btn-primary text-sm"
+              >
                 Settlements
               </button>
+              
               <Link
                 to="/v/profile"
-                className={`flex items-center gap-2 px-3 py-2 text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                className={`nav-link ${
                   isActive('/v/profile') 
-                    ? 'bg-black dark:bg-white text-white dark:text-black shadow-sm' 
-                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-900'
+                    ? 'bg-slate-900/80 dark:bg-slate-100/80 text-white dark:text-slate-900' 
+                    : 'text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100'
                 }`}
               >
-                <FaUser className="w-4 h-4" />
+                <FaUser className="h-4 w-4" />
                 <span>Profile</span>
               </Link>
-              <ThemeToggle className="ml-2" />
+              
+              <ThemeToggle />
+              
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-200 hover:scale-105"
+                className="nav-link text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50/80 dark:hover:bg-red-900/20"
               >
-                <FaSignOutAlt className="w-4 h-4" />
+                <FaSignOutAlt className="h-4 w-4" />
                 <span>Logout</span>
               </button>
             </div>
           </div>
         </div>
-      </header>
+      </motion.header>
+      
       {/* Navigation Bar */}
-      <div className="bg-white/90 dark:bg-black/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 fixed top-16 left-0 right-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-1 py-3">
-            <Link
-              to="/v/home"
-              className={`nav-link ${
-                isActive('/v/home') 
-                  ? 'nav-link-active border-b-2 border-black dark:border-white' 
-                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              <FaClipboardList className="w-4 h-4" />
-              <span>Orders</span>
-            </Link>
-            <Link
-              to="/v/payments"
-              className={`nav-link ${
-                isActive('/v/payments') 
-                  ? 'nav-link-active border-b-2 border-black dark:border-white' 
-                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              <FaMoneyBillWave className="w-4 h-4" />
-              <span>Payments</span>
-            </Link>
-            <Link
-              to="/v/dashboard"
-              className={`nav-link ${
-                isActive('/v/dashboard') 
-                  ? 'nav-link-active border-b-2 border-black dark:border-white' 
-                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              <FaChartLine className="w-4 h-4" />
-              <span>Dashboard</span>
-            </Link>
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="fixed top-28 left-4 right-4 z-40 glass-nav rounded-xl mx-auto max-w-3xl"
+      >
+        <div className="px-6 py-3">
+          <nav className="flex items-center justify-center gap-2">
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/v/home"
+                className={`nav-link transition-all duration-300 ${
+                  isActive('/v/home') 
+                    ? 'bg-orange-100/80 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-b-2 border-orange-600 shadow-sm' 
+                    : 'text-slate-700 dark:text-slate-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50/50 dark:hover:bg-orange-900/10'
+                }`}
+              >
+                <FaClipboardList className="h-4 w-4" />
+                <span>Orders</span>
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/v/payments"
+                className={`nav-link transition-all duration-300 ${
+                  isActive('/v/payments') 
+                    ? 'bg-green-100/80 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-b-2 border-green-600 shadow-sm' 
+                    : 'text-slate-700 dark:text-slate-300 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50/50 dark:hover:bg-green-900/10'
+                }`}
+              >
+                <FaMoneyBillWave className="h-4 w-4" />
+                <span>Payments</span>
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                to="/v/dashboard"
+                className={`nav-link transition-all duration-300 ${
+                  isActive('/v/dashboard') 
+                    ? 'bg-cyan-100/80 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400 border-b-2 border-cyan-600 shadow-sm' 
+                    : 'text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-50/50 dark:hover:bg-cyan-900/10'
+                }`}
+              >
+                <FaChartLine className="h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </motion.div>
           </nav>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }
