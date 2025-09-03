@@ -14,24 +14,26 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
     <motion.header 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed w-full z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white shadow-lg transition-colors duration-300"
+      className="fixed top-4 left-4 right-4 z-50 glass-nav rounded-2xl mx-auto max-w-6xl text-slate-900 dark:text-slate-100 transition-all duration-300"
     >
-      <div className="container mx-auto px-4 py-3">
+      <div className="px-6 py-4">
         <div className="flex justify-between items-center">
-          <Link to="/" onClick={() => window.location.reload()} className="flex items-center space-x-2 group">
-            <img src='/printer.svg' alt="" className="h-8 w-8 group-hover:scale-110 transition-transform duration-300" />
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white group-hover:opacity-80 transition-opacity duration-300">
+          <Link to="/" onClick={() => window.location.reload()} className="flex items-center space-x-3 group floating">
+            <div className="p-2 bg-white/20 dark:bg-black/20 rounded-xl backdrop-blur-sm">
+              <img src='/printer.svg' alt="" className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+            </div>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 group-hover:opacity-80 transition-opacity duration-300">
               PrintEase
             </h1>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
-                className="relative flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-300 group"
+                className="nav-link text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
                 onClick={(e) => {
                   if (item.reload) {
                     e.preventDefault();
@@ -39,24 +41,23 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
                   }
                 }}
               >
-                <item.icon className="h-4 w-4 group-hover:text-black dark:group-hover:text-white transition-colors duration-300" />
+                <item.icon className="h-4 w-4" />
                 <span>{item.name}</span>
-                <span className="absolute inset-x-0 bottom-0 h-0.5 bg-black dark:bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
               </Link>
             ))}
           </nav>
 
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
             <ThemeToggle />
             <button
-              className="px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-all duration-300"
+              className="btn-secondary text-sm"
               onClick={() => { setShowAuth(true); setFormType("signin-form"); }}
             >
               Sign In
             </button>
             <button
-              className="btn-primary"
+              className="btn-primary text-sm"
               onClick={() => { setShowAuth(true); setFormType("signup-form"); }}
             >
               Get Started
@@ -65,11 +66,11 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md transition-colors duration-300"
+            className="md:hidden p-2 hover:bg-white/20 dark:hover:bg-black/20 rounded-xl transition-colors duration-300 backdrop-blur-sm"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
@@ -84,30 +85,30 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
           transition={{ duration: 0.3 }}
           className="md:hidden overflow-hidden"
         >
-          <div className="py-4 space-y-4">
+          <div className="py-4 space-y-3 border-t border-white/20 dark:border-white/10 mt-4">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
-                className="flex items-center space-x-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-900 rounded-md transition-colors duration-300"
+                className="nav-link text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <item.icon className="h-4 w-4" />
                 <span>{item.name}</span>
               </Link>
             ))}
-            <div className="pt-4 space-y-2">
+            <div className="pt-3 space-y-3 border-t border-white/20 dark:border-white/10">
               <div className="flex justify-center">
                 <ThemeToggle />
               </div>
               <button
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 transition-all duration-300"
+                className="w-full btn-secondary text-sm"
                 onClick={() => { setShowAuth(true); setFormType("signin"); setIsMenuOpen(false); }}
               >
                 Sign In
               </button>
               <button
-                className="w-full btn-primary"
+                className="w-full btn-primary text-sm"
                 onClick={() => { setShowAuth(true); setFormType("signup"); setIsMenuOpen(false); }}
               >
                 Get Started

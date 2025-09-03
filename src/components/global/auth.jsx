@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -26,7 +27,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
   const handleSignIn = async (event) => {
     event.preventDefault();
-    setMessage(""); // Clear message on new submission
+    setMessage(""); 
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/api/auth/signin`, {
@@ -44,12 +45,14 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
     } catch (error) {
       console.error("Error during signin:", error);
     }
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   };
 
   const handleOTP = async (event, type) => {
     event.preventDefault();
-    setMessage(""); // Clear message on new submission
+    setMessage(""); 
     setLoading(true);
 
     try {
@@ -108,7 +111,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
   const verifyOtp = async (event, type) => {
     event.preventDefault();
-    setMessage(""); // Clear message on new submission
+    setMessage(""); 
     setLoading(true);
     console.log('otp is:'+otp);
     try {
@@ -152,12 +155,14 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
     } catch (error) {
       console.error("Error during signup:", error);
     }
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   };
 
   const resetPassword = async (event) => {
     event.preventDefault();
-    setMessage(""); // Clear message on new submission
+    setMessage(""); 
     setLoading(true);
 
     try {
@@ -179,8 +184,9 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
       console.error("Error resetting password:", error);
       setMessage("Something went wrong. Please try again.");
     }
-
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   };
 
   const togglePasswordVisibility = () => {
