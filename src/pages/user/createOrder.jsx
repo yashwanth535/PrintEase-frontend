@@ -472,7 +472,6 @@ const CreateOrder = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex gap-4">
                 <button
                   type="button"

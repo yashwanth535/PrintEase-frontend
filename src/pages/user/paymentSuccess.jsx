@@ -1,5 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { CheckCircle, Clock, XCircle, RefreshCw, Home, Mail, Copy } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -60,132 +62,279 @@ const PaymentSuccess = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+      <div className="min-h-screen minimal-gradient">
         <main className="pt-32 md:pt-36 px-4 pb-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="animate-spin h-12 w-12 border-b-2 border-black dark:border-white mx-auto mb-4"></div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Verifying Payment
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Please wait while we verify your payment...
-            </p>
-          </div>
+          <motion.div 
+            className="max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="feature-card floating p-12 text-center">
+              <div className="relative mb-8">
+                <div className="animate-spin h-16 w-16 border-4 border-slate-200 dark:border-slate-700 border-t-slate-600 dark:border-t-slate-400 rounded-full mx-auto"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <RefreshCw className="h-6 w-6 text-slate-600 dark:text-slate-400" />
+                </div>
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
+                Verifying Payment
+              </h2>
+              <p className="text-slate-600 dark:text-slate-400 text-lg">
+                Please wait while we verify your payment...
+              </p>
+            </div>
+          </motion.div>
         </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
+    <div className="min-h-screen minimal-gradient">
       <main className="pt-32 md:pt-36 px-4 pb-8">
-        <div className="max-w-2xl mx-auto">
+        <motion.div 
+          className="max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           {paymentStatus === 'success' && (
-            <div className="card p-8 text-center">
-              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Payment Successful!
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Your payment has been processed successfully. Your orders have been moved to active status and will be processed by the vendors.
-              </p>
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-6">
-                <p className="text-green-800 dark:text-green-200 text-sm">
-                  <strong>Order ID:</strong> {orderId}
-                </p>
-                <p className="text-green-800 dark:text-green-200 text-sm mt-1">
-                  You will receive an email confirmation shortly.
-                </p>
-              </div>
-              <button
-                onClick={handleViewOrders}
-                className="btn-primary"
+            <motion.div 
+              className="feature-card floating p-12 text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div 
+                className="relative mb-8"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.4, type: "spring", stiffness: 200 }}
               >
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </div>
+                <div className="absolute -inset-2 bg-emerald-400/20 rounded-full animate-pulse"></div>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                Payment Successful!
+              </motion.h1>
+              
+              <motion.p 
+                className="text-slate-600 dark:text-slate-400 text-lg mb-8 leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
+                Your payment has been processed successfully. Your orders have been moved to active status and will be processed by the vendors.
+              </motion.p>
+              
+              <motion.div 
+                className="bg-white/60 dark:bg-black/40 backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-800/50 rounded-xl p-6 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <Copy className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                  <p className="text-emerald-800 dark:text-emerald-200 font-semibold">
+                    Order ID: {orderId}
+                  </p>
+                </div>
+                <div className="flex items-center justify-center gap-3">
+                  <Mail className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                  <p className="text-emerald-700 dark:text-emerald-300 text-sm">
+                    You will receive an email confirmation shortly.
+                  </p>
+                </div>
+              </motion.div>
+              
+              <motion.button
+                onClick={handleViewOrders}
+                className="btn-primary inline-flex items-center gap-2 text-lg px-8 py-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Home className="h-5 w-5" />
                 View My Orders
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           )}
 
           {paymentStatus === 'pending' && (
-            <div className="card p-8 text-center">
-              <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-8 h-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            <motion.div 
+              className="feature-card floating p-12 text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div 
+                className="relative mb-8"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.4, type: "spring", stiffness: 200 }}
+              >
+                <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                  <Clock className="w-10 h-10 text-white" />
+                </div>
+                <div className="absolute -inset-2 bg-amber-400/20 rounded-full animate-pulse"></div>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
                 Payment Pending
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              </motion.h1>
+              
+              <motion.p 
+                className="text-slate-600 dark:text-slate-400 text-lg mb-8 leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
                 Your payment is still being processed. Please wait a few minutes and check again.
-              </p>
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-6">
-                <p className="text-yellow-800 dark:text-yellow-200 text-sm">
-                  <strong>Order ID:</strong> {orderId}
-                </p>
-                <p className="text-yellow-800 dark:text-yellow-200 text-sm mt-1">
+              </motion.p>
+              
+              <motion.div 
+                className="bg-white/60 dark:bg-black/40 backdrop-blur-sm border border-amber-200/50 dark:border-amber-800/50 rounded-xl p-6 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <Copy className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                  <p className="text-amber-800 dark:text-amber-200 font-semibold">
+                    Order ID: {orderId}
+                  </p>
+                </div>
+                <p className="text-amber-700 dark:text-amber-300 text-sm">
                   You can check your order status in your dashboard.
                 </p>
-              </div>
-              <div className="flex space-x-4 justify-center">
-                <button
+              </motion.div>
+              
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+              >
+                <motion.button
                   onClick={handleRetry}
-                  className="btn-secondary"
+                  className="btn-secondary inline-flex items-center gap-2 px-6 py-3"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
+                  <RefreshCw className="h-4 w-4" />
                   Check Again
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={handleViewOrders}
-                  className="btn-primary"
+                  className="btn-primary inline-flex items-center gap-2 px-6 py-3"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
+                  <Home className="h-4 w-4" />
                   View Orders
-                </button>
-              </div>
-            </div>
+                </motion.button>
+              </motion.div>
+            </motion.div>
           )}
 
           {paymentStatus === 'error' && (
-            <div className="card p-8 text-center">
-              <div className="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            <motion.div 
+              className="feature-card floating p-12 text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div 
+                className="relative mb-8"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.4, type: "spring", stiffness: 200 }}
+              >
+                <div className="w-20 h-20 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                  <XCircle className="w-10 h-10 text-white" />
+                </div>
+                <div className="absolute -inset-2 bg-red-400/20 rounded-full animate-pulse"></div>
+              </motion.div>
+              
+              <motion.h1 
+                className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
                 Payment Verification Failed
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              </motion.h1>
+              
+              <motion.p 
+                className="text-slate-600 dark:text-slate-400 text-lg mb-8 leading-relaxed"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
                 {error || "We couldn't verify your payment. Please contact support if you believe this is an error."}
-              </p>
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-                <p className="text-red-800 dark:text-red-200 text-sm">
-                  <strong>Order ID:</strong> {orderId}
-                </p>
-                <p className="text-red-800 dark:text-red-200 text-sm mt-1">
+              </motion.p>
+              
+              <motion.div 
+                className="bg-white/60 dark:bg-black/40 backdrop-blur-sm border border-red-200/50 dark:border-red-800/50 rounded-xl p-6 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+              >
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <Copy className="h-5 w-5 text-red-600 dark:text-red-400" />
+                  <p className="text-red-800 dark:text-red-200 font-semibold">
+                    Order ID: {orderId}
+                  </p>
+                </div>
+                <p className="text-red-700 dark:text-red-300 text-sm">
                   If you made a payment, please contact our support team.
                 </p>
-              </div>
-              <div className="flex space-x-4 justify-center">
-                <button
+              </motion.div>
+              
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4 justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+              >
+                <motion.button
                   onClick={handleRetry}
-                  className="btn-secondary"
+                  className="btn-secondary inline-flex items-center gap-2 px-6 py-3"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
+                  <RefreshCw className="h-4 w-4" />
                   Try Again
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={handleViewOrders}
-                  className="btn-primary"
+                  className="btn-primary inline-flex items-center gap-2 px-6 py-3"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
+                  <Home className="h-4 w-4" />
                   View Orders
-                </button>
-              </div>
-            </div>
+                </motion.button>
+              </motion.div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </main>
     </div>
   );

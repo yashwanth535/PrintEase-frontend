@@ -1,5 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { CreditCard, ArrowLeft, User, Mail, Phone, ShoppingBag, AlertCircle, Lock } from "lucide-react";
 import { initializeCashfreeCheckout, isCashfreeAvailable } from "../../utils/cashfree.js";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -112,11 +114,17 @@ useEffect(() => {
 
   if (selectedOrders.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-        <main className="pt-32 md:pt-36 px-4 pb-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <p className="text-gray-600 dark:text-gray-400">No orders selected for checkout.</p>
-            <button onClick={handleBack} className="btn-primary mt-4">Back to Cart</button>
+      <div className="min-h-screen minimal-gradient">
+        <main className="max-w-2xl mx-auto px-4 py-8 pt-24 mt-20">
+          <div className="feature-card floating p-8 text-center">
+            <div className="p-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl text-white w-fit mx-auto mb-4">
+              <AlertCircle size={32} />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+              No Orders Selected
+            </h3>
+            <p className="text-slate-600 dark:text-slate-400 mb-6">No orders selected for checkout.</p>
+            <button onClick={handleBack} className="btn-primary">Back to Cart</button>
           </div>
         </main>
       </div>
@@ -124,40 +132,50 @@ useEffect(() => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
-      <main className="pt-32 md:pt-36 px-4 pb-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                Checkout
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Complete your payment to process your orders
-              </p>
+    <div className="min-h-screen minimal-gradient">
+      <main className="max-w-4xl mx-auto px-4 py-8 pt-24 mt-20">
+        <motion.div className="space-y-6">
+          <div className="feature-card floating p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl text-white">
+                  <CreditCard size={24} />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+                    Checkout
+                  </h1>
+                  <p className="text-slate-600 dark:text-slate-400 mt-1">
+                    Complete your payment to process your orders
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={handleBack}
+                className="btn-secondary flex items-center gap-2"
+              >
+                <ArrowLeft size={16} />
+                Back to Cart
+              </button>
             </div>
-            <button 
-              onClick={handleBack}
-              className="btn-secondary flex items-center"
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Back to Cart
-            </button>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-6">
             {/* Customer Details */}
-            <div className="card p-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                Customer Details
-              </h2>
+            <div className="feature-card floating p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg text-white">
+                  <User size={20} />
+                </div>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                  Customer Details
+                </h2>
+              </div>
               
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm flex items-center gap-2">
+                    <User size={14} />
                     Full Name *
                   </label>
                   <input
@@ -172,7 +190,8 @@ useEffect(() => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm flex items-center gap-2">
+                    <Mail size={14} />
                     Email Address *
                   </label>
                   <input
@@ -187,7 +206,8 @@ useEffect(() => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm flex items-center gap-2">
+                    <Phone size={14} />
                     Phone Number *
                   </label>
                   <input
@@ -204,67 +224,74 @@ useEffect(() => {
             </div>
 
             {/* Order Summary */}
-            <div className="card p-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-                Order Summary
-              </h2>
+            <div className="feature-card floating p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg text-white">
+                  <ShoppingBag size={20} />
+                </div>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                  Order Summary
+                </h2>
+              </div>
               
               <div className="space-y-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">Orders:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{selectedOrders.length}</span>
+                  <span className="text-slate-600 dark:text-slate-400">Orders:</span>
+                  <span className="font-medium text-slate-900 dark:text-slate-100">{selectedOrders.length}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
-                  <span className="font-medium text-gray-900 dark:text-white">₹{(totalAmount / 1.18).toFixed(2)}</span>
+                  <span className="text-slate-600 dark:text-slate-400">Subtotal:</span>
+                  <span className="font-medium text-slate-900 dark:text-slate-100">₹{(totalAmount / 1.18).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">GST (18%):</span>
-                  <span className="font-medium text-gray-900 dark:text-white">₹{((totalAmount / 1.18) * 0.18).toFixed(2)}</span>
+                  <span className="text-slate-600 dark:text-slate-400">GST (18%):</span>
+                  <span className="font-medium text-slate-900 dark:text-slate-100">₹{((totalAmount / 1.18) * 0.18).toFixed(2)}</span>
                 </div>
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-between text-lg font-bold">
-                  <span className="text-gray-900 dark:text-white">Total:</span>
-                  <span className="text-black dark:text-white">₹{totalAmount.toFixed(2)}</span>
+                <div className="border-t border-slate-200 dark:border-slate-700 pt-4 flex justify-between text-lg font-bold">
+                  <span className="text-slate-900 dark:text-slate-100">Total:</span>
+                  <span className="text-slate-900 dark:text-slate-100">₹{totalAmount.toFixed(2)}</span>
                 </div>
               </div>
 
               {error && (
-                <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+                <div className="mt-6 p-4 bg-red-50/50 dark:bg-red-900/20 border border-red-200/50 dark:border-red-800/50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle size={16} className="text-red-600 dark:text-red-400" />
+                    <p className="text-red-600 dark:text-red-400 text-sm font-medium">{error}</p>
+                  </div>
                 </div>
               )}
 
-                             <button
+              <button
                  onClick={handlePayment}
                  disabled={loading || sdkLoading || !customerDetails.name || !customerDetails.email || !customerDetails.phone}
-                 className="w-full btn-primary mt-6 py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                 className="w-full btn-primary mt-6 py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                >
                 {loading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <>
+                    <div className="animate-spin h-5 w-5 border-b-2 border-white"></div>
                     Processing...
-                  </div>
-                                 ) : sdkLoading ? (
-                   <div className="flex items-center justify-center">
-                     <div className="animate-spin h-5 w-5 border-b-2 border-white mr-2"></div>
-                     Loading Payment Gateway...
-                   </div>
-                 ) : (
-                   <>
-                     <svg className="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                     </svg>
-                     Pay ₹{totalAmount.toFixed(2)}
-                   </>
-                 )}
+                  </>
+                ) : sdkLoading ? (
+                  <>
+                    <div className="animate-spin h-5 w-5 border-b-2 border-white"></div>
+                    Loading Payment Gateway...
+                  </>
+                ) : (
+                  <>
+                    <Lock size={20} />
+                    Pay ₹{totalAmount.toFixed(2)}
+                  </>
+                )}
               </button>
 
-              <div className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
-                By proceeding, you agree to our terms and conditions
+              <div className="mt-4 text-xs text-slate-500 dark:text-slate-400 text-center flex items-center justify-center gap-1">
+                <Lock size={12} />
+                Secure payment • By proceeding, you agree to our terms and conditions
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
     </div>
   );

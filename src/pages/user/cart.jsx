@@ -133,12 +133,8 @@ const Cart = () => {
     <div className="min-h-screen minimal-gradient">
       <main className="max-w-7xl mx-auto px-4 py-8 pt-24 mt-20">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           className="space-y-6"
         >
-          {/* Header Section */}
           <div className="feature-card floating p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -166,9 +162,6 @@ const Cart = () => {
 
           {loading ? (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
               className="feature-card floating p-8"
             >
               <div className="flex items-center justify-center">
@@ -178,9 +171,6 @@ const Cart = () => {
             </motion.div>
           ) : error ? (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
               className="feature-card floating p-8"
             >
               <div className="text-center">
@@ -198,9 +188,6 @@ const Cart = () => {
             </motion.div>
           ) : orders.length === 0 ? (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
               className="feature-card floating p-8"
             >
               <div className="text-center">
@@ -223,9 +210,6 @@ const Cart = () => {
             </motion.div>
           ) : (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
               className="grid lg:grid-cols-3 gap-8"
             >
               {/* Orders List */}
@@ -254,9 +238,6 @@ const Cart = () => {
                     {orders.map((order, index) => (
                        <motion.div 
                          key={order._id} 
-                         initial={{ opacity: 0, y: 20 }}
-                         animate={{ opacity: 1, y: 0 }}
-                         transition={{ duration: 0.3, delay: index * 0.1 }}
                          className={`feature-card p-6 transition-all duration-200 ${
                          selectedOrders.has(order._id) ? 'ring-2 ring-blue-500 bg-blue-50/50 dark:bg-blue-900/20' : 'hover:shadow-lg'
                        }`}>
