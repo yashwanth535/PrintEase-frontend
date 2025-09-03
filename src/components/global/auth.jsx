@@ -454,13 +454,16 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               <p className="text-xs text-slate-500 dark:text-slate-400 text-center">Paste your 6-digit code or enter each digit individually</p>
             </div>
 
-            <button
+            <motion.button
               type="submit"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
               className="w-full btn-primary mt-6"
               disabled={loading || otp.length !== 6}
             >
               {loading ? 'Verifying...' : 'Verify OTP'}
-            </button>
+            </motion.button>
 
             {message && (
               <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
@@ -498,13 +501,16 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               />
             </div>
 
-            <button
+            <motion.button
               type="submit"
               className="w-full btn-primary mt-6"
               disabled={loading}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
               {loading ? 'Sending OTP...' : 'Send Reset Code'}
-            </button>
+            </motion.button>
 
             {message && (
               <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
@@ -541,13 +547,16 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <button
+                <motion.button
                   type="button"
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200"
                   onClick={togglePasswordVisibility}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
                   {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                </button>
+                </motion.button>
               </div>
             </div>
 
@@ -562,23 +571,29 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
-                <button
+                <motion.button
                   type="button"
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors duration-200"
                   onClick={toggleConfirmPasswordVisibility}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
                   {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                </button>
+                </motion.button>
               </div>
             </div>
 
-            <button
+            <motion.button
               type="submit"
               className="w-full btn-primary mt-6"
               disabled={loading || password !== confirmPassword}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
               {loading ? 'Updating Password...' : 'Update Password'}
-            </button>
+            </motion.button>
 
             {password !== confirmPassword && password && confirmPassword && (
               <div className="text-center p-2 rounded-lg bg-amber-50/80 dark:bg-amber-900/20">
