@@ -43,7 +43,7 @@ const LandingPage = () => {
       />
 
       {/* Enhanced Hero Section */}
-      <div className="pt-10 pl-10">
+      <div className="pt-6 pl-10">
         <div className="minimal-gradient relative overflow-hidden">
           {/* Background Elements */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50 dark:from-blue-950/20 dark:via-transparent dark:to-purple-950/20"></div>

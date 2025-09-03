@@ -84,7 +84,7 @@
   
   /* Glassomorphic Navbar */
   .glass-nav {
-    @apply bg-white/70 dark:bg-black/70 backdrop-blur-xl border-b border-white/20 dark:border-white/10 shadow-lg;
+    @apply bg-white/70 dark:bg-black/70 backdrop-blur-md border-b border-white/20 dark:border-white/10 shadow-lg;
   }
   
   /* Minimalistic Input */
