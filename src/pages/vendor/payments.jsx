@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { CreditCard, X, Calendar, User, FileText, Package, Eye, DollarSign, CheckCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CreditCard, X, Calendar, User, FileText, Package, Eye, DollarSign, CheckCircle, Receipt, Printer, Palette } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -39,9 +39,16 @@ const Payments = () => {
     }
   };
 
-  const DetailRow = ({ label, value }) => (
-    <div className="flex justify-between items-center text-sm p-2 bg-white/50 dark:bg-slate-800/50 rounded-lg">
-      <span className="text-slate-600 dark:text-slate-400 font-medium">{label}:</span>
+  const DetailRow = ({ label, value, icon: Icon }) => (
+    <div className="flex justify-between items-center py-3 px-4 bg-gradient-to-r from-slate-50/50 to-slate-100/50 dark:from-slate-800/30 dark:to-slate-700/30 rounded-xl backdrop-blur-sm border border-slate-200/30 dark:border-slate-600/30">
+      <div className="flex items-center gap-3">
+        {Icon && (
+          <div className="p-2 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 rounded-lg">
+            <Icon className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+          </div>
+        )}
+        <span className="text-slate-600 dark:text-slate-400 font-medium">{label}</span>
+      </div>
       <span className="font-semibold text-slate-900 dark:text-slate-100">{value}</span>
     </div>
   );
@@ -170,65 +177,213 @@ const Payments = () => {
       </main>
 
       {/* Enhanced Modal */}
-      {selectedOrder && (
-        <motion.div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
+      <AnimatePresence>
+        {selectedOrder && (
           <motion.div 
-            className="feature-card max-w-lg w-full p-6 relative"
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setSelectedOrder(null)}
           >
-            <button
-              onClick={() => setSelectedOrder(null)}
-              className="absolute top-4 right-4 p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            <motion.div 
+              className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 rounded-3xl shadow-2xl max-w-2xl w-full p-0 relative overflow-hidden"
+              initial={{ opacity: 0, scale: 0.8, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 50 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <X className="w-5 h-5" />
-            </button>
-            
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 rounded-xl">
-                <Package className="h-6 w-6 text-slate-700 dark:text-slate-300" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                  Order #{selectedOrder._id.slice(-6)}
-                </h2>
-                <p className="text-slate-600 dark:text-slate-400">Payment Details</p>
-              </div>
-            </div>
-            
-            <div className="space-y-4 mb-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <DetailRow label="Pages per copy" value={selectedOrder.pages} />
-                <DetailRow label="Total copies" value={selectedOrder.sets} />
-                <DetailRow label="Print type" value={selectedOrder.color ? "Color" : "Black & White"} />
-                <DetailRow label="Paper size" value={selectedOrder.size} />
-                <DetailRow label="Binding" value={selectedOrder.binding === "no" ? "None" : selectedOrder.binding} />
-                <DetailRow label="Payment Status" value={<span className="text-emerald-600 dark:text-emerald-400 font-medium">PAID</span>} />
-              </div>
-              {selectedOrder.notes && (
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1 font-medium">Notes:</p>
-                  <p className="text-sm text-slate-900 dark:text-slate-100">{selectedOrder.notes}</p>
+              {/* Modal Header with Gradient */}
+              <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 p-6 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-blue-500/20 to-indigo-500/20 backdrop-blur-sm"></div>
+                <motion.button
+                  onClick={() => setSelectedOrder(null)}
+                  className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-200 backdrop-blur-sm"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X className="w-5 h-5 text-white" />
+                </motion.button>
+                
+                <div className="flex items-center gap-4 relative z-10">
+                  <motion.div 
+                    className="p-4 bg-white/20 backdrop-blur-sm rounded-2xl"
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.2, type: "spring", damping: 15 }}
+                  >
+                    <Receipt className="h-8 w-8 text-white" />
+                  </motion.div>
+                  <div>
+                    <motion.h2 
+                      className="text-3xl font-bold text-white mb-1"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      Order #{selectedOrder._id.slice(-6)}
+                    </motion.h2>
+                    <motion.div 
+                      className="flex items-center gap-2"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 }}
+                    >
+                      <CheckCircle className="h-5 w-5 text-white" />
+                      <span className="text-white/90 font-semibold">
+                        Payment Received
+                      </span>
+                    </motion.div>
+                  </div>
                 </div>
-              )}
-            </div>
-            
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-              <div className="flex justify-between items-center">
-                <span className="text-lg font-medium text-slate-600 dark:text-slate-400">Total Amount:</span>
-                <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">₹{selectedOrder.totalPrice}</span>
               </div>
-            </div>
+              
+              {/* Modal Body */}
+              <div className="p-8">
+                {/* Order Details Grid */}
+                <motion.div 
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <motion.div 
+                    className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-4 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    transition={{ type: "spring", damping: 20 }}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40 rounded-xl">
+                        <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">Pages per copy</span>
+                    </div>
+                    <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">{selectedOrder.pages}</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-4 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    transition={{ type: "spring", damping: 20 }}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/40 dark:to-purple-800/40 rounded-xl">
+                        <Package className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">Total copies</span>
+                    </div>
+                    <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">{selectedOrder.sets}</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-4 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    transition={{ type: "spring", damping: 20 }}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/40 dark:to-orange-800/40 rounded-xl">
+                        {selectedOrder.color ? <Palette className="h-4 w-4 text-orange-600 dark:text-orange-400" /> : <Printer className="h-4 w-4 text-orange-600 dark:text-orange-400" />}
+                      </div>
+                      <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">Print type</span>
+                    </div>
+                    <span className="text-lg font-semibold text-slate-900 dark:text-slate-100">{selectedOrder.color ? "Color" : "Black & White"}</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-4 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    transition={{ type: "spring", damping: 20 }}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900/40 dark:to-green-800/40 rounded-xl">
+                        <FileText className="h-4 w-4 text-green-600 dark:text-green-400" />
+                      </div>
+                      <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">Paper size</span>
+                    </div>
+                    <span className="text-lg font-semibold text-slate-900 dark:text-slate-100">{selectedOrder.size}</span>
+                  </motion.div>
+                </motion.div>
+                
+                {/* Additional Details */}
+                <motion.div 
+                  className="space-y-4 mb-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <DetailRow 
+                    label="Binding" 
+                    value={selectedOrder.binding === "no" ? "None" : selectedOrder.binding} 
+                    icon={Package}
+                  />
+                  <DetailRow 
+                    label="Customer" 
+                    value={selectedOrder?.userId?.email || "Unknown"} 
+                    icon={User}
+                  />
+                  <DetailRow 
+                    label="Paid At" 
+                    value={selectedOrder.paidAt ? new Date(selectedOrder.paidAt).toLocaleString() : "-"} 
+                    icon={Calendar}
+                  />
+                  <DetailRow 
+                    label="Payment Status" 
+                    value={<span className="text-emerald-600 dark:text-emerald-400 font-medium">PAID</span>} 
+                    icon={CheckCircle}
+                  />
+                  {selectedOrder.notes && (
+                    <div className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-4 border border-slate-200/50 dark:border-slate-600/50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <FileText className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                        <span className="text-slate-600 dark:text-slate-400 text-sm font-medium">Notes</span>
+                      </div>
+                      <p className="text-slate-900 dark:text-slate-100">{selectedOrder.notes}</p>
+                    </div>
+                  )}
+                </motion.div>
+                {/* Total Amount Section */}
+                <motion.div 
+                  className="bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-2xl p-6 relative overflow-hidden"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.7, type: "spring", damping: 20 }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-blue-500/20 to-indigo-500/20 backdrop-blur-sm"></div>
+                  <div className="flex items-center justify-between relative z-10">
+                    <div className="flex items-center gap-3">
+                      <motion.div 
+                        className="p-3 bg-white/20 backdrop-blur-sm rounded-xl"
+                        whileHover={{ rotate: 360 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <DollarSign className="h-6 w-6 text-white" />
+                      </motion.div>
+                      <div>
+                        <span className="text-white/80 text-sm font-medium block">
+                          Total Amount Received
+                        </span>
+                        <span className="text-white font-semibold">
+                          Payment Completed
+                        </span>
+                      </div>
+                    </div>
+                    <motion.span 
+                      className="text-4xl font-bold text-white"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.8, type: "spring", damping: 15 }}
+                    >
+                      ₹{selectedOrder.totalPrice}
+                    </motion.span>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 };

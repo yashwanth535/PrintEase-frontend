@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Package, CheckCircle, Clock, AlertCircle, Eye, Download, User, Calendar, FileText, CreditCard } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Package, CheckCircle, Clock, AlertCircle, Eye, Download, User, Calendar, FileText, CreditCard, X, ShoppingBag } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -14,6 +14,8 @@ const Home = () => {
   const [selectedTab, setSelectedTab] = useState("active");
   const [showAllCompleted, setShowAllCompleted] = useState(false);
   const [updatingOrder, setUpdatingOrder] = useState(null);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [orderToComplete, setOrderToComplete] = useState(null);
 
   // Fetch orders on component mount
   useEffect(() => {
@@ -83,20 +85,23 @@ const Home = () => {
       window.URL.revokeObjectURL(downloadUrl);
     } catch (error) {
       console.error('Error downloading file:', error);
-      alert('Failed to download file');
+      console.error('Failed to download file');
     }
   };
 
 
 
-  const handleCompleteOrder = async (orderId) => {
-    if (!window.confirm("Are you sure you want to mark this order as completed?")) {
-      return;
-    }
+  const handleCompleteOrder = (order) => {
+    setOrderToComplete(order);
+    setShowCompletionModal(true);
+  };
+
+  const confirmCompleteOrder = async () => {
+    if (!orderToComplete) return;
 
     try {
-      setUpdatingOrder(orderId);
-      const response = await fetch(`${API_URL}/api/order/update-status/${orderId}`, {
+      setUpdatingOrder(orderToComplete._id);
+      const response = await fetch(`${API_URL}/api/order/update-status/${orderToComplete._id}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -109,9 +114,11 @@ const Home = () => {
         // Update order status locally
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
-            order._id === orderId ? { ...order, status: "completed" } : order
+            order._id === orderToComplete._id ? { ...order, status: "completed" } : order
           )
         );
+        setShowCompletionModal(false);
+        setOrderToComplete(null);
       } else {
         alert("Failed to update order: " + data.message);
       }
@@ -121,6 +128,11 @@ const Home = () => {
     } finally {
       setUpdatingOrder(null);
     }
+  };
+
+  const cancelCompleteOrder = () => {
+    setShowCompletionModal(false);
+    setOrderToComplete(null);
   };
 
   return (
@@ -276,11 +288,13 @@ const Home = () => {
                               </div>
                               {/* Complete button for active orders */}
                               {(order.status === "accepted" || order.status === "in_progress") && (
-                                <button
-                                  onClick={() => handleCompleteOrder(order._id)}
+                                <motion.button
+                                  onClick={() => handleCompleteOrder(order)}
                                   disabled={updatingOrder === order._id}
                                   className="btn-primary text-sm px-3 py-1 disabled:opacity-50 flex items-center gap-1"
                                   title="Mark as Completed"
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
                                 >
                                   {updatingOrder === order._id ? (
                                     <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -290,7 +304,7 @@ const Home = () => {
                                       Complete
                                     </>
                                   )}
-                                </button>
+                                </motion.button>
                               )}
                             </div>
                             <div className="flex items-center justify-between mb-3">
@@ -367,6 +381,186 @@ const Home = () => {
           </motion.div>
         </motion.div>
       </main>
+
+      {/* Order Completion Confirmation Modal */}
+      <AnimatePresence>
+        {showCompletionModal && orderToComplete && (
+          <motion.div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={cancelCompleteOrder}
+          >
+            <motion.div 
+              className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 rounded-3xl shadow-2xl max-w-lg w-full p-0 relative overflow-hidden"
+              initial={{ opacity: 0, scale: 0.8, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 50 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header with Gradient */}
+              <div className="bg-gradient-to-r from-emerald-500 via-emerald-600 to-green-600 p-6 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-emerald-500/20 to-green-500/20 backdrop-blur-sm"></div>
+                <motion.button
+                  onClick={cancelCompleteOrder}
+                  className="absolute top-4 right-4 p-2 bg-white/20 hover:bg-white/30 rounded-full transition-all duration-200 backdrop-blur-sm"
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X className="w-5 h-5 text-white" />
+                </motion.button>
+                
+                <div className="flex items-center gap-4 relative z-10">
+                  <motion.div 
+                    className="p-4 bg-white/20 backdrop-blur-sm rounded-2xl"
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.2, type: "spring", damping: 15 }}
+                  >
+                    <CheckCircle className="h-8 w-8 text-white" />
+                  </motion.div>
+                  <div>
+                    <motion.h2 
+                      className="text-3xl font-bold text-white mb-1"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      Complete Order
+                    </motion.h2>
+                    <motion.p 
+                      className="text-white/90 font-medium"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 }}
+                    >
+                      Mark this order as completed?
+                    </motion.p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Modal Body */}
+              <div className="p-8">
+                {/* Order Summary Card */}
+                <motion.div 
+                  className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 rounded-2xl p-6 mb-8 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40 rounded-xl">
+                      <ShoppingBag className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                        Order #{orderToComplete._id?.slice(-6)}
+                      </h3>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm">
+                        Customer: {orderToComplete.userId?.email || "Unknown"}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-slate-600 dark:text-slate-400">Pages:</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{orderToComplete.pages}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600 dark:text-slate-400">Copies:</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{orderToComplete.sets}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600 dark:text-slate-400">Size:</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{orderToComplete.size}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-slate-600 dark:text-slate-400">Type:</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">
+                          {orderToComplete.color ? "Color" : "B&W"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600 dark:text-slate-400">Binding:</span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">
+                          {orderToComplete.binding === "no" ? "None" : orderToComplete.binding}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600 dark:text-slate-400">Total:</span>
+                        <span className="font-bold text-lg text-slate-900 dark:text-slate-100">
+                          ₹{orderToComplete.totalPrice}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+                
+                {/* Confirmation Message */}
+                <motion.div 
+                  className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-4 mb-8 border border-amber-200/50 dark:border-amber-800/50"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <div className="flex items-center gap-3">
+                    <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                    <div>
+                      <p className="text-amber-800 dark:text-amber-200 font-medium text-sm">
+                        Once marked as completed, this order will be moved to the completed section and the customer will be notified.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+                
+                {/* Action Buttons */}
+                <motion.div 
+                  className="flex gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                >
+                  <motion.button
+                    onClick={cancelCompleteOrder}
+                    className="flex-1 px-6 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold rounded-2xl transition-all duration-200 backdrop-blur-sm border border-slate-200/50 dark:border-slate-600/50"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    onClick={confirmCompleteOrder}
+                    disabled={updatingOrder === orderToComplete._id}
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-2xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    whileHover={{ scale: updatingOrder === orderToComplete._id ? 1 : 1.02 }}
+                    whileTap={{ scale: updatingOrder === orderToComplete._id ? 1 : 0.98 }}
+                  >
+                    {updatingOrder === orderToComplete._id ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Completing...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="h-4 w-4" />
+                        Complete Order
+                      </>
+                    )}
+                  </motion.button>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -99,7 +99,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 transition-all duration-500">
+    <div className="min-h-screen minimal-gradient dark:minimal-gradient transition-all duration-500">
       <div className="max-w-7xl mt-4 mx-auto px-4 py-8 pt-40">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
