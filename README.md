@@ -137,6 +137,7 @@ A full-stack web application that connects users with local printing vendors, en
    # Backend API URL - used for all API calls
    # For development: http://localhost:3000
    # For production: https://your-backend-domain.com
+   # Example production URLs: https://print-ease-backend.vercel.app or https://printease-backend.onrender.com
    VITE_API_URL=http://localhost:3000
    
    # Google Maps API Key - required for location services and geocoding
