@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Link } from 'react-router-dom';
 import AuthForms from "../../components/global/auth";
 import mainImage from '../../assets/main_img.png';
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import LandingHeader from "../../components/global/LandingHeader";
+import Spline from '@splinetool/react-spline';
 import { 
   Upload, 
   MapPin, 
@@ -101,7 +102,7 @@ const LandingPage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className={`w-full lg:w-3/5 transition-all duration-300 ${
+              className={`w-full lg:w-2/5 transition-all duration-300 ${
                 showAuth ? "hidden lg:block lg:w-1/2" : ""
               }`}
             >
@@ -186,22 +187,83 @@ const LandingPage = () => {
               </div>
             </motion.section>
 
-            {/* Image Section */}
+            {/* 3D Robot Model Section */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full lg:w-2/5 flex justify-center items-center p-8"
+              className="w-full lg:w-3/5 flex justify-center items-center p-4"
             >
-              <div className="hero-image-container group max-w-lg">
-                <div className="hero-image-glow"></div>
-                <motion.img
-                  src={mainImage}
-                  alt="PrintEase Hero"
-                  className="relative z-10 w-full h-auto object-contain drop-shadow-2xl floating"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
+              <div className="relative w-full max-w-7xl h-[550px] lg:h-[750px]">
+                {/* Seamless Background Effects */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 blur-3xl"></div>
+                <div className="absolute inset-4 bg-gradient-to-tr from-cyan-500/3 via-transparent to-orange-500/3"></div>
+                
+                {/* 3D Model Container - Seamless Integration */}
+                <motion.div 
+                  className="relative z-50 w-full h-full overflow-hidden"
+                  whileHover={{ scale: 1.02, rotateY: 2 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <Suspense fallback={
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900/30 via-blue-900/20 to-purple-900/30">
+                      <div className="text-center space-y-6">
+                        {/* Enhanced Loading Animation */}
+                        <div className="relative">
+                          <div className="animate-spin h-16 w-16 border-4 border-blue-500/30 border-t-blue-500 rounded-full mx-auto"></div>
+                          <div className="animate-ping absolute inset-0 h-16 w-16 border-4 border-purple-500/20 rounded-full mx-auto"></div>
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-white font-semibold text-lg">Loading 3D Robot...</p>
+                          <p className="text-blue-200 text-sm animate-pulse">Preparing interactive experience</p>
+                        </div>
+                      </div>
+                    </div>
+                  }>
+                    <Spline 
+                      scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                      className="w-full h-full"
+                      onLoad={() => console.log('Spline robot model loaded successfully on landing page')}
+                      onError={(error) => {
+                        console.error('Spline model failed to load:', error);
+                        // Fallback to original image if 3D model fails
+                      }}
+                    />
+                  </Suspense>
+                  
+                  {/* Interactive Hint Overlay */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 3, duration: 0.8 }}
+                    className="absolute bottom-6 left-6 right-6 z-60"
+                  >
+                    <div className="bg-white/90 dark:bg-black/90 backdrop-blur-md rounded-2xl px-6 py-4 shadow-2xl border border-white/20">
+                      <div className="flex items-center justify-center space-x-3">
+                        <motion.div
+                          animate={{ rotate: [0, 15, -15, 0] }}
+                          transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                          className="text-2xl"
+                        >
+                          🤖
+                        </motion.div>
+                        <div className="text-center">
+                          <p className="text-slate-800 dark:text-slate-200 font-semibold text-sm">
+                            Interactive 3D Model
+                          </p>
+                          <p className="text-slate-600 dark:text-slate-400 text-xs">
+                            Click & Drag to explore • Scroll to zoom
+                          </p>
+                        </div>
+                        <motion.div
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                          className="w-2 h-2 bg-green-500 rounded-full"
+                        ></motion.div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
               </div>
             </motion.div>
           </div>

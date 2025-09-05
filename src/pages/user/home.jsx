@@ -100,7 +100,10 @@ const Home = () => {
 
   return (
     <div className="min-h-screen minimal-gradient dark:minimal-gradient transition-all duration-500">
-      <div className="max-w-7xl mt-4 mx-auto px-4 py-8 pt-40">
+      {/* Hero Section with 3D Robot */}
+
+      {/* Orders Management Section */}
+      <div id="orders-section" className="max-w-7xl mt-36 mx-auto px-4 py-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
