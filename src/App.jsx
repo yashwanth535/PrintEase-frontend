@@ -85,7 +85,7 @@ function App() {
     const sendLocationToBackend = async () => {
       if (userLocation) {
         try {
-          const response = await fetch("http://localhost:3000/api/vendors/nearest", {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/vendors/nearest`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

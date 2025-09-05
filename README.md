@@ -94,17 +94,57 @@ A full-stack web application that connects users with local printing vendors, en
 
 4. **Environment Variables**
    
-   Create `.env` file in the backend directory:
+   **Backend (.env file in PrintEase-backend directory):**
    ```env
+   # MongoDB Connection
    MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
-   GOOGLE_MAPS_API_KEY=your_google_maps_api_key
-   CASHFREE_APP_ID=your_cashfree_app_id
-   CASHFREE_SECRET_KEY=your_cashfree_secret_key
-   EMAIL_USER=your_email
+   
+   # JWT Secret for token signing
+   JWT_SECRET=your_jwt_secret_here
+   
+   # Session Secret
+   SESSION_SECRET=your_session_secret_here
+   
+   # Frontend URLs for CORS (comma-separated)
+   FRONTEND_URL=http://localhost:5173,https://your-frontend-domain.com
+   
+   # Backend URLs for CSP (comma-separated) - optional, defaults to localhost:3000
+   BACKEND_URL=http://localhost:3000,https://your-backend-domain.com
+   
+   # Google Maps API Key
+   GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+   
+   # Cashfree Payment Gateway
+   CASHFREE_CLIENT_ID=your_cashfree_client_id
+   CASHFREE_CLIENT_SECRET=your_cashfree_client_secret
+   PROD=false
+   
+   # Email Configuration
+   EMAIL_USER=your_email@example.com
    EMAIL_PASS=your_email_password
-   SUPABASE_URL=your_supabase_url
-   SUPABASE_KEY=your_supabase_key
+   
+   # Supabase Configuration
+   supabase_url=your_supabase_url
+   supabase_service_secret=your_supabase_service_secret
+   
+   # Environment Settings
+   NODE_ENV=development
+   docker=false
+   ```
+
+   **Frontend (.env file in PrintEase-frontend directory):**
+   ```env
+   # Backend API URL - used for all API calls
+   # For development: http://localhost:3000
+   # For production: https://your-backend-domain.com
+   VITE_API_URL=http://localhost:3000
+   
+   # Google Maps API Key - required for location services and geocoding
+   VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+   
+   # Supabase Configuration - for file storage
+   VITE_SUPABASE_URL=your_supabase_url_here
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
    ```
 
 ### Docker Deployment
