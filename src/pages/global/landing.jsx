@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import LandingHeader from "../../components/global/LandingHeader";
 import Spline from '@splinetool/react-spline';
+import { ErrorBoundary } from 'react-error-boundary';
 import { 
   Upload, 
   MapPin, 
@@ -56,6 +57,11 @@ const LandingPage = () => {
   });
 
   const [faqRef, faqInView] = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
+  const [splineRef, splineInView] = useInView({
     threshold: 0.2,
     triggerOnce: true,
   });
@@ -777,6 +783,158 @@ const LandingPage = () => {
                 </motion.div>
               ))}
             </div>
+          </motion.div>
+        </section>
+
+        {/* Interactive 3D Model Section */}
+        <section 
+          ref={splineRef}
+          className="py-24 px-8 minimal-gradient relative transition-colors duration-300"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={splineInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="max-w-7xl mx-auto"
+          >
+            <div className="text-center mb-16">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                animate={splineInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4"
+              >
+                Experience the Future
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={splineInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto"
+              >
+                Interact with our intelligent printing assistant robot
+              </motion.p>
+            </div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={splineInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="relative"
+            >
+              {/* Main 3D Model Container */}
+              <div className="relative w-full h-[600px] lg:h-[700px] feature-card overflow-hidden group">
+                {/* Enhanced Background Effects */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-pink-500/10 animate-pulse"></div>
+                <div className="absolute inset-4 bg-gradient-to-tr from-cyan-500/5 via-transparent to-orange-500/5 blur-xl"></div>
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse"></div>
+                
+                {/* Interactive Hint Overlay */}
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2, duration: 1 }}
+                  className="absolute top-6 left-6 z-20 bg-white/20 dark:bg-black/20 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/20 dark:border-white/10"
+                >
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center">
+                    🤖 Interactive 3D Robot - Move your cursor around!
+                  </p>
+                </motion.div>
+                
+                {/* 3D Model Container */}
+                <motion.div 
+                  className="relative z-10 w-full h-full"
+                  whileHover={{ scale: 1.02, rotateY: 5 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <Suspense fallback={
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900/20 via-blue-900/10 to-purple-900/20">
+                      <div className="text-center space-y-6">
+                        {/* Enhanced Loading Animation */}
+                        <div className="relative">
+                          <div className="animate-spin h-20 w-20 border-4 border-blue-500/30 border-t-blue-500 rounded-full mx-auto"></div>
+                          <div className="animate-ping absolute inset-0 h-20 w-20 border-4 border-purple-500/20 rounded-full mx-auto"></div>
+                        </div>
+                        <div className="space-y-3">
+                          <p className="text-slate-900 dark:text-slate-100 font-semibold text-xl">Loading Interactive Robot...</p>
+                          <p className="text-blue-600 dark:text-blue-400 text-sm animate-pulse">Preparing cursor-following experience</p>
+                        </div>
+                      </div>
+                    </div>
+                  }>
+                    <ErrorBoundary fallback={
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl">
+                        <div className="text-center space-y-4 p-8">
+                          <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 mb-4">
+                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                          </div>
+                          <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">3D Model Unavailable</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm">
+                            The interactive robot is temporarily unavailable. Please refresh the page to try again.
+                          </p>
+                        </div>
+                      </div>
+                    }>
+                      <Spline 
+                        scene="https://prod.spline.design/gxcCutpWaCI9u8CS/scene.splinecode"
+                        className="w-full h-full"
+                        onLoad={() => console.log('Interactive cursor-following robot model loaded successfully')}
+                        onError={(error) => {
+                          console.error('Spline interactive robot model failed to load:', error);
+                        }}
+                      />
+                    </ErrorBoundary>
+                  </Suspense>
+                </motion.div>
+              </div>
+              
+              {/* Feature Highlights Below 3D Model */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={splineInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
+              >
+                <div className="text-center space-y-4 feature-card p-6 group hover:scale-105 transition-all duration-300">
+                  <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-blue-500 to-cyan-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Lightning Fast</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Experience instant responses and real-time interactions with our advanced 3D technology
+                  </p>
+                </div>
+                
+                <div className="text-center space-y-4 feature-card p-6 group hover:scale-105 transition-all duration-300">
+                  <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Interactive Design</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Move your cursor and watch the robot respond with smooth, natural movements
+                  </p>
+                </div>
+                
+                <div className="text-center space-y-4 feature-card p-6 group hover:scale-105 transition-all duration-300">
+                  <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Smart Technology</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Powered by cutting-edge 3D rendering and intelligent interaction algorithms
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         </section>
 
