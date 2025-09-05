@@ -198,12 +198,7 @@ const VendorMap = () => {
                         }}
                         title={vendor.shopName}
                         icon={{
-                          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <circle cx="16" cy="16" r="12" fill="#8b5cf6" stroke="white" stroke-width="3"/>
-                              <circle cx="16" cy="16" r="6" fill="white"/>
-                            </svg>
-                          `),
+                          url: '/vendor-marker.svg',
                           scaledSize: new window.google.maps.Size(32, 32),
                           anchor: new window.google.maps.Point(16, 16)
                         }}
