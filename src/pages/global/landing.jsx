@@ -797,24 +797,6 @@ const LandingPage = () => {
             transition={{ duration: 0.8 }}
             className="max-w-7xl mx-auto"
           >
-            <div className="text-center mb-16">
-              <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                animate={splineInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4"
-              >
-                Experience the Future
-              </motion.h2>
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                animate={splineInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto"
-              >
-                Interact with our intelligent printing assistant robot
-              </motion.p>
-            </div>
             
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -823,24 +805,13 @@ const LandingPage = () => {
               className="relative"
             >
               {/* Main 3D Model Container */}
-              <div className="relative w-full h-[600px] lg:h-[700px] feature-card overflow-hidden group">
-                {/* Enhanced Background Effects */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-pink-500/10 animate-pulse"></div>
-                <div className="absolute inset-4 bg-gradient-to-tr from-cyan-500/5 via-transparent to-orange-500/5 blur-xl"></div>
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-full blur-3xl animate-pulse"></div>
+              <div className="relative w-full h-[600px] lg:h-[700px] overflow-hidden group">
+                {/* Seamless Background Effects */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/3 via-purple-500/2 to-pink-500/3"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/2 via-transparent to-orange-500/2 blur-2xl"></div>
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/5 to-purple-400/5 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/5 to-pink-400/5 rounded-full blur-3xl"></div>
                 
-                {/* Interactive Hint Overlay */}
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 2, duration: 1 }}
-                  className="absolute top-6 left-6 z-20 bg-white/20 dark:bg-black/20 backdrop-blur-sm rounded-xl px-4 py-2 border border-white/20 dark:border-white/10"
-                >
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center">
-                    🤖 Interactive 3D Robot - Move your cursor around!
-                  </p>
-                </motion.div>
                 
                 {/* 3D Model Container */}
                 <motion.div 
@@ -849,7 +820,7 @@ const LandingPage = () => {
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                   <Suspense fallback={
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900/20 via-blue-900/10 to-purple-900/20">
+                    <div className="w-full h-full flex items-center justify-center">
                       <div className="text-center space-y-6">
                         {/* Enhanced Loading Animation */}
                         <div className="relative">
@@ -864,7 +835,7 @@ const LandingPage = () => {
                     </div>
                   }>
                     <ErrorBoundary fallback={
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-2xl">
+                      <div className="w-full h-full flex items-center justify-center">
                         <div className="text-center space-y-4 p-8">
                           <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 mb-4">
                             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
