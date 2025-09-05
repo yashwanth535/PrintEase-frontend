@@ -230,39 +230,6 @@ const LandingPage = () => {
                       }}
                     />
                   </Suspense>
-                  
-                  {/* Interactive Hint Overlay */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 3, duration: 0.8 }}
-                    className="absolute bottom-6 left-6 right-6 z-60"
-                  >
-                    <div className="bg-white/90 dark:bg-black/90 backdrop-blur-md rounded-2xl px-6 py-4 shadow-2xl border border-white/20">
-                      <div className="flex items-center justify-center space-x-3">
-                        <motion.div
-                          animate={{ rotate: [0, 15, -15, 0] }}
-                          transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                          className="text-2xl"
-                        >
-                          🤖
-                        </motion.div>
-                        <div className="text-center">
-                          <p className="text-slate-800 dark:text-slate-200 font-semibold text-sm">
-                            Interactive 3D Model
-                          </p>
-                          <p className="text-slate-600 dark:text-slate-400 text-xs">
-                            Click & Drag to explore • Scroll to zoom
-                          </p>
-                        </div>
-                        <motion.div
-                          animate={{ scale: [1, 1.2, 1] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                          className="w-2 h-2 bg-green-500 rounded-full"
-                        ></motion.div>
-                      </div>
-                    </div>
-                  </motion.div>
                 </motion.div>
               </div>
             </motion.div>
