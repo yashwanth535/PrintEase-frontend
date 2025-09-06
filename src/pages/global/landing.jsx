@@ -765,7 +765,7 @@ const LandingPage = () => {
                         </div>
                       }>
                         <Spline 
-                          scene="https://prod.spline.design/q38YStnIHKrXskvB/scene.splinecode"
+                          scene="https://prod.spline.design/ASQi-5B73PX6-ms7/scene.splinecode"
                           className="w-full h-full"
                           onLoad={() => console.log('Interactive 3D model loaded successfully in split layout')}
                           onError={(error) => {
