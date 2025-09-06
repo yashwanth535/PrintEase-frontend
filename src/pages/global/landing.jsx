@@ -736,7 +736,7 @@ const LandingPage = () => {
                   
                   {/* 3D Model Container */}
                   <motion.div 
-                    className="relative z-10 w-full h-full overflow-hidden"
+                    className="relative z-10 w-full h-full overflow-hidden flex items-center justify-center"
                     whileHover={{ scale: 1.02, rotateY: 2 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
                   >
@@ -779,20 +779,6 @@ const LandingPage = () => {
                         />
                       </ErrorBoundary>
                     </Suspense>
-                  </motion.div>
-
-                  {/* Interactive Hint */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2, duration: 0.5 }}
-                    className="absolute bottom-4 left-4 right-4 z-20"
-                  >
-                    <div className="bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-xl p-3 text-center border border-white/20 dark:border-white/10">
-                      <p className="text-sm text-slate-600 dark:text-slate-400">
-                        🎮 Interactive 3D Model - Click & Drag to explore!
-                      </p>
-                    </div>
                   </motion.div>
                 </div>
               </motion.div>
@@ -882,31 +868,6 @@ const LandingPage = () => {
                     </motion.div>
                   ))}
                 </div>
-
-                {/* Contact Support Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={splineInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 1.2, duration: 0.6 }}
-                  className="feature-card p-6 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 border border-blue-200/20 dark:border-blue-800/20"
-                >
-                  <div className="text-center space-y-4">
-                    <div className="inline-flex p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500">
-                      <Mail className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                        Still have questions?
-                      </h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                        Our support team is here to help you 24/7
-                      </p>
-                      <button className="btn-primary text-sm px-6 py-2">
-                        Contact Support
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
               </motion.div>
             </div>
           </motion.div>
