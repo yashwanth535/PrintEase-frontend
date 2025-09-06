@@ -697,6 +697,7 @@ const LandingPage = () => {
             </div>
           </motion.div>
         </section>
+        {/* Interactive 3D Model & FAQ Section */}
         <section 
           ref={splineRef}
           className="py-24 px-8 minimal-gradient relative transition-colors duration-300"
@@ -707,71 +708,207 @@ const LandingPage = () => {
             transition={{ duration: 0.8 }}
             className="max-w-7xl mx-auto"
           >
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={splineInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="relative"
-            >
-              {/* Main 3D Model Container */}
-              <div className="relative w-full h-[600px] lg:h-[700px] overflow-hidden group">
-                {/* Seamless Background Effects */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/3 via-purple-500/2 to-pink-500/3"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/2 via-transparent to-orange-500/2 blur-2xl"></div>
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/5 to-purple-400/5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-400/5 to-pink-400/5 rounded-full blur-3xl"></div>
-                
-                
-                {/* 3D Model Container */}
-                <motion.div 
-                  className="relative z-10 w-full h-full"
-                  whileHover={{ scale: 1.02, rotateY: 5 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <Suspense fallback={
-                    <div className="w-full h-full flex items-center justify-center">
-                      <div className="text-center space-y-6">
-                        {/* Enhanced Loading Animation */}
-                        <div className="relative">
-                          <div className="animate-spin h-20 w-20 border-4 border-blue-500/30 border-t-blue-500 rounded-full mx-auto"></div>
-                          <div className="animate-ping absolute inset-0 h-20 w-20 border-4 border-purple-500/20 rounded-full mx-auto"></div>
-                        </div>
-                        <div className="space-y-3">
-                          <p className="text-slate-900 dark:text-slate-100 font-semibold text-xl">Loading Interactive Robot...</p>
-                          <p className="text-blue-600 dark:text-blue-400 text-sm animate-pulse">Preparing cursor-following experience</p>
-                        </div>
-                      </div>
-                    </div>
-                  }>
-                    <ErrorBoundary fallback={
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center space-y-4 p-8">
-                          <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 mb-4">
-                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                            </svg>
+            {/* Section Header */}
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+                Experience PrintEase
+              </h2>
+              <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Interact with our 3D model and get answers to your questions
+              </p>
+            </div>
+
+            {/* Split Layout Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              
+              {/* Left Side - 3D Model */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={splineInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="relative -ml-8 lg:-ml-12"
+              >
+                <div className="relative h-[600px] lg:h-[700px] overflow-hidden group">
+                  {/* Seamless Background Gradient Glow */}
+                  <div className="absolute -inset-8 bg-gradient-to-br from-blue-500/8 via-purple-500/6 to-pink-500/8 blur-3xl"></div>
+                  <div className="absolute -inset-4 bg-gradient-to-tr from-cyan-500/5 via-transparent to-orange-500/5 blur-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/3 via-purple-400/2 to-pink-400/3 animate-pulse"></div>
+                  
+                  {/* 3D Model Container */}
+                  <motion.div 
+                    className="relative z-10 w-full h-full overflow-hidden"
+                    whileHover={{ scale: 1.02, rotateY: 2 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  >
+                    <Suspense fallback={
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-transparent via-slate-50/20 to-transparent dark:from-transparent dark:via-slate-900/20 dark:to-transparent">
+                        <div className="text-center space-y-6">
+                          <div className="relative">
+                            <div className="animate-spin h-20 w-20 border-4 border-blue-500/30 border-t-blue-500 rounded-full mx-auto"></div>
+                            <div className="animate-ping absolute inset-0 h-20 w-20 border-4 border-purple-500/20 rounded-full mx-auto"></div>
                           </div>
-                          <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">3D Model Unavailable</h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm">
-                            The interactive robot is temporarily unavailable. Please refresh the page to try again.
-                          </p>
+                          <div className="space-y-3">
+                            <p className="text-slate-900 dark:text-slate-100 font-semibold text-xl">Loading 3D Experience...</p>
+                            <p className="text-blue-600 dark:text-blue-400 text-sm animate-pulse">Preparing interactive model</p>
+                          </div>
                         </div>
                       </div>
                     }>
-                      <Spline 
-                        scene="https://prod.spline.design/gxcCutpWaCI9u8CS/scene.splinecode"
-                        className="w-full h-full"
-                        onLoad={() => console.log('Interactive cursor-following robot model loaded successfully')}
-                        onError={(error) => {
-                          console.error('Spline interactive robot model failed to load:', error);
+                      <ErrorBoundary fallback={
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-transparent via-slate-50/20 to-transparent dark:from-transparent dark:via-slate-900/20 dark:to-transparent">
+                          <div className="text-center space-y-4 p-8">
+                            <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 mb-4">
+                              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                              </svg>
+                            </div>
+                            <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">3D Model Unavailable</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm">
+                              The interactive model is temporarily unavailable. Please refresh to try again.
+                            </p>
+                          </div>
+                        </div>
+                      }>
+                        <Spline 
+                          scene="https://prod.spline.design/q38YStnIHKrXskvB/scene.splinecode"
+                          className="w-full h-full"
+                          onLoad={() => console.log('Interactive 3D model loaded successfully in split layout')}
+                          onError={(error) => {
+                            console.error('Spline 3D model failed to load:', error);
+                          }}
+                        />
+                      </ErrorBoundary>
+                    </Suspense>
+                  </motion.div>
+
+                  {/* Interactive Hint */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 2, duration: 0.5 }}
+                    className="absolute bottom-4 left-4 right-4 z-20"
+                  >
+                    <div className="bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-xl p-3 text-center border border-white/20 dark:border-white/10">
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        🎮 Interactive 3D Model - Click & Drag to explore!
+                      </p>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              {/* Right Side - FAQ Section */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={splineInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="space-y-6"
+              >
+                <div className="mb-8">
+                  <h3 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+                    Frequently Asked Questions
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    Get quick answers to common questions about PrintEase
+                  </p>
+                </div>
+
+                {/* FAQ Items */}
+                <div className="space-y-4">
+                  {[
+                    {
+                      question: "How does PrintEase work?",
+                      answer: "Simply upload your documents, choose a nearby print shop, make a secure payment, and track your order in real-time. You'll receive notifications when your prints are ready for pickup."
+                    },
+                    {
+                      question: "What file formats are supported?",
+                      answer: "We support PDF, DOC, DOCX, JPG, PNG, and many other common document and image formats. Our system automatically optimizes files for the best print quality."
+                    },
+                    {
+                      question: "How secure are my payments?",
+                      answer: "We use industry-standard encryption and secure payment gateways. Our 50% upfront payment system protects both customers and vendors, with the remaining balance paid upon pickup."
+                    },
+                    {
+                      question: "Can I track my order status?",
+                      answer: "Yes! You'll receive real-time updates via notifications and can track your order status through your dashboard. You'll know exactly when your prints are ready."
+                    },
+                    {
+                      question: "What if I'm not satisfied with the print quality?",
+                      answer: "We offer a quality guarantee. If you're not satisfied with the print quality, contact our support team and we'll work with the vendor to resolve the issue or provide a refund."
+                    },
+                    {
+                      question: "How do I become a vendor partner?",
+                      answer: "Print shop owners can sign up as vendors through our platform. After verification, you'll get access to the vendor dashboard to manage orders, set pricing, and grow your business."
+                    }
+                  ].map((faq, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={splineInView ? { opacity: 1, y: 0 } : {}}
+                      transition={{ delay: 0.6 + index * 0.1, duration: 0.6 }}
+                      className="feature-card p-6 group"
+                    >
+                      <button
+                        onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                        className="w-full text-left flex items-center justify-between group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200"
+                      >
+                        <h4 className="font-semibold text-slate-900 dark:text-slate-100 pr-4">
+                          {faq.question}
+                        </h4>
+                        <motion.div
+                          animate={{ rotate: expandedFaq === index ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="flex-shrink-0"
+                        >
+                          <ChevronDown className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+                        </motion.div>
+                      </button>
+                      
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height: expandedFaq === index ? "auto" : 0,
+                          opacity: expandedFaq === index ? 1 : 0
                         }}
-                      />
-                    </ErrorBoundary>
-                  </Suspense>
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 mt-4">
+                          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Contact Support Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={splineInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 1.2, duration: 0.6 }}
+                  className="feature-card p-6 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 border border-blue-200/20 dark:border-blue-800/20"
+                >
+                  <div className="text-center space-y-4">
+                    <div className="inline-flex p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500">
+                      <Mail className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                        Still have questions?
+                      </h4>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                        Our support team is here to help you 24/7
+                      </p>
+                      <button className="btn-primary text-sm px-6 py-2">
+                        Contact Support
+                      </button>
+                    </div>
+                  </div>
                 </motion.div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </motion.div>
         </section>
 
