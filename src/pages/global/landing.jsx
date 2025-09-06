@@ -729,19 +729,14 @@ const LandingPage = () => {
                 className="relative -ml-8 lg:-ml-12"
               >
                 <div className="relative h-[600px] lg:h-[700px] overflow-hidden group">
-                  {/* Seamless Background Gradient Glow */}
-                  <div className="absolute -inset-8 bg-gradient-to-br from-blue-500/8 via-purple-500/6 to-pink-500/8 blur-3xl"></div>
-                  <div className="absolute -inset-4 bg-gradient-to-tr from-cyan-500/5 via-transparent to-orange-500/5 blur-2xl"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/3 via-purple-400/2 to-pink-400/3 animate-pulse"></div>
-                  
-                  {/* 3D Model Container */}
+                  {/* 3D Model Container - No Background */}
                   <motion.div 
-                    className="relative z-10 w-full h-full overflow-hidden flex items-center justify-center"
+                    className="relative w-full h-full overflow-hidden flex items-center justify-center"
                     whileHover={{ scale: 1.02, rotateY: 2 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
                   >
                     <Suspense fallback={
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-transparent via-slate-50/20 to-transparent dark:from-transparent dark:via-slate-900/20 dark:to-transparent">
+                      <div className="w-full h-full flex items-center justify-center">
                         <div className="text-center space-y-6">
                           <div className="relative">
                             <div className="animate-spin h-20 w-20 border-4 border-blue-500/30 border-t-blue-500 rounded-full mx-auto"></div>
@@ -755,7 +750,7 @@ const LandingPage = () => {
                       </div>
                     }>
                       <ErrorBoundary fallback={
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-transparent via-slate-50/20 to-transparent dark:from-transparent dark:via-slate-900/20 dark:to-transparent">
+                        <div className="w-full h-full flex items-center justify-center">
                           <div className="text-center space-y-4 p-8">
                             <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 mb-4">
                               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
