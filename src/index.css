@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force hide cursor globally with highest priority */
+html {
+  cursor: none !important;
+}
+
+html * {
+  cursor: none !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -52,10 +61,45 @@
 @layer base {
   * {
     @apply border-border;
+    cursor: none !important;
   }
   
   body {
     @apply bg-background text-foreground transition-colors duration-300;
+    cursor: none !important;
+  }
+
+  /* Hide default cursor for all elements with maximum specificity */
+  html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  b, u, i, center,
+  dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, canvas, details, embed, 
+  figure, figcaption, footer, header, hgroup, 
+  menu, nav, output, ruby, section, summary,
+  time, mark, audio, video, button, input, textarea, select,
+  *, *::before, *::after,
+  [role="button"], [tabindex],
+  .btn-primary, .btn-secondary, .nav-link {
+    cursor: none !important;
+  }
+
+  /* Override any hover, focus, active cursor changes with maximum specificity */
+  html *:hover, html *:focus, html *:active,
+  body *:hover, body *:focus, body *:active,
+  *:hover, *:focus, *:active {
+    cursor: none !important;
+  }
+
+  /* Additional overrides for common interactive elements */
+  a:hover, button:hover, input:hover, textarea:hover, select:hover,
+  [role="button"]:hover, [tabindex]:hover {
+    cursor: none !important;
   }
 }
 

@@ -30,6 +30,7 @@ import VendorProfileForUser from "./pages/user/vendorProfile";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import UserHeader from "./components/user/header";
 import VendorHeader from "./components/vendor/header";
+import { Cursor, CursorPointer } from "./components/global/cursor";
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
@@ -121,6 +122,9 @@ function App() {
             className: 'dark:bg-gray-800 dark:text-white dark:border-gray-700',
           }}
         />
+        <Cursor>
+          <CursorPointer />
+        </Cursor>
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<LandingPage />} />
