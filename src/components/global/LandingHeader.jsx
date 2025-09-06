@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { Menu, X, Home, Info } from 'lucide-react';
 import ThemeToggle from '../ui/ThemeToggle';
+import { AnimatedThemeToggler } from '../../pages/global/animated-theme';
 
 const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) => {
   const navItems = [
@@ -49,7 +50,8 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
+            <AnimatedThemeToggler />
             <button
               className="btn-secondary text-sm"
               onClick={() => { setShowAuth(true); setFormType("signin-form"); }}
