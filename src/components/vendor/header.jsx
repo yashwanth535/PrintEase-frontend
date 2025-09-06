@@ -1,7 +1,7 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaSignOutAlt, FaUser, FaMoneyBillWave, FaClipboardList, FaChartLine } from "react-icons/fa";
-import ThemeToggle from '../ui/ThemeToggle';
+import { AnimatedThemeToggler } from "../../pages/global/animated-theme";
 
 const VendorHeader = () => {
   const navigate = useNavigate();
@@ -61,7 +61,8 @@ const VendorHeader = () => {
                 <FaUser className="h-4 w-4" />
               </Link>
               
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
+              <AnimatedThemeToggler />
               
               <button
                 onClick={handleLogout}

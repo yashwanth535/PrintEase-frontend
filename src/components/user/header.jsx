@@ -1,7 +1,7 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaSignOutAlt, FaUser, FaMoneyCheckAlt, FaClipboardList, FaChartLine, FaShoppingCart, FaBell, FaHeart, FaPlus } from "react-icons/fa";
-import ThemeToggle from '../ui/ThemeToggle';
+import { AnimatedThemeToggler } from "../../pages/global/animated-theme";
 
 const UserHeader = () => {
   const navigate = useNavigate();
@@ -86,7 +86,8 @@ const UserHeader = () => {
                 <span>Cart</span>
               </Link>
               
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
+              <AnimatedThemeToggler />
               
               <button
                 onClick={handleLogout}
