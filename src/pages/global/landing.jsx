@@ -1,13 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import { Link } from 'react-router-dom';
 import AuthForms from "../../components/global/auth";
 import mainImage from '../../assets/main_img.png';
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import LandingHeader from "../../components/global/LandingHeader";
-import Spline from '@splinetool/react-spline';
-import { ErrorBoundary } from 'react-error-boundary';
 import { 
   Upload, 
   MapPin, 
@@ -61,11 +59,6 @@ const LandingPage = () => {
     triggerOnce: true,
   });
 
-  const [splineRef, splineInView] = useInView({
-    threshold: 0.2,
-    triggerOnce: true,
-  });
-
   const [expandedFaq, setExpandedFaq] = useState(null);
 
   const handleCloseAuth = () => {
@@ -108,7 +101,7 @@ const LandingPage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className={`w-full lg:w-2/5 transition-all duration-300 ${
+              className={`w-full lg:w-3/5 transition-all duration-300 ${
                 showAuth ? "hidden lg:block lg:w-1/2" : ""
               }`}
             >
@@ -193,50 +186,22 @@ const LandingPage = () => {
               </div>
             </motion.section>
 
-            {/* 3D Robot Model Section */}
+            {/* Image Section */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full lg:w-3/5 flex justify-center items-center p-4"
+              className="w-full lg:w-2/5 flex justify-center items-center p-8"
             >
-              <div className="relative w-full max-w-7xl h-[550px] lg:h-[750px]">
-                {/* Seamless Background Effects */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 blur-3xl"></div>
-                <div className="absolute inset-4 bg-gradient-to-tr from-cyan-500/3 via-transparent to-orange-500/3"></div>
-                
-                {/* 3D Model Container - Seamless Integration */}
-                <motion.div 
-                  className="relative z-50 w-full h-full overflow-hidden"
-                  whileHover={{ scale: 1.02, rotateY: 2 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <Suspense fallback={
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-900/30 via-blue-900/20 to-purple-900/30">
-                      <div className="text-center space-y-6">
-                        {/* Enhanced Loading Animation */}
-                        <div className="relative">
-                          <div className="animate-spin h-16 w-16 border-4 border-blue-500/30 border-t-blue-500 rounded-full mx-auto"></div>
-                          <div className="animate-ping absolute inset-0 h-16 w-16 border-4 border-purple-500/20 rounded-full mx-auto"></div>
-                        </div>
-                        <div className="space-y-2">
-                          <p className="text-white font-semibold text-lg">Loading 3D Robot...</p>
-                          <p className="text-blue-200 text-sm animate-pulse">Preparing interactive experience</p>
-                        </div>
-                      </div>
-                    </div>
-                  }>
-                    <Spline 
-                      scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                      className="w-full h-full"
-                      onLoad={() => console.log('Spline robot model loaded successfully on landing page')}
-                      onError={(error) => {
-                        console.error('Spline model failed to load:', error);
-                        // Fallback to original image if 3D model fails
-                      }}
-                    />
-                  </Suspense>
-                </motion.div>
+              <div className="hero-image-container group max-w-lg">
+                <div className="hero-image-glow"></div>
+                <motion.img
+                  src={mainImage}
+                  alt="PrintEase Hero"
+                  className="relative z-10 w-full h-auto object-contain drop-shadow-2xl floating"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                />
               </div>
             </motion.div>
           </div>
@@ -697,173 +662,91 @@ const LandingPage = () => {
             </div>
           </motion.div>
         </section>
-        {/* Interactive 3D Model & FAQ Section */}
+
+        {/* FAQ Section */}
         <section 
-          ref={splineRef}
+          ref={faqRef}
           className="py-24 px-8 minimal-gradient relative transition-colors duration-300"
         >
           <motion.div
             initial={{ opacity: 0, y: 40 }}
-            animate={splineInView ? { opacity: 1, y: 0 } : {}}
+            animate={faqInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className="max-w-7xl mx-auto"
+            className="max-w-4xl mx-auto"
           >
-            {/* Section Header */}
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-                Experience PrintEase
+                Frequently Asked Questions
               </h2>
-              <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                Interact with our 3D model and get answers to your questions
+              <p className="text-xl text-slate-600 dark:text-slate-400">
+                Everything you need to know about PrintEase
               </p>
             </div>
-
-            {/* Split Layout Container */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              
-              {/* Left Side - 3D Model */}
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={splineInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.2, duration: 0.8 }}
-                className="relative -ml-8 lg:-ml-12"
-              >
-                <div className="relative h-[600px] lg:h-[700px] overflow-hidden group">
-                  {/* 3D Model Container - No Background */}
-                  <motion.div 
-                    className="relative w-full h-full overflow-hidden flex items-center justify-center"
-                    whileHover={{ scale: 1.02, rotateY: 2 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+            
+            <div className="space-y-4">
+              {[
+                {
+                  question: "How does PrintEase work?",
+                  answer: "Simply upload your documents, choose a nearby print shop, make a secure payment, and track your order in real-time. You'll receive notifications when your prints are ready for pickup."
+                },
+                {
+                  question: "What file formats do you support?",
+                  answer: "We support PDF, DOC, DOCX, JPG, PNG, and many other common file formats. Our system automatically optimizes your files for the best print quality."
+                },
+                {
+                  question: "How secure are my documents?",
+                  answer: "Your documents are encrypted during upload and automatically deleted from our servers after printing. We use enterprise-grade security to protect your privacy."
+                },
+                {
+                  question: "What if I'm not satisfied with the print quality?",
+                  answer: "We guarantee quality prints. If you're not satisfied, contact us within 24 hours and we'll work with the print shop to resolve the issue or provide a refund."
+                },
+                {
+                  question: "How do I become a vendor partner?",
+                  answer: "Print shop owners can apply through our vendor portal. We'll verify your business and help you get set up to receive orders through PrintEase."
+                },
+                {
+                  question: "Are there any setup fees?",
+                  answer: "No setup fees for customers. Our Basic plan is completely free. Print shops pay a small commission only on completed orders."
+                }
+              ].map((faq, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={faqInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  className="feature-card overflow-hidden"
+                >
+                  <button
+                    className="w-full p-6 text-left flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors duration-200"
+                    onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
                   >
-                    <Suspense fallback={
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center space-y-6">
-                          <div className="relative">
-                            <div className="animate-spin h-20 w-20 border-4 border-blue-500/30 border-t-blue-500 rounded-full mx-auto"></div>
-                            <div className="animate-ping absolute inset-0 h-20 w-20 border-4 border-purple-500/20 rounded-full mx-auto"></div>
-                          </div>
-                          <div className="space-y-3">
-                            <p className="text-slate-900 dark:text-slate-100 font-semibold text-xl">Loading 3D Experience...</p>
-                            <p className="text-blue-600 dark:text-blue-400 text-sm animate-pulse">Preparing interactive model</p>
-                          </div>
-                        </div>
-                      </div>
-                    }>
-                      <ErrorBoundary fallback={
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="text-center space-y-4 p-8">
-                            <div className="inline-flex p-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 mb-4">
-                              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                              </svg>
-                            </div>
-                            <h4 className="text-lg font-semibold text-slate-900 dark:text-slate-100">3D Model Unavailable</h4>
-                            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm">
-                              The interactive model is temporarily unavailable. Please refresh to try again.
-                            </p>
-                          </div>
-                        </div>
-                      }>
-                        <Spline 
-                          scene="https://prod.spline.design/ASQi-5B73PX6-ms7/scene.splinecode"
-                          className="w-full h-full"
-                          onLoad={() => console.log('Interactive 3D model loaded successfully in split layout')}
-                          onError={(error) => {
-                            console.error('Spline 3D model failed to load:', error);
-                          }}
-                        />
-                      </ErrorBoundary>
-                    </Suspense>
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 pr-4">
+                      {faq.question}
+                    </h3>
+                    {expandedFaq === index ? (
+                      <ChevronUp className="w-5 h-5 text-slate-600 dark:text-slate-400 flex-shrink-0" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-slate-600 dark:text-slate-400 flex-shrink-0" />
+                    )}
+                  </button>
+                  <motion.div
+                    initial={false}
+                    animate={{
+                      height: expandedFaq === index ? "auto" : 0,
+                      opacity: expandedFaq === index ? 1 : 0
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6">
+                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Right Side - FAQ Section */}
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={splineInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="space-y-6"
-              >
-                <div className="mb-8">
-                  <h3 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-                    Frequently Asked Questions
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400">
-                    Get quick answers to common questions about PrintEase
-                  </p>
-                </div>
-
-                {/* FAQ Items */}
-                <div className="space-y-4">
-                  {[
-                    {
-                      question: "How does PrintEase work?",
-                      answer: "Simply upload your documents, choose a nearby print shop, make a secure payment, and track your order in real-time. You'll receive notifications when your prints are ready for pickup."
-                    },
-                    {
-                      question: "What file formats are supported?",
-                      answer: "We support PDF, DOC, DOCX, JPG, PNG, and many other common document and image formats. Our system automatically optimizes files for the best print quality."
-                    },
-                    {
-                      question: "How secure are my payments?",
-                      answer: "We use industry-standard encryption and secure payment gateways. Our 50% upfront payment system protects both customers and vendors, with the remaining balance paid upon pickup."
-                    },
-                    {
-                      question: "Can I track my order status?",
-                      answer: "Yes! You'll receive real-time updates via notifications and can track your order status through your dashboard. You'll know exactly when your prints are ready."
-                    },
-                    {
-                      question: "What if I'm not satisfied with the print quality?",
-                      answer: "We offer a quality guarantee. If you're not satisfied with the print quality, contact our support team and we'll work with the vendor to resolve the issue or provide a refund."
-                    },
-                    {
-                      question: "How do I become a vendor partner?",
-                      answer: "Print shop owners can sign up as vendors through our platform. After verification, you'll get access to the vendor dashboard to manage orders, set pricing, and grow your business."
-                    }
-                  ].map((faq, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={splineInView ? { opacity: 1, y: 0 } : {}}
-                      transition={{ delay: 0.6 + index * 0.1, duration: 0.6 }}
-                      className="feature-card p-6 group"
-                    >
-                      <button
-                        onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                        className="w-full text-left flex items-center justify-between group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200"
-                      >
-                        <h4 className="font-semibold text-slate-900 dark:text-slate-100 pr-4">
-                          {faq.question}
-                        </h4>
-                        <motion.div
-                          animate={{ rotate: expandedFaq === index ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="flex-shrink-0"
-                        >
-                          <ChevronDown className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-                        </motion.div>
-                      </button>
-                      
-                      <motion.div
-                        initial={false}
-                        animate={{
-                          height: expandedFaq === index ? "auto" : 0,
-                          opacity: expandedFaq === index ? 1 : 0
-                        }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pt-4 border-t border-slate-200 dark:border-slate-700 mt-4">
-                          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                            {faq.answer}
-                          </p>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </section>
