@@ -6,17 +6,20 @@ import { initializeCashfreeCheckout, isCashfreeAvailable } from "../../utils/cas
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+// Default customer details (bypass)
+const DEFAULT_CUSTOMER = {
+  name: "Yashwanth Munikuntla",
+  email: "yashwanth.lumia535@gmail.com",
+  phone: "09966990206"
+};
+
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sdkLoading, setSdkLoading] = useState(true);
-  const [customerDetails, setCustomerDetails] = useState({
-    name: "",
-    email: "",
-    phone: ""
-  });
+  const [customerDetails, setCustomerDetails] = useState(DEFAULT_CUSTOMER);
 
   // Get selected orders from location state
   const selectedOrders = location.state?.selectedOrders || [];
@@ -29,26 +32,26 @@ const Checkout = () => {
   }, [selectedOrders, navigate]);
 
   // Check if Cashfree SDK is loaded
-  // Check if Cashfree SDK is loaded
-useEffect(() => {
-  const checkSDK = () => {
-    console.log("🔍 Checking if Cashfree SDK is available...");
+  useEffect(() => {
+    const checkSDK = () => {
+      console.log("🔍 Checking if Cashfree SDK is available...");
 
-    if (isCashfreeAvailable()) {
-      console.log("✅ Cashfree SDK is available.");
-      setSdkLoading(false);
-    } else {
-      console.log("❌ Cashfree SDK not available yet. Retrying in 500ms...");
-      // Retry after a short delay
-      setTimeout(checkSDK, 500);
-    }
-  };
+      if (isCashfreeAvailable()) {
+        console.log("✅ Cashfree SDK is available.");
+        setSdkLoading(false);
+      } else {
+        console.log("❌ Cashfree SDK not available yet. Retrying in 500ms...");
+        // Retry after a short delay
+        setTimeout(checkSDK, 500);
+      }
+    };
 
-  checkSDK();
-}, []);
+    checkSDK();
+  }, []);
 
 
   const handleInputChange = (e) => {
+    // kept in case you later want to allow edits — but inputs are readOnly by default now
     const { name, value } = e.target;
     setCustomerDetails(prev => ({
       ...prev,
@@ -57,11 +60,7 @@ useEffect(() => {
   };
 
   const handlePayment = async () => {
-    if (!customerDetails.name || !customerDetails.email || !customerDetails.phone) {
-      alert("Please fill in all customer details");
-      return;
-    }
-
+    // No longer blocking for missing customer details — defaults provided
     try {
       setLoading(true);
       setError(null);
@@ -78,7 +77,7 @@ useEffect(() => {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         try {
           // Check if Cashfree SDK is available
@@ -161,67 +160,8 @@ useEffect(() => {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
-            {/* Customer Details */}
-            <div className="feature-card floating p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg text-white">
-                  <User size={20} />
-                </div>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                  Customer Details
-                </h2>
-              </div>
-              
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm flex items-center gap-2">
-                    <User size={14} />
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={customerDetails.name}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm flex items-center gap-2">
-                    <Mail size={14} />
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={customerDetails.email}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    placeholder="Enter your email address"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-700 dark:text-slate-300 mb-2 font-medium text-sm flex items-center gap-2">
-                    <Phone size={14} />
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={customerDetails.phone}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    placeholder="Enter your phone number"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
+            {/* Customer Details (prefilled & readOnly) */}
+            
 
             {/* Order Summary */}
             <div className="feature-card floating p-6">
@@ -264,7 +204,7 @@ useEffect(() => {
 
               <button
                  onClick={handlePayment}
-                 disabled={loading || sdkLoading || !customerDetails.name || !customerDetails.email || !customerDetails.phone}
+                 disabled={loading || sdkLoading}
                  className="w-full btn-primary mt-6 py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                >
                 {loading ? (
@@ -297,4 +237,4 @@ useEffect(() => {
   );
 };
 
-export default Checkout; 
+export default Checkout;
