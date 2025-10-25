@@ -6,12 +6,7 @@ import { initializeCashfreeCheckout, isCashfreeAvailable } from "../../utils/cas
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Default customer details (bypass)
-const DEFAULT_CUSTOMER = {
-  name: "Yashwanth Munikuntla",
-  email: "yashwanth.lumia535@gmail.com",
-  phone: "09966990206"
-};
+
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -19,7 +14,6 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sdkLoading, setSdkLoading] = useState(true);
-  const [customerDetails, setCustomerDetails] = useState(DEFAULT_CUSTOMER);
 
   // Get selected orders from location state
   const selectedOrders = location.state?.selectedOrders || [];
@@ -72,7 +66,6 @@ const Checkout = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           orderIds: selectedOrders,
-          customerDetails
         }),
       });
 

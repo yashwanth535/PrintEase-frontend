@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force hide cursor globally with highest priority */
-html {
-  cursor: none !important;
-}
-
-html * {
-  cursor: none !important;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -61,45 +52,10 @@ html * {
 @layer base {
   * {
     @apply border-border;
-    cursor: none !important;
   }
-  
+
   body {
     @apply bg-background text-foreground transition-colors duration-300;
-    cursor: none !important;
-  }
-
-  /* Hide default cursor for all elements with maximum specificity */
-  html, body, div, span, applet, object, iframe,
-  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-  a, abbr, acronym, address, big, cite, code,
-  del, dfn, em, img, ins, kbd, q, s, samp,
-  small, strike, strong, sub, sup, tt, var,
-  b, u, i, center,
-  dl, dt, dd, ol, ul, li,
-  fieldset, form, label, legend,
-  table, caption, tbody, tfoot, thead, tr, th, td,
-  article, aside, canvas, details, embed, 
-  figure, figcaption, footer, header, hgroup, 
-  menu, nav, output, ruby, section, summary,
-  time, mark, audio, video, button, input, textarea, select,
-  *, *::before, *::after,
-  [role="button"], [tabindex],
-  .btn-primary, .btn-secondary, .nav-link {
-    cursor: none !important;
-  }
-
-  /* Override any hover, focus, active cursor changes with maximum specificity */
-  html *:hover, html *:focus, html *:active,
-  body *:hover, body *:focus, body *:active,
-  *:hover, *:focus, *:active {
-    cursor: none !important;
-  }
-
-  /* Additional overrides for common interactive elements */
-  a:hover, button:hover, input:hover, textarea:hover, select:hover,
-  [role="button"]:hover, [tabindex]:hover {
-    cursor: none !important;
   }
 }
 
@@ -108,39 +64,39 @@ html * {
   .btn-primary {
     @apply bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-100 dark:to-white text-white dark:text-slate-900 font-medium py-3 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 backdrop-blur-sm;
   }
-  
+
   .btn-secondary {
     @apply bg-white/10 dark:bg-black/10 backdrop-blur-md border border-white/20 dark:border-black/20 text-slate-900 dark:text-slate-100 font-medium py-3 px-6 rounded-full transition-all duration-300 hover:bg-white/20 dark:hover:bg-black/20 hover:scale-105;
   }
-  
+
   .btn-success {
     @apply bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-medium py-3 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105;
   }
-  
+
   .btn-danger {
     @apply bg-gradient-to-r from-red-500 to-red-600 text-white font-medium py-3 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105;
   }
-  
+
   /* Glassomorphic Card */
   .card {
     @apply bg-white/80 dark:bg-black/80 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105;
   }
-  
+
   /* Glassomorphic Navbar */
   .glass-nav {
     @apply bg-white/70 dark:bg-black/70 backdrop-blur-md border-b border-white/20 dark:border-white/10 shadow-lg;
   }
-  
+
   /* Minimalistic Input */
   .input-field {
     @apply w-full border border-slate-200/50 dark:border-slate-700/50 bg-white/50 dark:bg-black/50 backdrop-blur-sm text-slate-900 dark:text-slate-100 px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-slate-400 dark:focus:ring-slate-500 focus:border-transparent transition-all duration-300;
   }
-  
+
   /* Minimalistic Navigation */
   .nav-link {
     @apply flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full hover:bg-white/20 dark:hover:bg-black/20 backdrop-blur-sm;
   }
-  
+
   .nav-link-active {
     @apply text-slate-900 dark:text-slate-100 bg-white/30 dark:bg-black/30 backdrop-blur-md;
   }

@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ShoppingCart, ArrowLeft, Package, Trash2, CreditCard, FileText, Copy, Calendar, AlertCircle } from "lucide-react";
+import toast from "react-hot-toast";
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -100,11 +102,11 @@ const Cart = () => {
         newSelected.delete(orderId);
         setSelectedOrders(newSelected);
       } else {
-        alert("Failed to delete order: " + data.message);
+        toast.error("Failed to delete order: " + data.message);
       }
     } catch (error) {
       console.error("Error deleting order:", error);
-      alert("Error deleting order. Please try again.");
+      toast.error("Error deleting order. Please try again.");
     } finally {
       setDeletingOrder(null);
     }
@@ -112,7 +114,7 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (selectedOrders.size === 0) {
-      alert("Please select at least one order to checkout!");
+      toast.error("Please select at least one order to checkout!");
       return;
     }
     

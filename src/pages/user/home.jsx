@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaClipboardList, FaTrash, FaEye, FaShoppingCart, FaClock, FaCheckCircle, FaHourglassHalf } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -88,11 +89,11 @@ const Home = () => {
         // Remove order from local state
         setOrders(orders.filter(order => order._id !== orderId));
       } else {
-        alert("Failed to delete order: " + data.message);
+        toast.error("Failed to delete order: " + data.message);
       }
     } catch (error) {
       console.error("Error deleting order:", error);
-      alert("Error deleting order. Please try again.");
+      toast.error("Error deleting order. Please try again.");
     } finally {
       setDeletingOrder(null);
     }

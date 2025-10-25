@@ -16,7 +16,7 @@ import { Toaster } from "react-hot-toast";
 import BackendCheck from './pages/global/ui/BackendCheck';
 import VendorMap from "./pages/vendor/vendorMap";
 import Cart from "./pages/user/cart";
-import Payments from "./pages/user/payments";
+import Payments from "./pages/user/payments-history";
 import UserProfile from "./pages/user/profile";
 import UserDashboard from "./pages/user/dashboard";
 import Favourites from "./pages/user/favourites";
@@ -39,92 +39,104 @@ function App() {
 
   const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // Replace with your actual API key
 
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-          console.log("User location:", position.coords.latitude, position.coords.longitude);
-        },
-        (error) => {
-          setLocationError(error.message);
-          console.error("Error getting user location:", error);
-        }
-      );
-    } else {
-      setLocationError("Geolocation is not supported by your browser.");
-      console.error("Geolocation is not supported by your browser.");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if ("geolocation" in navigator) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         setUserLocation({
+  //           latitude: position.coords.latitude,
+  //           longitude: position.coords.longitude,
+  //         });
+  //         console.log("User location:", position.coords.latitude, position.coords.longitude);
+  //       },
+  //       (error) => {
+  //         setLocationError(error.message);
+  //         console.error("Error getting user location:", error);
+  //       }
+  //     );
+  //   } else {
+  //     setLocationError("Geolocation is not supported by your browser.");
+  //     console.error("Geolocation is not supported by your browser.");
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    const fetchAddress = async () => {
-      if (userLocation && GOOGLE_MAPS_API_KEY !== "YOUR_GOOGLE_MAPS_API_KEY") {
-        try {
-          const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${userLocation.latitude},${userLocation.longitude}&key=${GOOGLE_MAPS_API_KEY}`
-          );
-          const data = await response.json();
-          if (data.results && data.results.length > 0) {
-            setUserAddress(data.results[0].formatted_address);
-          } else {
-            setUserAddress('Address not found');
-          }
-        } catch (error) {
-          console.error("Error fetching address:", error);
-          setUserAddress('Error fetching address');
-        }
-      }
-    };
-    fetchAddress();
-  }, [userLocation, GOOGLE_MAPS_API_KEY]);
+  // useEffect(() => {
+  //   const fetchAddress = async () => {
+  //     if (userLocation && GOOGLE_MAPS_API_KEY !== "YOUR_GOOGLE_MAPS_API_KEY") {
+  //       try {
+  //         const response = await fetch(
+  //           `https://maps.googleapis.com/maps/api/geocode/json?latlng=${userLocation.latitude},${userLocation.longitude}&key=${GOOGLE_MAPS_API_KEY}`
+  //         );
+  //         const data = await response.json();
+  //         if (data.results && data.results.length > 0) {
+  //           setUserAddress(data.results[0].formatted_address);
+  //         } else {
+  //           setUserAddress('Address not found');
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching address:", error);
+  //         setUserAddress('Error fetching address');
+  //       }
+  //     }
+  //   };
+  //   fetchAddress();
+  // }, [userLocation, GOOGLE_MAPS_API_KEY]);
 
-  useEffect(() => {
-    const sendLocationToBackend = async () => {
-      if (userLocation) {
-        try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/vendors/nearest`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              userLat: userLocation.latitude,
-              userLng: userLocation.longitude,
-            }),
-          });
+  // useEffect(() => {
+  //   const sendLocationToBackend = async () => {
+  //     if (userLocation) {
+  //       try {
+  //         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/vendors/nearest`, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({
+  //             userLat: userLocation.latitude,
+  //             userLng: userLocation.longitude,
+  //           }),
+  //         });
 
-          const data = await response.json();
-          if (data.success) {
-            console.log("Nearest vendors:", data.vendors);
-            // You can now use this data to display nearest vendors
-          } else {
-            console.error("Error from backend:", data.message);
-          }
-        } catch (error) {
-          console.error("Error sending location to backend:", error);
-        }
-      }
-    };
-    sendLocationToBackend();
-  }, [userLocation]);
+  //         const data = await response.json();
+  //         if (data.success) {
+  //           console.log("Nearest vendors:", data.vendors);
+  //           // You can now use this data to display nearest vendors
+  //         } else {
+  //           console.error("Error from backend:", data.message);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error sending location to backend:", error);
+  //       }
+  //     }
+  //   };
+  //   sendLocationToBackend();
+  // }, [userLocation]);
 
   return (
     <ThemeProvider>
       <Router>
         <Toaster 
-          position="top-center" 
-          reverseOrder={false}
-          toastOptions={{
-            className: 'dark:bg-gray-800 dark:text-white dark:border-gray-700',
-          }}
-        />
-        <Cursor>
-          <CursorPointer />
-        </Cursor>
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<LandingPage />} />

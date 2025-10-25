@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { User, Mail, ShoppingBag, Heart, Bell, Activity, CheckCircle, Home, Star, Check } from "lucide-react";
+import { User,Mail, Edit2,ShoppingBag, Heart, Bell, Activity, CheckCircle, Home, Star, Check } from "lucide-react";
+import toast from "react-hot-toast";
 
 const defaultUserData = {
   email: "",
@@ -9,11 +10,14 @@ const defaultUserData = {
   favourites: [],
   logs: [],
   notifications: [],
-  createdAt: ""
+  createdAt: "",
+  name:"",
+  phone:""
 };
 
 const UserProfile = () => {
   const API_URL = import.meta.env.VITE_API_URL;
+  const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState(defaultUserData);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -38,6 +42,45 @@ const UserProfile = () => {
     }
   };
 
+const updateInfo = async (editedData) => {
+  try {
+    const response = await fetch(`${API_URL}/api/user/update-profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify(editedData)
+    });
+    
+    // Check if response is OK before parsing
+    if (!response.ok) {
+      // Try to get error message from response
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to update profile");
+      } else {
+        // If HTML or other non-JSON response
+        toast.error(`Server error: ${response.status} ${response.statusText}`);
+      }
+      return;
+    }
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      setUserData({ ...userData, ...editedData });
+      toast.success("Profile updated successfully!");
+    } else {
+      toast.error(data.message || "Failed to update profile");
+    }
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    toast.error("Network error. Please try again.");
+  }
+};
+
   const formatDate = (dateString) => {
     if (!dateString) return "-";
     return new Date(dateString).toLocaleString();
@@ -50,6 +93,32 @@ const UserProfile = () => {
   const getRecentActivity = () => {
     return userData.logs.slice(-5); // Show last 5 logs
   };
+
+  const [editedData, setEditedData] = useState({
+  name: userData.name || "",
+  phone: userData.phone || ""
+});
+
+const handleEdit = () => {
+  setIsEditing(true);
+  setEditedData({
+    name: userData.name || "",
+    phone: userData.phone || ""
+  });
+};
+
+const handleCancel = () => {
+  setIsEditing(false);
+  setEditedData({
+    name: userData.name || "",
+    phone: userData.phone || ""
+  });
+};
+
+const handleSave = () => {
+  updateInfo(editedData);
+  setIsEditing(false);
+};
 
   if (loading) {
     return (
@@ -109,16 +178,75 @@ const UserProfile = () => {
                 </div>
                 <div className="space-y-4">
                   <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Name</p>
+                      {!isEditing && (
+                        <button onClick={handleEdit} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                          <Edit2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editedData.name}
+                        onChange={(e) => setEditedData({...editedData, name: e.target.value})}
+                        className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    ) : (
+                      <p className="text-slate-800 dark:text-slate-200">{userData.name || "-"}</p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Phone</p>
+                      {!isEditing && (
+                        <button onClick={handleEdit} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                          <Edit2 size={16} />
+                        </button>
+                      )}
+                    </div>
+                    {isEditing ? (
+                      <input
+                        type="tel"
+                        value={editedData.phone}
+                        onChange={(e) => setEditedData({...editedData, phone: e.target.value})}
+                        className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    ) : (
+                      <p className="text-slate-800 dark:text-slate-200">{userData.phone || "-"}</p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-1">
                     <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Email Address</p>
                     <p className="text-slate-800 dark:text-slate-200">{userData.email || "-"}</p>
                   </div>
+                  
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Member Since</p>
                     <p className="text-slate-800 dark:text-slate-200">{formatDate(userData.createdAt)}</p>
                   </div>
+
+                  {isEditing && (
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        onClick={handleSave}
+                        className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                      >
+                        Save Changes
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="px-4 py-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg font-medium transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </div>
               </motion.div>
-
               {/* Account Status */}
               <motion.div 
                 className="feature-card floating p-6"

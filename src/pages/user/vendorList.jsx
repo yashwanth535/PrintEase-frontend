@@ -4,6 +4,7 @@ import { FaStar, FaRegStar, FaSearch, FaMapMarkerAlt, FaEye, FaPlus, FaDirection
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -170,7 +171,7 @@ const VendorList = () => {
       const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${vendorLat},${vendorLng}`;
       window.open(googleMapsUrl, '_blank');
     } else {
-      alert('Cannot get directions: User location or vendor location is missing.');
+      toast.error('Cannot get directions: User location or vendor location is missing.');
     }
   };
 

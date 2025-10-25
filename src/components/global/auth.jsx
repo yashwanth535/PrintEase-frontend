@@ -9,6 +9,8 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   const [formType, setFormType] = useState(initialForm);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState('');
+const [phone, setPhone] = useState('');
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
@@ -212,7 +214,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, isVendor }),
+        body: JSON.stringify({ email, password, isVendor,fullName,phone}),
       });
       const data = await response.json();
       if (response.status === 400) {
@@ -368,8 +370,44 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
 
         {formType === 'signup-form' && (
           <form onSubmit={(e) => handleOTP(e, 'signup')} className="space-y-6">
+
+            {/* Full Name */}
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Full Name
+              </label>
+              <input
+                className="input-field"
+                type="text"
+                placeholder="Enter your full name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Phone Number */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Phone Number
+              </label>
+              <input
+                className="input-field"
+                type="tel"
+                placeholder="Enter your phone number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                pattern="[0-9]{10}"
+                maxLength="10"
+                required
+              />
+            </div>
+
+            {/* Email */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Email
+              </label>
               <input
                 className="input-field"
                 type="email"
@@ -379,8 +417,12 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
                 required
               />
             </div>
+
+            {/* Password */}
             <div className="space-y-3">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Password
+              </label>
               <div className="relative">
                 <input
                   className="input-field pr-12"
@@ -400,6 +442,7 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full btn-primary mt-6"
@@ -408,24 +451,33 @@ const AuthForms = ({ initialForm = "signin-form", onClose }) => {
               {loading ? 'Sending OTP...' : 'Continue'}
             </button>
 
+            {/* Message Display */}
             {message && (
-              <div className={`text-center p-3 rounded-xl backdrop-blur-sm ${message.includes('successful') ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300' : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+              <div
+                className={`text-center p-3 rounded-xl backdrop-blur-sm ${
+                  message.includes('successful')
+                    ? 'bg-emerald-50/80 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
+                    : 'bg-red-50/80 dark:bg-red-900/20 text-red-700 dark:text-red-300'
+                }`}
+              >
                 <p className="text-sm font-medium">{message}</p>
               </div>
             )}
 
+            {/* Switch to Sign In */}
             <p className="text-center text-sm text-slate-600 dark:text-slate-400 pt-4">
-              Already have an account?{" "}
+              Already have an account?{' '}
               <button
                 type="button"
                 className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 font-medium transition-colors duration-200"
-                onClick={() => setFormType("signin-form")}
+                onClick={() => setFormType('signin-form')}
               >
                 Sign In
               </button>
             </p>
           </form>
         )}
+
 
         {(formType === 'otp-signup' || formType === 'otp-reset') && (
           <form onSubmit={(e) => verifyOtp(e, formType === 'otp-signup' ? 'signup' : 'reset')} className="space-y-6">

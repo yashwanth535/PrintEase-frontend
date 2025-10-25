@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { FileText, Upload, Copy, Settings, Edit3, Calculator, ShoppingCart, ArrowLeft, Check, Store, MapPin, Phone } from "lucide-react";
 
@@ -128,7 +129,7 @@ const CreateOrder = () => {
       setUploadStatus("File uploaded successfully!");
     } catch (err) {
       console.error(err);
-      setUploadStatus("Upload failed");
+      toast.error("upload failed");
     } finally {
       setUploading(false);
     }
@@ -151,7 +152,7 @@ const CreateOrder = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!fileUrl) {
-      alert("Please upload a file before submitting.");
+      toast.error("Please upload a file before submitting.");
       return;
     }
 
@@ -180,14 +181,14 @@ const CreateOrder = () => {
       const data = await response.json();
       
       if (data.success) {
-        alert("Order created successfully!");
+        toast.success("Order Created Successfully");
         navigate("/u/cart");
       } else {
-        alert("Failed to create order: " + data.message);
+        toast.error("Failed to create order");
       }
     } catch (error) {
       console.error("Error creating order:", error);
-      alert("Error creating order. Please try again.");
+      toast.error("Error creating order. Please try again.");
     }
   };
 
