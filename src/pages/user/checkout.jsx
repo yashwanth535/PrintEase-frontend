@@ -174,15 +174,15 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-600 dark:text-slate-400">Subtotal:</span>
-                  <span className="font-medium text-slate-900 dark:text-slate-100">₹{(totalAmount / 1.18).toFixed(2)}</span>
+                  <span className="font-medium text-slate-900 dark:text-slate-100">₹{(totalAmount).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600 dark:text-slate-400">GST (18%):</span>
-                  <span className="font-medium text-slate-900 dark:text-slate-100">₹{((totalAmount / 1.18) * 0.18).toFixed(2)}</span>
+                  <span className="text-slate-600 dark:text-slate-400">Platform Fee:</span>
+                  <span className="font-medium text-slate-900 dark:text-slate-100">₹{((totalAmount) * 0.05).toFixed(2)}</span>
                 </div>
                 <div className="border-t border-slate-200 dark:border-slate-700 pt-4 flex justify-between text-lg font-bold">
                   <span className="text-slate-900 dark:text-slate-100">Total:</span>
-                  <span className="text-slate-900 dark:text-slate-100">₹{totalAmount.toFixed(2)}</span>
+                  <span className="text-slate-900 dark:text-slate-100">₹{(totalAmount+((totalAmount)*0.05)).toFixed(2)}</span>
                 </div>
               </div>
 

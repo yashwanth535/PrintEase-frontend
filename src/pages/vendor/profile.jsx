@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { User, MapPin, Clock, DollarSign, Settings, CheckCircle, XCircle, Edit3, Save, X } from "lucide-react";
+import { useLocation } from "../../hooks/geolocation";
+
+
 
 const defaultVendorData = {
   email: "",
@@ -55,6 +58,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [trackingEnabled, setTrackingEnabled] = useState(false);
 
   useEffect(() => {
     fetchVendorData();
@@ -72,6 +76,7 @@ const Profile = () => {
       });
       const data = await response.json();
       if (data.success) {
+        console.log("fetched vendor data");
         setVendorData({ ...defaultVendorData, ...data.vendor });
       }
     } catch (error) {
@@ -124,41 +129,35 @@ const Profile = () => {
     }));
   };
 
-  const handleGetLocation = () => {
-    const watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        console.log(position.coords);
-        const { latitude, longitude, accuracy } = position.coords;
-  
-        console.log("📍 New location received");
-        console.log("Latitude:", latitude);
-        console.log("Longitude:", longitude);
-        console.log("Accuracy (in meters):", accuracy);
-  
-        // Only accept location with accuracy better than 25 meters
-        if (accuracy <= 50) {
-          setVendorData((prev) => ({
-            ...prev,
-            location: {
-              ...prev.location,
-              lat: latitude.toString(),
-              lng: longitude.toString()
-            }
-          }));
-  
-          // Stop watching for further updates once we get good accuracy
-          navigator.geolocation.clearWatch(watchId);
-        }
-      },
-      (error) => {
-        alert("Failed to get location: " + error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 20000,      // Wait up to 20 sec
-        maximumAge: 0
+const [userLocation, accuracy, locationError] = useLocation(
+  true,   // enable tracking
+  50,     // desired accuracy in meters
+  10     // wait up to 10 seconds
+);
+
+useEffect(() => {
+  if (userLocation && accuracy <= 50 && trackingEnabled) {
+    console.log("📍 New accurate location received");
+    console.log("Latitude:", userLocation.lat);
+    console.log("Longitude:", userLocation.lng);
+    console.log("Accuracy:", accuracy);
+
+    // Update vendor data only once when we have a good location
+    setVendorData((prev) => ({
+      ...prev,
+      location: {
+        ...prev.location,
+        lat: userLocation.lat.toString(),
+        lng: userLocation.lng.toString()
       }
-    );
+    }));
+
+    setTrackingEnabled(false);
+  }
+}, [userLocation, accuracy]);
+
+const handleGetLocation = () => {
+    setTrackingEnabled(true);
   };
 
   const handleSubmit = async (e) => {
@@ -381,14 +380,32 @@ const Profile = () => {
                         />
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleGetLocation}
-                      className="btn-secondary w-full flex items-center justify-center gap-2"
-                    >
-                      <MapPin size={16} />
-                      Get My Location
-                    </button>
+                    <div className="flex flex-col items-center">
+          <button
+            type="button"
+            onClick={handleGetLocation}
+            disabled={trackingEnabled}
+            className={`btn-secondary w-full flex items-center justify-center gap-2 ${
+              trackingEnabled ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+          >
+            <MapPin size={16} />
+            {trackingEnabled ? "Fetching location..." : "Get My Location"}
+          </button>
+
+          {/* Small loading indicator */}
+          {trackingEnabled && (
+            <div className="mt-3 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+              <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              <span>Fetching your current location...</span>
+            </div>
+          )}
+
+          {/* Optional: show error */}
+          {locationError && (
+            <p className="mt-2 text-sm text-red-500">{locationError}</p>
+          )}
+        </div>
                   </div>
                 </motion.div>
               </div>
