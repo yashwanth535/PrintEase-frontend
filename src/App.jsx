@@ -30,6 +30,8 @@ import VendorProfileForUser from "./pages/user/vendorProfile";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import UserHeader from "./components/user/header";
 import VendorHeader from "./components/vendor/header";
+import AdminLandingPage from "./pages/admin/landing";
+import AdminHome from "./pages/admin/home";
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
@@ -38,78 +40,6 @@ function App() {
 
   const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY; // Replace with your actual API key
 
-  // useEffect(() => {
-  //   if ("geolocation" in navigator) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         setUserLocation({
-  //           latitude: position.coords.latitude,
-  //           longitude: position.coords.longitude,
-  //         });
-  //         console.log("User location:", position.coords.latitude, position.coords.longitude);
-  //       },
-  //       (error) => {
-  //         setLocationError(error.message);
-  //         console.error("Error getting user location:", error);
-  //       }
-  //     );
-  //   } else {
-  //     setLocationError("Geolocation is not supported by your browser.");
-  //     console.error("Geolocation is not supported by your browser.");
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchAddress = async () => {
-  //     if (userLocation && GOOGLE_MAPS_API_KEY !== "YOUR_GOOGLE_MAPS_API_KEY") {
-  //       try {
-  //         const response = await fetch(
-  //           `https://maps.googleapis.com/maps/api/geocode/json?latlng=${userLocation.latitude},${userLocation.longitude}&key=${GOOGLE_MAPS_API_KEY}`
-  //         );
-  //         const data = await response.json();
-  //         if (data.results && data.results.length > 0) {
-  //           setUserAddress(data.results[0].formatted_address);
-  //         } else {
-  //           setUserAddress('Address not found');
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching address:", error);
-  //         setUserAddress('Error fetching address');
-  //       }
-  //     }
-  //   };
-  //   fetchAddress();
-  // }, [userLocation, GOOGLE_MAPS_API_KEY]);
-
-  // useEffect(() => {
-  //   const sendLocationToBackend = async () => {
-  //     if (userLocation) {
-  //       try {
-  //         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/vendors/nearest`, {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({
-  //             userLat: userLocation.latitude,
-  //             userLng: userLocation.longitude,
-  //           }),
-  //         });
-
-  //         const data = await response.json();
-  //         if (data.success) {
-  //           console.log("Nearest vendors:", data.vendors);
-  //           // You can now use this data to display nearest vendors
-  //         } else {
-  //           console.error("Error from backend:", data.message);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error sending location to backend:", error);
-  //       }
-  //     }
-  //   };
-  //   sendLocationToBackend();
-  // }, [userLocation]);
 
   return (
     <ThemeProvider>
@@ -139,6 +69,7 @@ function App() {
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<LandingPage />} />
+          <Route path="/admin" element={<AdminLandingPage />} />
           <Route path="/backend" element={<BackendCheck/>} />
           <Route path="/about" element={<About />} />
           <Route path="/error" element={<Error/>} />
@@ -182,6 +113,19 @@ function App() {
                     <Route path="settlements" element={<VendorSettlements />} />
                     <Route path="dashboard" element={<VendorDashboard />} />
                     <Route path="map" element={<VendorMap />} />
+                  </Routes>
+                </div>
+              }
+            />
+          </Route>
+
+          <Route element={<ProtectedRoute role="admin" />}>
+            <Route
+              path="/admin/*"
+              element={
+                <div>
+                  <Routes>
+                    <Route path="home" element={<AdminHome />} />
                   </Routes>
                 </div>
               }
