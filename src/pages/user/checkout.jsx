@@ -82,7 +82,7 @@ const Checkout = () => {
           // Initialize Cashfree checkout with utility function
           await initializeCashfreeCheckout(
             data.paymentSessionId,
-            `${window.location.origin}/u/payment-success?order_id=${data.orderId}`,
+            `${window.location.origin}/u/payment-success?order_id=${data.orderId}&total_amount=${totalAmount}`,
             import.meta.env.VITE_PROD === 'true' ? 'production' : 'sandbox'
           );
         } catch (error) {

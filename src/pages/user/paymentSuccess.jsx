@@ -13,6 +13,7 @@ const PaymentSuccess = () => {
   const [error, setError] = useState(null);
 
   const orderId = searchParams.get('order_id');
+  const totalAmount = searchParams.get('total_amount');
 
   useEffect(() => {
     if (orderId) {
@@ -30,7 +31,7 @@ const PaymentSuccess = () => {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId }),
+        body: JSON.stringify({ orderId,totalAmount }),
       });
 
       const data = await response.json();
