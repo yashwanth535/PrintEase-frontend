@@ -37,7 +37,7 @@ const UserHeader = () => {
       <motion.header 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed top-4 left-4 right-4 z-50 glass-nav rounded-2xl mx-auto max-w-screen text-slate-900 dark:text-slate-100 transition-all duration-300"
+        className="fixed top-0 left-4 right-4 z-50 glass-nav rounded-2xl mx-auto max-w-screen text-slate-900 dark:text-slate-100 transition-all duration-300"
       >
         <div className="px-6 py-4">
           <div className="flex justify-between items-center">
@@ -105,7 +105,7 @@ const UserHeader = () => {
       <motion.div 
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="fixed top-[100px] left-4 right-4 z-40 glass-nav rounded-xl mx-auto max-w-4xl"
+        className="fixed top-[80px] left-4 right-4 z-40 glass-nav rounded-xl mx-auto max-w-4xl"
       >
         <div className="px-6 py-3">
           <nav className="flex items-center justify-center gap-2">

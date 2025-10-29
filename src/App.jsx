@@ -14,7 +14,7 @@ import About from "./pages/global/About";
 import NotFound from "./pages/global/ui/PageNotFound";
 import { Toaster } from "react-hot-toast";
 import BackendCheck from './pages/global/ui/BackendCheck';
-import VendorMap from "./pages/vendor/vendorMap";
+import VendorMap from "./components/global/vendorMap";
 import Cart from "./pages/user/cart";
 import Payments from "./pages/user/payments-history";
 import UserProfile from "./pages/user/profile";
@@ -24,7 +24,7 @@ import Notifications from "./pages/user/notifications";
 import Checkout from "./pages/user/checkout";
 import PaymentSuccess from "./pages/user/paymentSuccess";
 import CreateOrder from "./pages/user/createOrder";
-import VendorList from "./pages/user/vendorList";
+import NewOrder from "./pages/user/newOrder";
 import Dev from "./pages/global/dev";
 import VendorProfileForUser from "./pages/user/vendorProfile";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -90,10 +90,11 @@ function App() {
                   <Route path="dashboard" element={<UserDashboard />} />
                   <Route path="favourites" element={<Favourites />} />
                   <Route path="notifications" element={<Notifications />} />
-                  <Route path="vendors" element={<VendorList />} />
+                  <Route path="vendors" element={<NewOrder />} />
                   <Route path="order/create/:vendorId" element={<CreateOrder />} />
                   <Route path="vendor-profile/:vendorId" element={<VendorProfileForUser/>} />
                   <Route path="profile" element={<UserProfile/>}/>
+                  <Route path="map" element={<VendorMap/>} />
                 </Routes>
               </div>
             } />
