@@ -14,9 +14,7 @@ import {
   Users, 
   FileText,
   Clock,
-  Star,
   CheckCircle,
-  Play,
   ChevronDown,
   ChevronUp,
   Mail,
@@ -29,28 +27,8 @@ const LandingPage = () => {
   const [formType, setFormType] = useState("signin");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [featuresRef, featuresInView] = useInView({
-    threshold: 0.2,
-    triggerOnce: true,
-  });
-
   const [bentoRef, bentoInView] = useInView({
     threshold: 0.1,
-    triggerOnce: true,
-  });
-
-  const [videoRef, videoInView] = useInView({
-    threshold: 0.3,
-    triggerOnce: true,
-  });
-
-  const [testimonialsRef, testimonialsInView] = useInView({
-    threshold: 0.2,
-    triggerOnce: true,
-  });
-
-  const [pricingRef, pricingInView] = useInView({
-    threshold: 0.2,
     triggerOnce: true,
   });
 
@@ -71,11 +49,6 @@ const LandingPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-    hover: { scale: 1.05, transition: { duration: 0.3 } },
-  };
 
 
   return (
@@ -87,14 +60,10 @@ const LandingPage = () => {
         setIsMenuOpen={setIsMenuOpen}
       />
 
-      {/* Enhanced Hero Section */}
-      <div className="pt-6 pl-20">
+      {/* all sections */}
+      <div className="pt-6 pl-5">
+        {/* first section hero section*/}
         <div className="minimal-gradient relative overflow-hidden">
-          {/* Background Elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-transparent to-purple-50/50 dark:from-blue-950/20 dark:via-transparent dark:to-purple-950/20"></div>
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-200/20 to-purple-200/20 dark:from-blue-800/10 dark:to-purple-800/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-200/20 to-pink-200/20 dark:from-purple-800/10 dark:to-pink-800/10 rounded-full blur-3xl"></div>
-          
           <div className="relative z-10 flex flex-col lg:flex-row items-center min-h-screen px-8 py-20">
             {/* Content Section */}
             <motion.section
@@ -162,27 +131,6 @@ const LandingPage = () => {
                     Sign In
                   </button>
                 </motion.div>
-
-                {/* Stats */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.6 }}
-                  className="hero-stats justify-center lg:justify-start"
-                >
-                  <div className="hero-stat-item">
-                    <div className="hero-stat-number">500+</div>
-                    <div className="hero-stat-label">Print Shops</div>
-                  </div>
-                  <div className="hero-stat-item">
-                    <div className="hero-stat-number">10K+</div>
-                    <div className="hero-stat-label">Orders Completed</div>
-                  </div>
-                  <div className="hero-stat-item">
-                    <div className="hero-stat-number">99.9%</div>
-                    <div className="hero-stat-label">Uptime</div>
-                  </div>
-                </motion.div>
               </div>
             </motion.section>
 
@@ -191,7 +139,7 @@ const LandingPage = () => {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full lg:w-2/5 flex justify-center items-center p-8"
+              className="hidden md:flex w-full lg:w-2/5 flex justify-center items-center p-8"
             >
               <div className="hero-image-container group max-w-lg">
                 <div className="hero-image-glow"></div>
@@ -207,12 +155,14 @@ const LandingPage = () => {
           </div>
           {/* Auth Form Overlay */}
           {showAuth && (
-            <div className="absolute inset-0 z-20 bg-white/95 dark:bg-black/95 backdrop-blur-sm flex items-center justify-center">
+            <div className="absolute inset-0 z-10 bg-white/95 dark:bg-black/95 backdrop-blur-sm flex items-center justify-center">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-md mx-4"
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="w-full max-w-md mx-4 origin-center"
               >
+
                 <AuthForms initialForm={formType} onClose={handleCloseAuth} />
               </motion.div>
             </div>

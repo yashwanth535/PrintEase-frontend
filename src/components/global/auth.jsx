@@ -369,7 +369,7 @@ const [phone, setPhone] = useState('');
         )}
 
         {formType === 'signup-form' && (
-          <form onSubmit={(e) => handleOTP(e, 'signup')} className="space-y-6">
+          <form onSubmit={(e) => handleOTP(e, 'signup')}>
 
             {/* Full Name */}
             <div className="space-y-3">
