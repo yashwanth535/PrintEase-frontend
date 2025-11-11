@@ -3,6 +3,8 @@
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { GoogleLogin } from "@react-oauth/google";
+import { googleSignIn } from "./google";
 
 const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -35,6 +37,26 @@ const [phone, setPhone] = useState('');
   useEffect(() => {
     setOtp(otpDigits.join(""));
   }, [otpDigits]);
+
+  const handleGoogleSuccess = async (response) => {
+    setMessage(""); // Clear any previous messages
+    setLoading(true);
+    try {
+      const data = await googleSignIn(response.credential,isVendor);
+      if (data?.success) {
+        console.log("Login successful, navigating to dashboard...");
+        if(data.role==='vendor')
+        window.location.href = "/v/home";
+        else window.location.href='/u/home';
+      } else {
+        setMessage(data.message || "Login failed, please try again.");
+      }
+    } catch (error) {
+      setMessage(error.message || "An unexpected error occurred.");
+    }
+  
+    setLoading(false);
+  };
 
   const handleOtpChange = (index, value) => {
     // Only allow single digit
@@ -348,6 +370,20 @@ const [phone, setPhone] = useState('');
                 <p className="text-sm font-medium">{message}</p>
               </div>
             )}
+
+            <div className="mt-6">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => {
+                    setMessage("Google login failed");
+                  }}
+                  theme="filled_black"
+                  size="large"
+                  text="continue_with"
+                  shape="rectangular"
+                  width="100%"
+                />
+              </div>
 
             <div className="flex justify-between text-sm pt-4">
               <button
