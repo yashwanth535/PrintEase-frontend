@@ -32,6 +32,8 @@ import UserHeader from "./components/user/header";
 import VendorHeader from "./components/vendor/header";
 import AdminLandingPage from "./pages/admin/landing";
 import AdminHome from "./pages/admin/home";
+import Privacy from "./pages/global/privacy";
+import Terms from "./pages/global/terms";
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
@@ -75,6 +77,8 @@ function App() {
           <Route path="/error" element={<Error/>} />
           <Route path = "/u/dev" element={<Dev user={true}/>}/> 
           <Route path = "/v/dev" element={<Dev user={false}/>} />
+          <Route path="/privacy" element={<Privacy/>}/>
+          <Route path="/terms" element={<Terms/>}/>
 
           {/* Protected User Routes */}
           <Route element={<ProtectedRoute role="user"/>}>
