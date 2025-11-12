@@ -128,6 +128,7 @@ const CreateOrder = () => {
       setFileUrl(fullUrl);
       setUploadStatus("File uploaded successfully!");
     } catch (err) {
+      
       console.error(err);
       toast.error("upload failed");
     } finally {
