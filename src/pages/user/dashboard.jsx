@@ -1,48 +1,43 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaClipboardList, FaRupeeSign, FaCheckCircle, FaMoneyBillAlt, FaChartLine, FaArrowUp } from "react-icons/fa";
-import toast from "react-hot-toast";
 
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrders } from "../../store/slices/orderSlice";
 
 const Dashboard = () => {
-  const [stats, setStats] = useState({
-    totalOrders: 0,
-    paidOrders: 0,
-    totalSpent: 0,
-    completedOrders: 0,
-  });
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
+  /** Pull from Redux store */
+  const {
+    allOrders,
+    pendingOrders,
+    activeOrders,
+    completedOrders,
+    loading,
+    error,
+  } = useSelector((state) => state.orders);
+
+  /** Fetch only if store is empty */
   useEffect(() => {
-    fetchStats();
-  }, []);
-
-  const fetchStats = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/order`, {
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (data.success) {
-        const orders = data.orders;
-        const totalOrders = orders.length;
-        const paidOrders = orders.filter((o) => o.paymentStatus === "paid").length;
-        const totalSpent = orders
-          .filter((o) => o.paymentStatus === "paid")
-          .reduce((sum, o) => sum + o.totalPrice, 0);
-        const completedOrders = orders.filter((o) => o.status === "completed").length;
-
-        setStats({ totalOrders, paidOrders, totalSpent, completedOrders });
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+    if (allOrders.length === 0) {
+      dispatch(fetchOrders());
     }
+  }, [allOrders.length, dispatch]);
+
+  /** Compute stats using existing Redux datasets — no recomputation required */
+  /** Compute stats using Redux datasets */
+  const stats = {
+    totalOrders: allOrders.length,
+    paidOrders: activeOrders.length + completedOrders.length,
+    totalSpent: [...activeOrders, ...completedOrders].reduce(
+      (sum, o) => sum + o.totalPrice,
+      0
+    ),
+    completedOrders: completedOrders.length,
   };
+
 
   const StatCard = ({ icon: Icon, label, value, color, gradient, index }) => (
     <motion.div
@@ -58,7 +53,7 @@ const Dashboard = () => {
         </div>
         <div className="text-right">
           <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">{label}</p>
-          <p className={`text-2xl font-bold ${color} group-hover:scale-110 transition-transform duration-300`}>
+          <p className={`text-2xl font-bold ${color}`}>
             {value}
           </p>
         </div>
@@ -101,10 +96,13 @@ const Dashboard = () => {
     }
   ];
 
+  const showLoading = loading && allOrders.length === 0;
+
   return (
     <div className="min-h-screen minimal-gradient dark:minimal-gradient transition-all duration-500">
       <div className="max-w-7xl mt-4 mx-auto px-4 py-8 pt-40">
-        {/* Header Section */}
+
+        {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -121,8 +119,8 @@ const Dashboard = () => {
           </p>
         </motion.div>
 
-        {/* Statistics Cards */}
-        {loading ? (
+        {/* Loading State */}
+        {showLoading ? (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -135,6 +133,7 @@ const Dashboard = () => {
           </motion.div>
         ) : (
           <>
+            {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {statsData.map((stat, index) => (
                 <StatCard
@@ -149,7 +148,7 @@ const Dashboard = () => {
               ))}
             </div>
 
-            {/* Additional Insights */}
+            {/* Quick Insights */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -164,23 +163,26 @@ const Dashboard = () => {
                   Quick Insights
                 </h2>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-4 bg-white/40 dark:bg-slate-800/40 rounded-xl backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+                {/* Completion Rate */}
+                <div className="text-center p-4 bg-white/40 dark:bg-slate-800/40 rounded-xl backdrop-blur-sm border">
                   <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
                     {stats.totalOrders > 0 ? Math.round((stats.completedOrders / stats.totalOrders) * 100) : 0}%
                   </div>
                   <div className="text-sm text-slate-600 dark:text-slate-400">Completion Rate</div>
                 </div>
-                
-                <div className="text-center p-4 bg-white/40 dark:bg-slate-800/40 rounded-xl backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+
+                {/* Payment Rate */}
+                <div className="text-center p-4 bg-white/40 dark:bg-slate-800/40 rounded-xl backdrop-blur-sm border">
                   <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
                     {stats.totalOrders > 0 ? Math.round((stats.paidOrders / stats.totalOrders) * 100) : 0}%
                   </div>
                   <div className="text-sm text-slate-600 dark:text-slate-400">Payment Rate</div>
                 </div>
-                
-                <div className="text-center p-4 bg-white/40 dark:bg-slate-800/40 rounded-xl backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
+
+                {/* Avg Order Value */}
+                <div className="text-center p-4 bg-white/40 dark:bg-slate-800/40 rounded-xl backdrop-blur-sm border">
                   <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
                     ₹{stats.paidOrders > 0 ? Math.round(stats.totalSpent / stats.paidOrders) : 0}
                   </div>
