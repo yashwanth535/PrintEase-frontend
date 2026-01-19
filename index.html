@@ -2,14 +2,81 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <title>
+      PrintEase - Online Printing & Document Delivery Platform | Created by Yashwanth Munikuntla
+    </title>
+
+    <meta name="robots" content="index, follow" />
+
     <link rel="icon" type="image/svg+xml" href="/printer.svg" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>printEase</title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="PrintEase is an online printing platform that connects users with local print shops for seamless document printing, payments, and real-time order tracking. Created by Yashwanth Munikuntla."
+    />
+    <meta
+      name="keywords"
+      content="PrintEase, Online Printing Service, Document Printing, Local Print Shops, MERN Project, Printing Platform, Yashwanth Munikuntla, Print App"
+    />
+    <meta name="author" content="Yashwanth Munikuntla" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="PrintEase - Online Printing Platform" />
+    <meta
+      property="og:description"
+      content="Print documents easily with PrintEase. Upload files, pay securely, and track print orders in real time. Built by Yashwanth Munikuntla."
+    />
+    <meta
+      property="og:image"
+      content="https://printease.yashwanth.online/preview-image.png"
+    />
+    <meta property="og:url" content="https://printease.yashwanth.online" />
+    <meta property="og:type" content="website" />
+
+    <!-- Cashfree SDK -->
+    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PrintEase",
+        "url": "https://printease.yashwanth.online",
+        "description": "PrintEase is an online printing and document delivery platform connecting users with nearby print shops for fast and secure printing.",
+        "creator": {
+          "@type": "Person",
+          "name": "Yashwanth Munikuntla"
+        },
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "INR"
+        },
+        "keywords": [
+          "online printing",
+          "document printing",
+          "printease",
+          "printing platform",
+          "mern project",
+          "yashwanth munikuntla",
+          "yashwanth535",
+          "print service",
+          "local print shops"
+        ]
+      }
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
-    
-    <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
     <script src="/cashfree-init.js"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
