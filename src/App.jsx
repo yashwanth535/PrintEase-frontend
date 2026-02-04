@@ -34,6 +34,7 @@ import AdminLandingPage from "./pages/admin/landing";
 import AdminHome from "./pages/admin/home";
 import Privacy from "./pages/global/privacy";
 import Terms from "./pages/global/terms";
+import DownloadPage from "./pages/global/downloads";
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
@@ -71,6 +72,7 @@ function App() {
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<LandingPage />} />
+          <Route path="/downloads" element={<DownloadPage />} />
           <Route path="/admin" element={<AdminLandingPage />} />
           <Route path="/backend" element={<BackendCheck/>} />
           <Route path="/about" element={<About />} />
@@ -79,7 +81,6 @@ function App() {
           <Route path = "/v/dev" element={<Dev user={false}/>} />
           <Route path="/privacy" element={<Privacy/>}/>
           <Route path="/terms" element={<Terms/>}/>
-
           {/* Protected User Routes */}
           <Route element={<ProtectedRoute role="user"/>}>
             <Route path="/u/*" element={

@@ -2,14 +2,16 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
-import { Menu, X, Home, Info } from 'lucide-react';
+import { Menu, X, Home, Info,Download } from 'lucide-react';
 import ThemeToggle from '../ui/ThemeToggle';
 import { AnimatedThemeToggler } from '../../pages/global/animated-theme';
 
 const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) => {
   const navItems = [
     { name: 'Home', path: '/', icon: Home, reload: true },
-    { name: 'About', path: '/about', icon: Info }
+    { name: 'About', path: '/about', icon: Info },
+    { name: 'Downloads', path: '/downloads', icon: Download }
+
   ];
 
   const headerRef = useRef(null);
