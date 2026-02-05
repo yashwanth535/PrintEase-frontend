@@ -2,8 +2,11 @@ import { motion } from 'framer-motion';
 import { Users, Target, Heart, ArrowLeft, Zap, Shield, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
+import LandingHeader from '../../components/global/LandingHeader';
+import Footer from '../../components/global/Footer';
 
 const About = () => {
+
   const [valuesRef, valuesInView] = useInView({
     threshold: 0.2,
     triggerOnce: true,
@@ -75,8 +78,10 @@ const About = () => {
   };
 
   return (
+    <>
     <div className="flex flex-col min-h-screen hero-gradient transition-colors duration-300">
       {/* Enhanced Hero Section */}
+      <LandingHeader/>
       <div className="-pt-10 pl-10">
         <div className="minimal-gradient relative overflow-hidden">
           {/* Background Elements */}
@@ -85,16 +90,7 @@ const About = () => {
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-200/20 to-pink-200/20 dark:from-purple-800/10 dark:to-pink-800/10 rounded-full blur-3xl"></div>
           
           <div className="relative z-10 flex flex-col items-center min-h-screen px-8 py-20">
-            {/* Back Button */}
-            <div className="w-full max-w-7xl mb-8">
-              <Link
-                to="/"
-                className="inline-flex items-center text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors group floating"
-              >
-                <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-200" />
-                Back to Home
-              </Link>
-            </div>
+            
 
             {/* Hero Content */}
             <motion.section
@@ -236,6 +232,8 @@ const About = () => {
         </section>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

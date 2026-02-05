@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
-import { Menu, X, Home, Info,Download } from 'lucide-react';
+import { Menu, X, Home, Info,Download,Bug } from 'lucide-react';
 import ThemeToggle from '../ui/ThemeToggle';
 import { AnimatedThemeToggler } from '../../pages/global/animated-theme';
 
@@ -10,8 +10,8 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
   const navItems = [
     { name: 'Home', path: '/', icon: Home, reload: true },
     { name: 'About', path: '/about', icon: Info },
-    { name: 'Downloads', path: '/downloads', icon: Download }
-
+    { name: 'Downloads', path: '/downloads', icon: Download },
+    { name: 'Bug Report', path: '/bugreport', icon: Bug }
   ];
 
   const headerRef = useRef(null);
@@ -47,7 +47,7 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
             if (window.innerWidth < 768) setIsMenuOpen((prev) => !prev);
           }}
         >
-          <Link to="/" onClick={() => window.location.reload()} className="flex items-center space-x-3 group floating">
+          <Link to="/"  className="flex items-center space-x-3 group floating">
             <div className="p-2 bg-white/20 dark:bg-black/20 rounded-xl backdrop-blur-sm">
               <img src='/printer.svg' alt="" className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
             </div>

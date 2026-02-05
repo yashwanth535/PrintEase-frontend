@@ -35,6 +35,9 @@ import AdminHome from "./pages/admin/home";
 import Privacy from "./pages/global/privacy";
 import Terms from "./pages/global/terms";
 import DownloadPage from "./pages/global/downloads";
+import BugReport from "./pages/global/BugReport";
+import SignIn from "./pages/global/signin";
+import SignUp from "./pages/global/signup";
 
 function App() {
   const [userLocation, setUserLocation] = useState(null);
@@ -78,9 +81,12 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/error" element={<Error/>} />
           <Route path = "/u/dev" element={<Dev user={true}/>}/> 
+          <Route path ="/bugreport" element={<BugReport />}/>
           <Route path = "/v/dev" element={<Dev user={false}/>} />
           <Route path="/privacy" element={<Privacy/>}/>
           <Route path="/terms" element={<Terms/>}/>
+          <Route path="/signin" element={<SignIn/>}/>
+          <Route path="/signup" element={<SignUp/>}/>
           {/* Protected User Routes */}
           <Route element={<ProtectedRoute role="user"/>}>
             <Route path="/u/*" element={
