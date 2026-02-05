@@ -7,6 +7,7 @@ import ThemeToggle from '../ui/ThemeToggle';
 import { AnimatedThemeToggler } from '../../pages/global/animated-theme';
 
 const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) => {
+  const isStandaloneAuth = setShowAuth == null;
   const navItems = [
     { name: 'Home', path: '/', icon: Home, reload: true },
     { name: 'About', path: '/about', icon: Info },
@@ -79,18 +80,27 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center space-x-3">
             <AnimatedThemeToggler />
-            <button
-              className="btn-secondary text-sm"
-              onClick={() => { setShowAuth(true); setFormType("signin-form"); }}
-            >
-              Sign In
-            </button>
-            <button
-              className="btn-primary text-sm"
-              onClick={() => { setShowAuth(true); setFormType("signup-form"); }}
-            >
-              Get Started
-            </button>
+            {isStandaloneAuth ? (
+              <>
+                <Link to="/signin" className="btn-secondary text-sm">Sign In</Link>
+                <Link to="/signup" className="btn-primary text-sm">Get Started</Link>
+              </>
+            ) : (
+              <>
+                <button
+                  className="btn-secondary text-sm"
+                  onClick={() => { setShowAuth(true); setFormType("signin-form"); }}
+                >
+                  Sign In
+                </button>
+                <button
+                  className="btn-primary text-sm"
+                  onClick={() => { setShowAuth(true); setFormType("signup-form"); }}
+                >
+                  Get Started
+                </button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -137,18 +147,27 @@ const LandingHeader = ({ setShowAuth, setFormType, isMenuOpen, setIsMenuOpen }) 
               <div className="flex justify-center">
                 <ThemeToggle />
               </div>
-              <button
-                className="w-full btn-secondary text-sm"
-                onClick={() => { setShowAuth(true); setFormType("signin-form"); setIsMenuOpen(false); }}
-              >
-                Sign In
-              </button>
-              <button
-                className="w-full btn-primary text-sm"
-                onClick={() => { setShowAuth(true); setFormType("signup-form"); setIsMenuOpen(false); }}
-              >
-                Get Started
-              </button>
+              {isStandaloneAuth ? (
+                <>
+                  <Link to="/signin" className="w-full btn-secondary text-sm block text-center" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
+                  <Link to="/signup" className="w-full btn-primary text-sm block text-center" onClick={() => setIsMenuOpen(false)}>Get Started</Link>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="w-full btn-secondary text-sm"
+                    onClick={() => { setShowAuth(true); setFormType("signin-form"); setIsMenuOpen(false); }}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    className="w-full btn-primary text-sm"
+                    onClick={() => { setShowAuth(true); setFormType("signup-form"); setIsMenuOpen(false); }}
+                  >
+                    Get Started
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </motion.div>

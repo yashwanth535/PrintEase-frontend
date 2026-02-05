@@ -45,8 +45,6 @@ const DownloadPage = () => {
   return (
     <div className="flex flex-col min-h-screen hero-gradient transition-colors duration-300">
       <LandingHeader 
-        setShowAuth={handleShowAuth}
-        setFormType={setFormType}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
       />

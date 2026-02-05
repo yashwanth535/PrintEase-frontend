@@ -55,7 +55,11 @@ const Checkout = () => {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ orderIds: selectedOrders }),
+          body: JSON.stringify({
+            orderIds: selectedOrders,
+            returnUrl: null,                 // ⭐ mobile not used here
+            baseUrl: window.location.origin // ⭐ web origin
+          }),
         });
 
         const data = await res.json();

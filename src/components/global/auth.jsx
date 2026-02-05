@@ -6,6 +6,16 @@ import { motion } from "framer-motion";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleSignIn } from "./google";
 
+const parseJsonResponse = async (response) => {
+  const text = await response.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch {
+    return { message: "Something went wrong. Please try again." };
+  }
+};
+
 const AuthForms = ({ initialForm = "signin-form", onClose }) => {
   const API_URL = import.meta.env.VITE_API_URL;
   const [formType, setFormType] = useState(initialForm);
@@ -128,9 +138,9 @@ const [phone, setPhone] = useState('');
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, isVendor }),
       });
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
       if (data.success) {
-          window.location.href = isVendor?"v/home":"u/home";
+          window.location.href = isVendor ? "/v/home" : "/u/home";
       } else {
         setMessage(data.message);
       }
@@ -155,7 +165,7 @@ const [phone, setPhone] = useState('');
         body: JSON.stringify({ email, isVendor }),
       });
 
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
 
       if (response.status === 400) {
         if (type === 'signup') {
@@ -186,7 +196,7 @@ const [phone, setPhone] = useState('');
         text: text,
       }),
     });
-    const otpData = await otpResponse.json();
+    const otpData = await parseJsonResponse(otpResponse);
 
     if (otpResponse.ok) {
       setMessage("OTP sent to your email");
@@ -213,7 +223,7 @@ const [phone, setPhone] = useState('');
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ otp }),
       });
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
       if (response.status === 400) {
         setMessage(data.message);
       } else {
@@ -236,16 +246,24 @@ const [phone, setPhone] = useState('');
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, isVendor,fullName,phone}),
+        body: JSON.stringify({
+          email,
+          password,
+          isVendor,
+          name: fullName ?? '',
+          fullName: fullName ?? '',
+          phone: phone ?? '',
+        }),
       });
-      const data = await response.json();
-      if (response.status === 400) {
-        setMessage(data.message);
+      const data = await parseJsonResponse(response);
+      if (response.status === 400 || !response.ok) {
+        setMessage(data.message || "Registration failed. Please try again.");
       } else {
-        window.location.href = isVendor?"v/home":"u/home";
+        window.location.href = isVendor ? "/v/home" : "/u/home";
       }
     } catch (error) {
       console.error("Error during signup:", error);
+      setMessage("Something went wrong. Please try again.");
     }
     finally{
       setLoading(false);
@@ -262,10 +280,10 @@ const [phone, setPhone] = useState('');
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password ,isVendor}),
+        body: JSON.stringify({ email, password, isVendor }),
       });
 
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
 
       if (response.ok) {
         setMessage("Password reset successful. Click below to sign in.");
