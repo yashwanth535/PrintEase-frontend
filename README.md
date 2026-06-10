@@ -5,7 +5,7 @@ A full-stack web application that connects users with local printing vendors, en
 ## 🌟 Live Demo
 
 - **Main Application**: [https://printease.yashwanth.site](https://printease.yashwanth.site)
-- **Docker Deployment**: [https://printease-docker-full-stack.onrender.com](https://printease-docker-full-stack.onrender.com)
+- **Docker Deployment**: [https://printease-docker.yashwanth.online/](https://printease-docker.yashwanth.online/)
 
 ## ✨ Features
 
