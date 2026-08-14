@@ -34,9 +34,10 @@ const Checkout = () => {
 
   // Check Cashfree SDK availability
   useEffect(() => {
+    console.log("calling to load cashfree sdk");
     const checkSDK = () => {
       if (isCashfreeAvailable()) {
-        console.log("✅ Cashfree SDK loaded");
+        console.log("✅ Cashfree SDK loaded type");
         setSdkLoading(false);
       } else {
         console.log("❌ SDK not ready, retrying...");
@@ -50,6 +51,7 @@ const Checkout = () => {
   useEffect(() => {
     const createPaymentSession = async () => {
       try {
+        console.log("requesting for creating payment order to backend");
         setError(null);
         const res = await fetch(`${API_URL}/api/order/create-payment`, {
           method: "POST",
@@ -97,8 +99,9 @@ const Checkout = () => {
     try {
       initializeCashfreeCheckout(
         paymentSession.id,
-        `${window.location.origin}/u/payment-success?order_id=${paymentSession.orderId}&total_amount=${totalAmount}`,
-        import.meta.env.VITE_PROD === "true" ? "production" : "sandbox"
+        import.meta.env.VITE_PROD === "true"
+          ? "production"
+          : "sandbox"
       );
     } catch (err) {
       console.error("Cashfree init error:", err);

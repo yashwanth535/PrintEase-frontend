@@ -38,40 +38,42 @@ export const waitForCashfree = (timeout = 10000) => {
  * @param {string} mode - 'sandbox' or 'production'
  * @returns {Promise} Promise that resolves when checkout is initiated
  */
-export const initializeCashfreeCheckout = async (paymentSessionId, returnUrl, mode = 'sandbox') => {
+export const initializeCashfreeCheckout = async (
+  paymentSessionId,
+  mode = "sandbox"
+) => {
   console.log("🛠️ Initializing Cashfree Checkout...");
   console.log("📦 Payment Session ID:", paymentSessionId);
-  console.log("🔁 Return URL:", returnUrl);
   console.log("🌐 Mode:", mode);
+
+  if (!paymentSessionId) {
+    throw new Error("Payment Session ID is missing");
+  }
 
   try {
     const Cashfree = await waitForCashfree();
 
     const cashfree = Cashfree({
-      mode: mode,
+      mode,
     });
 
     const checkoutOptions = {
-      paymentSessionId: paymentSessionId,
-      returnUrl: returnUrl,
-      redirectTarget: '_self',
+      paymentSessionId,
+      redirectTarget: "_self",
     };
 
-    console.log("🚀 Calling `cashfree.checkout()` with options:", checkoutOptions);
+    console.log(
+      "🚀 Calling cashfree.checkout():",
+      checkoutOptions
+    );
 
-    return new Promise((resolve, reject) => {
-      try {
-        cashfree.checkout(checkoutOptions);
-        console.log("✅ Cashfree checkout initialized.");
-        resolve();
-      } catch (error) {
-        console.error("❌ Error during `cashfree.checkout()`:", error);
-        reject(error);
-      }
-    });
+    await cashfree.checkout(checkoutOptions);
+
+    console.log("✅ Cashfree checkout called successfully.");
+
   } catch (error) {
-    console.error("❌ Failed to initialize Cashfree:", error.message);
-    throw new Error(`Failed to initialize Cashfree: ${error.message}`);
+    console.error("❌ Cashfree checkout error:", error);
+    throw error;
   }
 };
 
